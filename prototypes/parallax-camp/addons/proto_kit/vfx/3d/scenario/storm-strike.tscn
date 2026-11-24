@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/storm-strike/storm-strike.tres" id="1_y7vvq"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_4rh3g"]
+
+[node name="StormStrike" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(0, 40)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_y7vvq")
+animation = &"storm_strike"
+frame = 2
+script = ExtResource("2_4rh3g")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "storm-strike"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

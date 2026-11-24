@@ -1,0 +1,208 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_b6uqh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_0.gdshader" id="2_xia15"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_0.res" id="3_xia15"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_0_depth.gdshader" id="4_xia15"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_1.res" id="5_fgarp"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_1.gdshader" id="5_lcw62"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_2.gdshader" id="6_c7pl3"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_1_depth.gdshader" id="7_lcw62"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_2.res" id="7_rny8s"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_3.gdshader" id="8_yvq8p"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_3.res" id="9_kqd6o"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_4.gdshader" id="10_pvw8u"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_4.res" id="11_hhfdo"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_5.gdshader" id="12_3r0y5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_5.res" id="13_yqvrf"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/spatial_part_6.gdshader" id="14_4hws2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/part_6.res" id="15_sh3d1"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/billowing-airburst/motion.res" id="16_yamte"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i0o1d"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_xia15")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 58320
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uDetail = 1.0
+shader_parameter/uQuantity = 4.0
+shader_parameter/uJetPaths = PackedVector4Array(-0.7870504, -0.3316274, -0.5201682, 4.5158005, 0.54488194, 0.70842904, 0.44858894, 3.979007, 0.043570314, -0.8958471, -0.44222125, 3.7364774, -0.3854154, -0.8798178, 0.27816474, 3.519021, 0.5887105, 0.7767018, -0.22395144, 3.8228436, 0.45269135, -0.8810043, 0.13748446, 4.2067614)
+shader_parameter/uJetBends = PackedVector4Array(0.32361537, -0.27773464, 0.026696632, 1.0641323, -0.24120049, -0.041733727, 0.024111792, 0.95380986, -0.081507914, 0.18480235, 0.00046911946, 0.9858031, 0.29688752, 0.05009466, 0.018475443, 1.0490599, -0.18303315, 0.09789451, 0.026691636, 0.89393854, -0.09497175, -0.22065192, 0.020102039, 0.87321293)
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_udckg"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("7_lcw62")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = 149760.0
+shader_parameter/source_vertices_per_instance = 224640
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uDetail = 1.0
+shader_parameter/uQuantity = 4.0
+shader_parameter/uJetPaths = PackedVector4Array(-0.7870504, -0.3316274, -0.5201682, 4.5158005, 0.54488194, 0.70842904, 0.44858894, 3.979007, 0.043570314, -0.8958471, -0.44222125, 3.7364774, -0.3854154, -0.8798178, 0.27816474, 3.519021, 0.5887105, 0.7767018, -0.22395144, 3.8228436, 0.45269135, -0.8810043, 0.13748446, 4.2067614)
+shader_parameter/uJetBends = PackedVector4Array(0.32361537, -0.27773464, 0.026696632, 1.0641323, -0.24120049, -0.041733727, 0.024111792, 0.95380986, -0.081507914, 0.18480235, 0.00046911946, 0.9858031, 0.29688752, 0.05009466, 0.018475443, 1.0490599, -0.18303315, 0.09789451, 0.026691636, 0.89393854, -0.09497175, -0.22065192, 0.020102039, 0.87321293)
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nw1ao"]
+resource_local_to_scene = true
+render_priority = -128
+shader = ExtResource("6_c7pl3")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = 270.0
+shader_parameter/source_vertices_per_instance = 378
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uQuantity = 4.0
+shader_parameter/uJetPaths = PackedVector4Array(-0.7870504, -0.3316274, -0.5201682, 4.5158005, 0.54488194, 0.70842904, 0.44858894, 3.979007, 0.043570314, -0.8958471, -0.44222125, 3.7364774, -0.3854154, -0.8798178, 0.27816474, 3.519021, 0.5887105, 0.7767018, -0.22395144, 3.8228436, 0.45269135, -0.8810043, 0.13748446, 4.2067614)
+shader_parameter/uJetBends = PackedVector4Array(0.32361537, -0.27773464, 0.026696632, 1.0641323, -0.24120049, -0.041733727, 0.024111792, 0.95380986, -0.081507914, 0.18480235, 0.00046911946, 0.9858031, 0.29688752, 0.05009466, 0.018475443, 1.0490599, -0.18303315, 0.09789451, 0.026691636, 0.89393854, -0.09497175, -0.22065192, 0.020102039, 0.87321293)
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0unv"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("8_yvq8p")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtxf3"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("10_pvw8u")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uDetail = 1.0
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trpsb"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("12_3r0y5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1152
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_skfvw"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("14_4hws2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 174
+shader_parameter/source_instance_count = 64.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.22
+shader_parameter/uBurstOffset = Vector3(13.08404, 3.4917347, 3.426003)
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.19461784, 0.017641954)
+
+[node name="BillowingAirburst" type="Node3D" unique_id=112059446]
+script = ExtResource("1_b6uqh")
+effect_id = "billowing-airburst"
+burst = true
+duration = 2.4
+start_duration = 0.15
+end_duration = 1.8
+kind = 3
+variant = 11
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "billowing-airburst"
+metadata/editor_preview_time = 0.22
+
+[node name="Parts" type="Node3D" parent="." unique_id=1858220089]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1472046539]
+material_override = SubResource("ShaderMaterial_i0o1d")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_xia15")
+metadata/source_name = "airburst-core"
+metadata/source_depth_shader = ExtResource("4_xia15")
+metadata/source_transparent_shader = ExtResource("2_xia15")
+metadata/source_depth_mode = "always"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1914431256]
+material_override = SubResource("ShaderMaterial_udckg")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_fgarp")
+metadata/source_name = "airburst-jets"
+metadata/source_depth_shader = ExtResource("7_lcw62")
+metadata/source_transparent_shader = ExtResource("5_lcw62")
+metadata/source_depth_mode = "always"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1892780802]
+material_override = SubResource("ShaderMaterial_nw1ao")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_rny8s")
+metadata/source_name = "airburst-glow"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=2147098599]
+visible = false
+material_override = SubResource("ShaderMaterial_l0unv")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_kqd6o")
+metadata/source_name = "airburst-flash"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1169178512]
+material_override = SubResource("ShaderMaterial_rtxf3")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_hhfdo")
+metadata/source_name = "airburst-shockwave"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=1317851964]
+material_override = SubResource("ShaderMaterial_trpsb")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_yqvrf")
+metadata/source_name = "airburst-arcs"
+
+[node name="Part006" type="MeshInstance3D" parent="Parts" unique_id=986275489]
+material_override = SubResource("ShaderMaterial_skfvw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("15_sh3d1")
+metadata/source_name = "airburst-embers"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1148043349]
+unique_name_in_owner = true
+libraries/ = ExtResource("16_yamte")

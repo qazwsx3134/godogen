@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/flux-shield/flux-shield.tres" id="1_1mtdx"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_qywyd"]
+
+[node name="FluxShield" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_1mtdx")
+animation = &"flux_shield"
+frame = 2
+script = ExtResource("2_qywyd")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "flux-shield"
+metadata/placement = "caster"
+metadata/depth_hint = "front"

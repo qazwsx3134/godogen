@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 git log 查核） | 2026-11-25 | feat(parallax-camp): 新增森林營地與跑跳試驗道、分件旅人和鏡頭系統；沿用 60／144 FPS 測試證據 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | feat(walker-tps): expand combat and urban environments；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | feat(pixel-aquarium): add aquarium prototype；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | art(parallax-camp): add prototype artwork；整理提交，測試未重跑 |

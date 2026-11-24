@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_3ey2g"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_0.gdshader" id="2_4g8l4"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/part_0.res" id="3_8hlao"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_0_depth.gdshader" id="4_4g8l4"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_1.gdshader" id="4_64lyd"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/part_1.res" id="5_n4b5q"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_2.gdshader" id="6_6ffjc"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/part_2.res" id="7_m4hu6"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_3.gdshader" id="8_pe721"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/part_3.res" id="9_pouqa"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/spatial_part_4.gdshader" id="10_5rsy6"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/part_4.res" id="11_pumbg"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-explosion/motion.res" id="12_be6sv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4cogn"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_4g8l4")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 44064
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.107023105, 0.019382361)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cd0uf"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("4_64lyd")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 114
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.107023105, 0.019382361)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8y6k4"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_6ffjc")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = 12294.0
+shader_parameter/source_vertices_per_instance = 12294
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.107023105, 0.019382361)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lg282"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("8_pe721")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 8448
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.107023105, 0.019382361)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ikys7"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("10_5rsy6")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 128.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.107023105, 0.019382361)
+
+[node name="FireExplosion" type="Node3D" unique_id=709522692]
+script = ExtResource("1_3ey2g")
+effect_id = "fire-explosion"
+burst = true
+duration = 2.8
+start_duration = 0.27999999999999997
+end_duration = 1.26
+kind = 3
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "fire-explosion"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=14385585]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1529097446]
+material_override = SubResource("ShaderMaterial_4cogn")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_8hlao")
+metadata/source_name = "fire-explosion-billowing-volume"
+metadata/source_depth_shader = ExtResource("4_4g8l4")
+metadata/source_transparent_shader = ExtResource("2_4g8l4")
+metadata/source_depth_mode = "always"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1410608574]
+material_override = SubResource("ShaderMaterial_cd0uf")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_n4b5q")
+metadata/source_name = "fire-explosion-local-glow"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1695026906]
+material_override = SubResource("ShaderMaterial_8y6k4")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_m4hu6")
+metadata/source_name = "fire-explosion-pressure-and-scorch"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=853764655]
+material_override = SubResource("ShaderMaterial_lg282")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_pouqa")
+metadata/source_name = "fire-explosion-ballistic-trails"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1209684352]
+material_override = SubResource("ShaderMaterial_ikys7")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_pumbg")
+metadata/source_name = "fire-explosion-embers"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=753044039]
+unique_name_in_owner = true
+libraries/ = ExtResource("12_be6sv")

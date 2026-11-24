@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/loading/loading_system.gd" id="1_sb58n"]
+
+[node name="LoadingSystem" type="CanvasLayer" unique_id=9606351]
+layer = 100
+script = ExtResource("1_sb58n")
+
+[node name="Root" type="Control" parent="." unique_id=611515897]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Bg" type="ColorRect" parent="Root" unique_id=302056413]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.07, 0.07, 0.1, 1)
+
+[node name="Box" type="VBoxContainer" parent="Root" unique_id=2074287587]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -40.0
+offset_right = 210.0
+offset_bottom = 40.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Root/Box" unique_id=1485488181]
+layout_mode = 2
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="Bar" type="ProgressBar" parent="Root/Box" unique_id=1050375345]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+show_percentage = false
+
+[node name="Percent" type="Label" parent="Root/Box" unique_id=438113215]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0%"
+horizontal_alignment = 1
+
+[node name="Error" type="Label" parent="Root/Box" unique_id=1977417503]
+unique_name_in_owner = true
+modulate = Color(1, 0.45, 0.4, 1)
+layout_mode = 2
+horizontal_alignment = 1

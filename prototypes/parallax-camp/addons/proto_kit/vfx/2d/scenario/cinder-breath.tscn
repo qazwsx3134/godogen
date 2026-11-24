@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/cinder-breath/cinder-breath.tres" id="1_hhusu"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_dekxp"]
+
+[node name="CinderBreath" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_hhusu")
+animation = &"cinder_breath"
+frame = 2
+offset = Vector2(38.4, 0)
+script = ExtResource("2_dekxp")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "cinder-breath"
+metadata/placement = "from-caster"
+metadata/depth_hint = "front"

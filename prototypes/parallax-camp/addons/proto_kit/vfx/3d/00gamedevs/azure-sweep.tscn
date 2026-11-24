@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_66hog"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/spatial_part_0.gdshader" id="2_icljo"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/part_0.res" id="3_s33qr"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/spatial_part_1.gdshader" id="4_ud3x0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/part_1.res" id="5_d03eg"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/spatial_part_2.gdshader" id="6_qxlmk"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/part_2.res" id="7_xufvo"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/spatial_part_3.gdshader" id="8_7v7cb"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/part_3.res" id="9_rgtvm"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/azure-sweep/motion.res" id="10_kbtgw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xia8f"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_icljo")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1152
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.32
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5orpi"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_ud3x0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1152
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.32
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8s1r"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("6_qxlmk")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1152
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.32
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nwdkr"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("8_7v7cb")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1152
+shader_parameter/source_instance_count = 6.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.32
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[node name="AzureSweep" type="Node3D" unique_id=1497955461]
+script = ExtResource("1_66hog")
+effect_id = "azure-sweep"
+burst = true
+duration = 0.85
+start_duration = 0.08
+end_duration = 0.43
+kind = 2
+variant = 10
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "azure-sweep"
+metadata/editor_preview_time = 0.32
+
+[node name="Parts" type="Node3D" parent="." unique_id=1272532019]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1234337891]
+material_override = SubResource("ShaderMaterial_xia8f")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_s33qr")
+metadata/source_name = "azure-sweep-blade"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=667994652]
+material_override = SubResource("ShaderMaterial_5orpi")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_d03eg")
+metadata/source_name = "azure-sweep-halo"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1036515307]
+material_override = SubResource("ShaderMaterial_h8s1r")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_xufvo")
+metadata/source_name = "azure-sweep-edge"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1662287089]
+material_override = SubResource("ShaderMaterial_nwdkr")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_rgtvm")
+metadata/source_name = "azure-sweep-streaks"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=2170102]
+unique_name_in_owner = true
+libraries/ = ExtResource("10_kbtgw")

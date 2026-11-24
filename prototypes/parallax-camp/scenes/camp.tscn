@@ -1,0 +1,638 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/camp.gd" id="1_yfdyn"]
+[ext_resource type="Texture2D" path="res://art/final/sky.png" id="2_oump4"]
+[ext_resource type="Texture2D" path="res://art/final/sky_night.png" id="3_rq756"]
+[ext_resource type="Texture2D" path="res://art/final/far.png" id="4_ibqns"]
+[ext_resource type="Texture2D" path="res://art/final/mid.png" id="5_s0ico"]
+[ext_resource type="Texture2D" path="res://art/final/near.png" id="6_gab7d"]
+[ext_resource type="Texture2D" path="res://art/final/closest.png" id="7_sdm6p"]
+[ext_resource type="Texture2D" path="res://art/final/fg_occluder.png" id="8_sljs8"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="9_h7rp3"]
+[ext_resource type="Texture2D" path="res://art/final/props/tent.png" id="10_5iv0h"]
+[ext_resource type="Texture2D" path="res://art/final/props/item_rack.png" id="11_g0ld7"]
+[ext_resource type="Texture2D" path="res://art/final/props/cook_rack.png" id="12_obbu4"]
+[ext_resource type="PackedScene" path="res://scenes/street_lamp.tscn" id="13_ft0ss"]
+[ext_resource type="Texture2D" path="res://art/final/props/campfire_sheet.png" id="14_q6qfv"]
+[ext_resource type="PackedScene" path="res://scenes/interaction_point.tscn" id="15_80l5i"]
+[ext_resource type="Script" path="res://scripts/interaction.gd" id="16_e5qtl"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="17_qvhf0"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="18_lcqxp"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="19_pdvq6"]
+[ext_resource type="PackedScene" path="res://scenes/camera_rig.tscn" id="20_gab7d"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="21_sdm6p"]
+[ext_resource type="PackedScene" path="res://scenes/camera_zone.tscn" id="22_sljs8"]
+[ext_resource type="Script" path="res://scripts/camera_zone.gd" id="23_h7rp3"]
+[ext_resource type="Script" path="res://scripts/camera_zone_debug.gd" id="24_5iv0h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yfdyn"]
+size = Vector2(1476, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1wkub"]
+size = Vector2(16, 270)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nt0g5"]
+size = Vector2(16, 270)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oump4"]
+size = Vector2(140, 74)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rq756"]
+size = Vector2(180, 125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ibqns"]
+size = Vector2(140, 90)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s0ico"]
+size = Vector2(464, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sl08c"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1t6i"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mq1on"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1wdu8"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nakp8"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alq6w"]
+atlas = ExtResource("14_q6qfv")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4k36e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sl08c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1t6i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mq1on")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1wdu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nakp8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_alq6w")
+}],
+"loop": 1,
+"name": &"burn",
+"speed": 9.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_nm1yq"]
+offsets = PackedFloat32Array(0, 0.32, 0.66, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.55, 0.55, 0.55, 1, 0.12, 0.12, 0.12, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y7mp3"]
+gradient = SubResource("Gradient_nm1yq")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_33cuq"]
+colors = PackedColorArray(0.8862745, 0.8039216, 0.69803923, 0.8784314, 0.7490196, 0.6862745, 0.7294118, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wrgh"]
+content_margin_left = 7.0
+content_margin_top = 3.0
+content_margin_right = 7.0
+content_margin_bottom = 3.0
+bg_color = Color(0.09411765, 0.11764706, 0.16470589, 0.9019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42352942, 0.43137255, 0.48235294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nbv7q"]
+content_margin_left = 7.0
+content_margin_top = 3.0
+content_margin_right = 7.0
+content_margin_bottom = 3.0
+bg_color = Color(0.09411765, 0.11764706, 0.16470589, 0.9019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6117647, 0.5058824, 0.34901962, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7hse"]
+content_margin_left = 12.0
+content_margin_top = 9.0
+content_margin_right = 12.0
+content_margin_bottom = 9.0
+bg_color = Color(0.12941177, 0.11764706, 0.16470589, 0.972549)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.69803923, 0.5803922, 0.3764706, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_obbu4"]
+resource_local_to_scene = true
+size = Vector2(1290, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ft0ss"]
+resource_local_to_scene = true
+size = Vector2(495, 180)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q6qfv"]
+light_mode = 1
+
+[node name="Camp" type="Node2D" unique_id=458275053]
+script = ExtResource("1_yfdyn")
+
+[node name="Ambient" type="CanvasModulate" parent="." unique_id=870801604]
+unique_name_in_owner = true
+
+[node name="Sky" type="Parallax2D" parent="." unique_id=372267544]
+unique_name_in_owner = true
+z_index = -7
+scroll_scale = Vector2(0.03, 0.15)
+scroll_offset = Vector2(-286, -14)
+repeat_size = Vector2(1080, 0)
+
+[node name="DaySky" type="Sprite2D" parent="Sky" unique_id=1458507072]
+texture = ExtResource("2_oump4")
+centered = false
+
+[node name="NightSky" type="Sprite2D" parent="Sky" unique_id=949223290]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
+texture = ExtResource("3_rq756")
+centered = false
+
+[node name="Far" type="Parallax2D" parent="." unique_id=434863074]
+unique_name_in_owner = true
+light_mask = 2
+z_index = -6
+scroll_scale = Vector2(0.1, 0.3)
+scroll_offset = Vector2(-542, 0)
+repeat_size = Vector2(1662, 0)
+
+[node name="Art" type="Sprite2D" parent="Far" unique_id=505619428]
+light_mask = 2
+position = Vector2(0, 81)
+texture = ExtResource("4_ibqns")
+centered = false
+
+[node name="Mid" type="Parallax2D" parent="." unique_id=1579562696]
+unique_name_in_owner = true
+light_mask = 4
+z_index = -5
+scroll_scale = Vector2(0.24, 0.45)
+scroll_offset = Vector2(-305, 0)
+repeat_size = Vector2(1320, 0)
+
+[node name="Art" type="Sprite2D" parent="Mid" unique_id=1308867147]
+light_mask = 4
+position = Vector2(0, 102)
+texture = ExtResource("5_s0ico")
+centered = false
+
+[node name="Near" type="Parallax2D" parent="." unique_id=1161238540]
+unique_name_in_owner = true
+light_mask = 8
+z_index = -4
+scroll_scale = Vector2(0.45, 0.65)
+scroll_offset = Vector2(216, 0)
+repeat_size = Vector2(480, 0)
+repeat_times = 3
+
+[node name="Art" type="Sprite2D" parent="Near" unique_id=453980917]
+light_mask = 8
+texture = ExtResource("6_gab7d")
+centered = false
+
+[node name="Closest" type="Parallax2D" parent="." unique_id=1875179501]
+unique_name_in_owner = true
+light_mask = 16
+z_index = -3
+scroll_scale = Vector2(0.7, 0.85)
+scroll_offset = Vector2(336, 0)
+repeat_size = Vector2(480, 0)
+repeat_times = 3
+
+[node name="Art" type="Sprite2D" parent="Closest" unique_id=1205675786]
+light_mask = 16
+texture = ExtResource("7_sdm6p")
+centered = false
+
+[node name="FgOccluder" type="Parallax2D" parent="." unique_id=977879266]
+unique_name_in_owner = true
+light_mask = 32
+z_index = 4
+scroll_scale = Vector2(1.3, 1)
+
+[node name="WestTree" type="Sprite2D" parent="FgOccluder" unique_id=619075302]
+light_mask = 32
+texture = ExtResource("8_sljs8")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 160, 270)
+
+[node name="EastTree" type="Sprite2D" parent="FgOccluder" unique_id=788049170]
+light_mask = 32
+position = Vector2(2816, 0)
+texture = ExtResource("8_sljs8")
+centered = false
+region_enabled = true
+region_rect = Rect2(320, 0, 160, 270)
+
+[node name="CampPlane" type="Node2D" parent="." unique_id=86538643]
+unique_name_in_owner = true
+light_mask = 64
+
+[node name="Ground" type="Node2D" parent="CampPlane" unique_id=1047560271]
+light_mask = 64
+
+[node name="Tile1" type="Sprite2D" parent="CampPlane/Ground" unique_id=1323923734]
+light_mask = 64
+position = Vector2(0, 228)
+texture = ExtResource("9_h7rp3")
+centered = false
+
+[node name="Tile2" type="Sprite2D" parent="CampPlane/Ground" unique_id=988623030]
+light_mask = 64
+position = Vector2(492, 228)
+texture = ExtResource("9_h7rp3")
+centered = false
+
+[node name="Tile3" type="Sprite2D" parent="CampPlane/Ground" unique_id=253621920]
+light_mask = 64
+position = Vector2(984, 228)
+texture = ExtResource("9_h7rp3")
+centered = false
+
+[node name="RidgeApproach" type="Sprite2D" parent="CampPlane/Ground" unique_id=594271820]
+light_mask = 64
+texture_repeat = 2
+position = Vector2(1476, 210)
+texture = ExtResource("9_h7rp3")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 140, 120)
+
+[node name="RidgeCrest" type="Sprite2D" parent="CampPlane/Ground" unique_id=771168922]
+light_mask = 64
+texture_repeat = 3
+position = Vector2(1616, 159)
+texture = ExtResource("9_h7rp3")
+centered = false
+region_enabled = true
+region_rect = Rect2(140, 0, 180, 161)
+
+[node name="RidgeDescent" type="Sprite2D" parent="CampPlane/Ground" unique_id=626783501]
+light_mask = 64
+texture_repeat = 3
+position = Vector2(1796, 194)
+texture = ExtResource("9_h7rp3")
+centered = false
+region_enabled = true
+region_rect = Rect2(320, 0, 140, 126)
+
+[node name="EastTrail" type="Sprite2D" parent="CampPlane/Ground" unique_id=505148045]
+light_mask = 64
+texture_repeat = 2
+position = Vector2(1936, 228)
+texture = ExtResource("9_h7rp3")
+centered = false
+region_enabled = true
+region_rect = Rect2(460, 0, 464, 120)
+
+[node name="Terrain" type="StaticBody2D" parent="CampPlane" unique_id=1527426110]
+
+[node name="Floor" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=340144559]
+position = Vector2(738, 256)
+shape = SubResource("RectangleShape2D_yfdyn")
+
+[node name="WestWall" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=352947027]
+position = Vector2(-8, 135)
+shape = SubResource("RectangleShape2D_1wkub")
+
+[node name="EastWall" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=294097938]
+position = Vector2(2408, 135)
+shape = SubResource("RectangleShape2D_nt0g5")
+
+[node name="RidgeApproach" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=1662807124]
+position = Vector2(1546, 247)
+shape = SubResource("RectangleShape2D_oump4")
+
+[node name="RidgeCrest" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=1825086669]
+position = Vector2(1706, 221.5)
+shape = SubResource("RectangleShape2D_rq756")
+
+[node name="RidgeDescent" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=1684199673]
+position = Vector2(1866, 239)
+shape = SubResource("RectangleShape2D_ibqns")
+
+[node name="EastTrail" type="CollisionShape2D" parent="CampPlane/Terrain" unique_id=207397755]
+position = Vector2(2168, 256)
+shape = SubResource("RectangleShape2D_s0ico")
+
+[node name="Tent" type="Sprite2D" parent="CampPlane" unique_id=1590453191]
+light_mask = 64
+position = Vector2(527, 132)
+texture = ExtResource("10_5iv0h")
+centered = false
+
+[node name="ItemRack" type="Sprite2D" parent="CampPlane" unique_id=339331668]
+light_mask = 64
+position = Vector2(743, 143)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("11_g0ld7")
+centered = false
+
+[node name="CookRack" type="Sprite2D" parent="CampPlane" unique_id=1635239976]
+light_mask = 64
+position = Vector2(832, 152)
+scale = Vector2(0.62, 0.62)
+texture = ExtResource("12_obbu4")
+centered = false
+
+[node name="LampWest" type="Node2D" parent="CampPlane" unique_id=1928722902 instance=ExtResource("13_ft0ss")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(293, 228)
+
+[node name="LampEast" type="Node2D" parent="CampPlane" unique_id=1888646283 instance=ExtResource("13_ft0ss")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(904, 228)
+
+[node name="Fire" type="AnimatedSprite2D" parent="CampPlane" unique_id=265717364]
+light_mask = 64
+position = Vector2(724, 228)
+sprite_frames = SubResource("SpriteFrames_4k36e")
+animation = &"burn"
+autoplay = "burn"
+centered = false
+offset = Vector2(-32, -45)
+
+[node name="FireLight" type="PointLight2D" parent="CampPlane" unique_id=526465629]
+unique_name_in_owner = true
+position = Vector2(724, 210)
+color = Color(1, 0.67058825, 0.34509805, 1)
+energy = 0.42
+range_item_cull_mask = 64
+texture = SubResource("GradientTexture2D_y7mp3")
+texture_scale = 1.58
+
+[node name="Smoke" type="CPUParticles2D" parent="CampPlane" unique_id=708197371]
+unique_name_in_owner = true
+light_mask = 64
+z_index = 1
+position = Vector2(872, 192)
+emitting = false
+amount = 20
+lifetime = 1.4
+one_shot = true
+explosiveness = 0.3
+direction = Vector2(0, -1)
+spread = 21.0
+gravity = Vector2(6, -13)
+initial_velocity_min = 10.0
+initial_velocity_max = 23.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_33cuq")
+
+[node name="FirePoint" type="Area2D" parent="CampPlane" unique_id=361748574 instance=ExtResource("15_80l5i")]
+unique_name_in_owner = true
+position = Vector2(724, 228)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("16_e5qtl")
+prompt_text = "E  Add firewood"
+
+[node name="ItemPoint" type="Area2D" parent="CampPlane" unique_id=1692532292 instance=ExtResource("15_80l5i")]
+unique_name_in_owner = true
+position = Vector2(801, 228)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("16_e5qtl")
+prompt_text = "E  Inspect supplies"
+
+[node name="CookPoint" type="Area2D" parent="CampPlane" unique_id=388383130 instance=ExtResource("15_80l5i")]
+unique_name_in_owner = true
+position = Vector2(872, 228)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("16_e5qtl")
+prompt_text = "E  Cook a meal"
+
+[node name="Player" type="CharacterBody2D" parent="CampPlane" unique_id=1198963220 instance=ExtResource("17_qvhf0")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(666, 228)
+collision_layer = 2
+script = ExtResource("18_lcqxp")
+
+[node name="RidgeLamp" type="Node2D" parent="CampPlane" unique_id=1144910840 instance=ExtResource("13_ft0ss")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(1396, 228)
+
+[node name="TrailEndLamp" type="Node2D" parent="CampPlane" unique_id=260108814 instance=ExtResource("13_ft0ss")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(2240, 228)
+
+[node name="StokeTimer" type="Timer" parent="." unique_id=1121411930]
+unique_name_in_owner = true
+wait_time = 5.0
+one_shot = true
+
+[node name="Sfx" type="Node" parent="." unique_id=47268645]
+unique_name_in_owner = true
+script = ExtResource("19_pdvq6")
+voices = 4
+
+[node name="Hud" type="CanvasLayer" parent="." unique_id=82288032]
+
+[node name="Overlay" type="Control" parent="Hud" unique_id=2096819047]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Controls" type="PanelContainer" parent="Hud/Overlay" unique_id=1327746321]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 10.0
+offset_bottom = 10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3wrgh")
+
+[node name="Keys" type="Label" parent="Hud/Overlay/Controls" unique_id=413343254]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.93333334, 0.8980392, 0.84313726, 1)
+text = "A / D or ← / →   Run     Space / W   Double jump     T   Time"
+
+[node name="Time" type="PanelContainer" parent="Hud/Overlay" unique_id=1538469777]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nbv7q")
+
+[node name="Phase" type="Label" parent="Hud/Overlay/Time" unique_id=774207477]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.8862745, 0.654902, 1)
+text = "DAYLIGHT"
+horizontal_alignment = 1
+
+[node name="Supplies" type="PanelContainer" parent="Hud/Overlay" unique_id=785635417]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -10.0
+offset_top = 43.0
+offset_right = -10.0
+offset_bottom = 43.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e7hse")
+
+[node name="List" type="VBoxContainer" parent="Hud/Overlay/Supplies" unique_id=1673857260]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Hud/Overlay/Supplies/List" unique_id=213461775]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.8862745, 0.654902, 1)
+text = "Camp supplies"
+
+[node name="Items" type="Label" parent="Hud/Overlay/Supplies/List" unique_id=1948162287]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.93333334, 0.8980392, 0.84313726, 1)
+text = "Bedroll
+Flint and steel
+Trail rations"
+
+[node name="CameraDev" type="HBoxContainer" parent="Hud/Overlay" unique_id=788649954]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -29.0
+offset_bottom = -9.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="CameraZonesButton" type="Button" parent="Hud/Overlay/CameraDev" unique_id=222037533]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "Camera zones"
+
+[node name="CameraZoneStatus" type="Label" parent="Hud/Overlay/CameraDev" unique_id=574057181]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.98039216, 0.90588236, 0.7411765, 1)
+theme_override_colors/font_outline_color = Color(0.07058824, 0.09411765, 0.12941177, 1)
+theme_override_constants/outline_size = 4
+text = "Default follow"
+
+[node name="CameraRig" type="Node2D" parent="." unique_id=1801212460 instance=ExtResource("20_gab7d")]
+unique_name_in_owner = true
+process_priority = 20
+position = Vector2(666, 178)
+script = ExtResource("21_sdm6p")
+
+[node name="CameraZones" type="Node2D" parent="." unique_id=1947449870]
+unique_name_in_owner = true
+
+[node name="EastTrail" parent="CameraZones" unique_id=1255510484 instance=ExtResource("22_sljs8")]
+position = Vector2(1675, 146)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h7rp3")
+zone_priority = 10
+override_look_ahead = true
+look_ahead_distance = 132.0
+override_follow_speed = true
+follow_speed = 7.8
+
+[node name="Bounds" parent="CameraZones/EastTrail" index="0" unique_id=579050348]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_obbu4")
+debug_color = Color(0.35, 0.85, 0.95, 0.28)
+
+[node name="Ridge" parent="CameraZones" unique_id=1720137653 instance=ExtResource("22_sljs8")]
+position = Vector2(1697.5, 146)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h7rp3")
+zone_priority = 20
+vertical_bias = -24.0
+override_look_ahead = true
+look_ahead_distance = 88.0
+
+[node name="Bounds" parent="CameraZones/Ridge" index="0" unique_id=579050348]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_ft0ss")
+debug_color = Color(0.35, 0.85, 0.95, 0.28)
+
+[node name="CameraZoneDebug" type="Node2D" parent="." unique_id=1175512200]
+unique_name_in_owner = true
+visible = false
+z_index = 10
+material = SubResource("CanvasItemMaterial_q6qfv")
+script = ExtResource("24_5iv0h")
+
+[editable path="CameraZones/EastTrail"]
+[editable path="CameraZones/Ridge"]

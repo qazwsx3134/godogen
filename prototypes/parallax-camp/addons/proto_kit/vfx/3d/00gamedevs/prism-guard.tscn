@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_klfur"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-guard/spatial_part_0.gdshader" id="2_o0ywy"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-guard/part_0.res" id="3_lqiq3"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-guard/spatial_part_1.gdshader" id="4_ge6rh"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-guard/part_1.res" id="5_1171w"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-guard/motion.res" id="6_m1ni3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_olgxo"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_o0ywy")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1008
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.65
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 7.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.17144111, 0.76815116, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3oly0"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_ge6rh")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.65
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 7.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.17144111, 0.76815116, 1)
+
+[node name="PrismGuard" type="Node3D" unique_id=1454272488]
+script = ExtResource("1_klfur")
+effect_id = "prism-guard"
+start_duration = 0.3
+end_duration = 0.65
+kind = 7
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "prism-guard"
+metadata/editor_preview_time = 1.2
+
+[node name="Parts" type="Node3D" parent="." unique_id=1427250440]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1008243668]
+material_override = SubResource("ShaderMaterial_olgxo")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_lqiq3")
+metadata/source_name = "utility-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1381912146]
+material_override = SubResource("ShaderMaterial_3oly0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_1171w")
+metadata/source_name = "utility-detail-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=333883230]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_m1ni3")

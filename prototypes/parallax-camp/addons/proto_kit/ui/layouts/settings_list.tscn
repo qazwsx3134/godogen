@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_ge0gr"]
+
+[node name="SettingsList" type="Control" unique_id=770484775]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_ge0gr")
+metadata/ui_layout_id = "settings_list"
+metadata/authored_node_count = 26
+
+[node name="Backdrop" type="Panel" parent="." unique_id=505978139]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=807843395]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=1799500837]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body" unique_id=238333391]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "設定"
+autowrap_mode = 3
+
+[node name="TabScroller" type="ScrollContainer" parent="SafeMargin/Body" unique_id=1017375835]
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="Tabs" type="TabBar" parent="SafeMargin/Body/TabScroller" unique_id=652344390]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+current_tab = 0
+clip_tabs = false
+tab_count = 3
+tab_0/title = "遊戲"
+tab_1/title = "音效"
+tab_2/title = "畫面"
+
+[node name="SettingsScroll" type="ScrollContainer" parent="SafeMargin/Body" unique_id=1926551242]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/SettingsScroll" unique_id=1433178720]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Rows" type="VBoxContainer" parent="SafeMargin/Body/SettingsScroll/Content" unique_id=2053726071]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Setting0" type="HBoxContainer" parent="SafeMargin/Body/SettingsScroll/Content/Rows" unique_id=2130793298]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting0" unique_id=575642903]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "語言"
+autowrap_mode = 3
+
+[node name="Previous" type="Button" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting0" unique_id=1632945539]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "‹"
+
+[node name="Value" type="Label" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting0" unique_id=612251318]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "繁中"
+autowrap_mode = 3
+
+[node name="Next" type="Button" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting0" unique_id=709977855]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "›"
+
+[node name="Setting1" type="HBoxContainer" parent="SafeMargin/Body/SettingsScroll/Content/Rows" unique_id=467266363]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting1" unique_id=994293861]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "畫質"
+autowrap_mode = 3
+
+[node name="Previous" type="Button" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting1" unique_id=1945760864]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "‹"
+
+[node name="Value" type="Label" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting1" unique_id=141695868]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "高"
+autowrap_mode = 3
+
+[node name="Next" type="Button" parent="SafeMargin/Body/SettingsScroll/Content/Rows/Setting1" unique_id=1918245483]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "›"
+
+[node name="VolumeRow" type="VBoxContainer" parent="SafeMargin/Body/SettingsScroll/Content/Rows" unique_id=778223746]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SafeMargin/Body/SettingsScroll/Content/Rows/VolumeRow" unique_id=508009577]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "音樂 · 70%"
+autowrap_mode = 3
+
+[node name="Volume" type="HSlider" parent="SafeMargin/Body/SettingsScroll/Content/Rows/VolumeRow" unique_id=38698888]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+value = 70.0
+
+[node name="Actions" type="HBoxContainer" parent="SafeMargin/Body" unique_id=938512565]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="SafeMargin/Body/Actions" unique_id=1926096446]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "返回"
+
+[node name="Reset" type="Button" parent="SafeMargin/Body/Actions" unique_id=400174534]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "重設"

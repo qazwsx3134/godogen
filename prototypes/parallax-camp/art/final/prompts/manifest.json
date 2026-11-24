@@ -1,0 +1,179 @@
+{
+  "schema": "parallax-camp.generation-manifest.v1",
+  "style": "A-erwin",
+  "viewport_px": [
+    480,
+    270
+  ],
+  "image_route": "codex-cli",
+  "entries": [
+    {
+      "output": "near.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: parallax-background-layer\nAsset type: seamless repeatable transparent side-view game layer for a 480x270 camera\nInput images: Image 1 is the selected A-erwin preview, reference only for the warm dusk palette, 16-bit pixel scale, outlines and forest mood. Image 2 is the Erwin-run mid background layer, reference only for pixel-art rendering quality and material detail.\nPrimary request: Create one horizontal loopable forest depth layer named near. Show rolling dark-green forested hills with varied pine clusters, a few round broadleaf trees, small shrubs, and warm gold highlights. This layer sits between the mid forest and the close foreground.\nComposition: 16:9 side view. Forest silhouettes occupy mainly the lower 55 percent; upper area is one perfectly flat solid #FF00FF magenta key color. Keep the first and last 5 percent of the canvas as clean flat magenta safety margins so the repeated tile has matching transparent edges. Distribute tree clusters with natural gaps across the width; do not place a single focal landmark at the edge.\nStyle: high-quality commercial 16-bit pixel art, crisp square pixel clusters, thin dark outlines, muted forest greens and warm dusk light, fine but readable material texture, limited palette. No anti-aliasing, blur, glow or bloom.\nConstraints: scenery only; no sky, clouds, ground strip, wall, windmills, ruins, campsite, props, characters, text, logo, watermark or signature.\n",
+      "postprocess": "Horizontal near-depth forest layer; magenta keyed and downsampled to 480x270.",
+      "prompt_id": "near"
+    },
+    {
+      "output": "closest.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: parallax-background-layer\nAsset type: seamless repeatable transparent closest forest layer for a 480x270 side-view game camera\nInput images: Image 1 is the selected A-erwin preview, reference only for palette, pixel scale and tree silhouette style. Image 2 is the Erwin-run mid background layer, reference only for 16-bit pixel-art quality and outlines.\nPrimary request: Create one distinct closest-depth forest layer in the same established A-erwin style. Use several large, clearly separated pine groups, thick but not massive tree trunks, leafy branches and low fern or grass tufts. Keep the center mostly open so the campsite remains readable when this layer is placed behind the foreground overlay.\nComposition: 16:9 side view. Trees occupy the lower half and outer quarter regions, with natural openings through the middle. Upper area is perfectly flat solid #FF00FF magenta for keying. Leave the first and last 5 percent as clean flat magenta margins for a repeatable horizontal seam. Avoid a unique landmark that would make the loop obvious.\nStyle: high-quality 16-bit pixel art, crisp square clusters, thin dark outlines, muted deep greens and warm gold rim light; match the selected preview's detail density. No blur, anti-aliasing, glow or bloom.\nConstraints: no sky, no ground platform, no camp props, no tent, no fire, no lantern, no character, no text, logo, watermark or signature.\n",
+      "postprocess": "Horizontal closest-depth forest layer; magenta keyed, downsampled to 480x270, and made edge-transparent for a tile seam.",
+      "prompt_id": "closest"
+    },
+    {
+      "output": "fg_occluder.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: foreground-occluder-layer\nAsset type: transparent screen-space foreground occluder, 480x270\nInput images: Image 1 is the selected A-erwin preview, reference only for framing, palette and tree design. Image 2 is the accepted A-erwin magenta-backed foreground artwork, reference only for its hand-crafted pixel contours and materials.\nPrimary request: Create a single foreground occluder overlay for the camp scene. Place one thick old pine or broadleaf trunk at the far left and another leafy trunk at the far right, with irregular branches and a few grass or fern tufts along the lower side corners. Keep the center 62 percent entirely flat #FF00FF magenta with no branches or shadows so actors and camp interactions stay unobstructed.\nStyle: high-quality 16-bit pixel art, crisp square clusters, narrow dark outlines, muted brown bark and deep green foliage with warm dusk highlights, consistent with A-erwin.\nConstraints: full 16:9 screen framing; solid flat magenta where transparent; no scenery or props in the middle; no sky, tent, fire, racks, lamp, character, text, logo, watermark or signature.\n",
+      "postprocess": "Screen-space tree and grass overlay; magenta keyed and fitted to 480x270.",
+      "prompt_id": "fg"
+    },
+    {
+      "output": "props/street_lamp.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: game-prop\nAsset type: one transparent side-view pixel-art street lamp prop for the A-erwin camp, isolated sprite\nInput images: Image 1 is the selected A-erwin preview, reference for scene mood and scale. Image 2 is the lamp shape in the accepted A-erwin foreground artwork, reference for the exact wooden post, crossbar, hanging lantern, warm metal and glass treatment.\nPrimary request: Recreate one freestanding wooden camp street lamp: a slim sturdy post, short crossbar and a small hanging metal lantern with a warm amber window. Keep the complete silhouette grounded and centered, with generous margins. It is a separate game prop and must not merge with a tree.\nStyle: commercial 16-bit pixel art, crisp square clusters, thin dark outlines, warm gold illumination kept inside the lantern glass, muted wood and brass colors matching A-erwin.\nBackground: perfectly flat solid #FF00FF magenta for chroma keying; no floor plane, cast shadow, scenery or glow beyond the object.\nConstraints: one object only; no text, letters, logo, watermark, signature or existing game character.\n",
+      "postprocess": "Isolated camp lamp; magenta keyed and pixel-art downsampled.",
+      "prompt_id": "lamp"
+    },
+    {
+      "output": "props/cook_rack.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: game-prop\nAsset type: one transparent side-view cooking rack prop for the A-erwin camp\nInput images: Image 1 is the selected A-erwin preview, reference for scale and dusk palette. Image 2 is the accepted A-erwin gear-rack crop, reference for its wooden construction, iron hardware and crisp 16-bit rendering; create a distinct cook rack, not a copy of the whole gear rack.\nPrimary request: A compact freestanding cooking tripod or low wooden rack with one iron pot suspended over a small, unlit cooking space. Show a readable pot handle and a few simple metal details. Make the object distinct from the larger item rack, with no sacks, crates or stored supplies.\nStyle: high-quality 16-bit pixel art, crisp square clusters, thin dark outlines, muted wood and iron, restrained warm gold accents; same A-erwin material detail and outline weight.\nBackground: perfectly flat solid #FF00FF magenta for keying, no floor plane, cast shadow or scenery. Full prop centered, complete, with safe magenta margins.\nConstraints: no fire, flame, smoke, tent, lantern, character, text, logo, watermark or signature.\n",
+      "postprocess": "Isolated cooking rack and pot; magenta keyed and pixel-art downsampled.",
+      "prompt_id": "cook"
+    },
+    {
+      "output": "props/campfire_sheet.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: game-fx\nAsset type: six-frame 2x3 raw grid for a transparent campfire sprite animation; it will be assembled into one horizontal strip after QC\nInput images: Image 1 is the isolated fire-and-stone-ring crop from the accepted A-erwin artwork, reference for the exact fire base, log arrangement and stone palette. Image 2 is the selected A-erwin preview, reference for game scale and dusk lighting.\nPrimary request: Recreate the same compact campfire as six sequential animation poses. Every cell has the identical fixed stone ring, three crossed logs, footprint, camera, scale and ground-contact baseline; animate only the flame tongues and a few tiny embers. The loop should read as a gentle natural flicker and frame 6 should lead smoothly back to frame 1.\nLayout: exactly 2 columns by 3 rows, row-major frames 1 to 6, equal cells, safe padding, no marks or cell borders. Keep all fire art centered and inside the central 70 percent of each cell. Use one shared ignition point and no baked ground slab.\nStyle: high-quality crisp 16-bit pixel art with thin dark outlines and warm amber/orange fire, matching A-erwin.\nBackground: every unused pixel is flat solid #FF00FF magenta. No text, labels, watermark or signature.\n",
+      "postprocess": "Six-frame campfire animation; raw 3x2 grid processed through ASF at 1/10 logical-pixel scale, yielding centered 64px cells inside the central 70%; strict sheet spill QC passed after horizontal assembly.",
+      "prompt_id": "campfire"
+    },
+    {
+      "output": "hero/idle.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: player-character-sprite\nAsset type: original side-view traveler idle animation, four-frame 2x2 sheet, later exported as a horizontal strip\nInput images: Image 1 is the isolated traveler from the selected A-erwin foreground artwork; preserve this exact original character identity, hair, face, olive travel cloak, scarf, pack, belt, tan trousers and boots. Image 2 is the selected A-erwin preview, reference for game scale and rendering style.\nPrimary request: Draw one complete idle cycle for this same traveler facing right: four subtle phases of breathing, a small blink and slight cloak or pack settling. Keep the head, torso and feet centered in each cell, the same body scale, and a stable grounded feet line. Character target at game scale is about 32x48 visible pixels.\nLayout: exactly 2 columns by 2 rows, four sequential frames in row-major order, equal cells. Full body entirely inside the central 65 percent of every cell, no limb, hair, pack or cloak crossing cell edges; no duplicate characters within a cell.\nStyle: commercial 16-bit pixel-art action game, crisp square clusters, fine dark outlines and muted earthy sunset colors matching A-erwin. No blur, anti-aliasing, glow or bloom.\nBackground: flat solid #FF00FF magenta. Original character only; no Attack on Titan, no existing game characters, text, logo, watermark or signature.\n",
+      "postprocess": "Four-frame traveler idle; magenta keyed, one shared 1/11 scale, root registered, then packed into 64px cells.",
+      "prompt_id": "hero_idle"
+    },
+    {
+      "output": "hero/walk.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: player-character-sprite\nAsset type: four-frame in-place side-view traveler walk cycle, 2x2 raw grid, later exported as a horizontal strip\nInput images: Image 1 is the original A-erwin traveler reference; keep the same young brown-haired traveler, olive cloak, warm scarf, tan trousers, boots and compact pack. Image 2 is a fixed character-anchor guide made from the accepted idle sprite; use it only for identical subject scale, cell placement, side-facing direction, and feet/root position in every cell. Replace the copied idle pose with the requested walking poses.\nPrimary request: Create four genuinely distinct sequential walk poses facing right: (1) near-foot contact forward with far foot behind; (2) passing pose with feet close and knees bent; (3) far-foot contact forward with near foot behind, the opposite leg lead from frame 1; (4) opposite passing pose before the loop returns to frame 1. Show alternating legs clearly. Move only legs and small arm/cloak/pack details. Keep the head, chest center, pelvis and horizontal root fixed in every cell; do not translate the whole character across the frame.\nLayout: exactly 2 columns by 2 rows, frames 1 to 4 in row-major order, equal 64x64 logical cells. Keep the complete body inside the central 65 percent, one traveler per cell, identical feet baseline and body scale, no part crossing cell boundaries. Frame 1 and frame 3 must have opposite leading legs.\nStyle: crisp commercial 16-bit pixel art, thin dark outlines, muted earthy colors and warm A-erwin dusk palette. No blur, anti-aliasing, glow or bloom.\nBackground: perfectly flat solid #FF00FF magenta. No ground plate, dust, props, text, logo, watermark, signature or existing game character.\n",
+      "postprocess": "Four-frame traveler walk; generated from fixed-anchor guide, magenta keyed, root registered at shared 1/11 scale, then packed into 64px cells.",
+      "prompt_id": "hero_walk_anchor"
+    },
+    {
+      "output": "hero/jump.png",
+      "method": "Codex CLI image generation (user-selected route)",
+      "prompt": "Use case: player-character-sprite\nAsset type: original side-view traveler four-frame jump action, 2x2 raw grid, later exported as a horizontal strip\nInput images: Image 1 is the accepted A-erwin traveler identity reference. Image 2 is the accepted A-erwin idle-sheet frame, reference for the exact sprite scale, clothing, palette, outlines and pixel density.\nPrimary request: Draw a four-pose one-shot jump facing right: crouched anticipation, takeoff, compact apex pose, then descending landing preparation. Keep the character centered horizontally and the same body scale; vary the feet height naturally to show airtime. Keep cloak and pack close to the body. Visible target body is about 32x48 game pixels.\nLayout: exactly 2 columns by 2 rows, frames 1 to 4 in row-major order, equal cells. Full character inside the central 65 percent of every cell, no hair, limbs, pack or cloak crossing cell edges; do not duplicate characters. No ground plane.\nStyle: crisp commercial 16-bit pixel art, thin dark outlines, muted earthy tones and warm A-erwin dusk light. No blur, anti-aliasing, glow or bloom.\nBackground: perfectly flat solid #FF00FF magenta. Original traveler only; no text, logo, watermark, signature or existing game character.\n",
+      "postprocess": "Four-frame traveler jump; magenta keyed, root registered at shared 1/11 scale, then packed into 64px cells.",
+      "prompt_id": "hero_jump"
+    }
+  ],
+  "derived_assets": [
+    {
+      "output": "sky_night.png",
+      "source": "sky.png",
+      "method": "deterministic dusk-to-night tint with 62 stars; source dimensions and side edges preserved."
+    },
+    {
+      "output": "props/tent.png",
+      "source": "accepted A-erwin foreground artwork",
+      "method": "isolated crop and pixel-art processing; no separate generation prompt."
+    },
+    {
+      "output": "props/item_rack.png",
+      "source": "accepted A-erwin foreground artwork",
+      "method": "isolated crop and pixel-art processing; no separate generation prompt."
+    }
+  ],
+  "reused_assets": [
+    {
+      "output": "sky.png",
+      "source": "art/style-options/A-erwin/reused/sky.png",
+      "byte_identical": true
+    },
+    {
+      "output": "far.png",
+      "source": "art/style-options/A-erwin/reused/far.png",
+      "byte_identical": true
+    },
+    {
+      "output": "mid.png",
+      "source": "art/style-options/A-erwin/reused/mid.png",
+      "byte_identical": true
+    },
+    {
+      "output": "ground.png",
+      "source": "art/style-options/A-erwin/reused/ground.png",
+      "byte_identical": true
+    }
+  ],
+  "spill_cleanup": {
+    "method": "At visible alpha-boundary pixels only, key-like colors were replaced with the nearest non-key opaque neighbor in the same sprite cell; transparent RGB was set to zero.",
+    "detector": "8-neighbor alpha edge; R>=150, B>=120, G<=110, abs(R-B)<=100.",
+    "measured_files": [
+      "far.png",
+      "mid.png",
+      "near.png",
+      "closest.png",
+      "fg_occluder.png",
+      "props/campfire_sheet.png",
+      "props/tent.png",
+      "props/item_rack.png",
+      "props/cook_rack.png",
+      "props/street_lamp.png",
+      "hero/idle.png",
+      "hero/walk.png",
+      "hero/jump.png"
+    ],
+    "residual_pixels_each": 0
+  },
+  "purple_interior_cleanup": {
+    "criterion": "for visible pixels: r>0.4, b>0.35, g<0.7*min(r,b), RGB normalized to [0,1]",
+    "method": "Replace every matching pixel with the nearest nonmatching opaque pixel color in its 8-connected alpha component; campfire frames processed independently; alpha silhouette preserved.",
+    "counts": [
+      {
+        "file": "near.png",
+        "before": 262,
+        "after": 0
+      },
+      {
+        "file": "closest.png",
+        "before": 1048,
+        "after": 0
+      },
+      {
+        "file": "fg_occluder.png",
+        "before": 349,
+        "after": 0
+      },
+      {
+        "file": "props/campfire_sheet.png",
+        "before": 21,
+        "after": 0
+      },
+      {
+        "file": "props/tent.png",
+        "before": 37,
+        "after": 0
+      },
+      {
+        "file": "props/item_rack.png",
+        "before": 62,
+        "after": 0
+      },
+      {
+        "file": "props/cook_rack.png",
+        "before": 18,
+        "after": 0
+      },
+      {
+        "file": "props/street_lamp.png",
+        "before": 20,
+        "after": 0
+      }
+    ]
+  }
+}

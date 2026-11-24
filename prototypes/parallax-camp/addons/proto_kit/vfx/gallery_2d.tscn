@@ -1,0 +1,123 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/gallery.gd" id="1_0r5fi"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/2d/scenario/cinder-explosion.tscn" id="2_iy54b"]
+
+[node name="VfxGallery2D" type="Control" unique_id=1013524590]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0r5fi")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1826463608]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=891117312]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Columns" type="HBoxContainer" parent="Panel/Margin" unique_id=1007325473]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Controls" type="VBoxContainer" parent="Panel/Margin/Columns" unique_id=160832532]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=1877222224]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Godot VFX · 2D"
+
+[node name="SourceChoice" type="OptionButton" parent="Panel/Margin/Columns/Controls" unique_id=1070034902]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All sources"
+popup/item_0/id = 0
+popup/item_1/text = "Scenario sprites"
+popup/item_1/id = 1
+popup/item_2/text = "00GameDevs native"
+popup/item_2/id = 2
+
+[node name="EffectsList" type="ItemList" parent="Panel/Margin/Columns/Controls" unique_id=1876269409]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Info" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=1980647596]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "Choose an effect"
+autowrap_mode = 3
+
+[node name="ReplayButton" type="Button" parent="Panel/Margin/Columns/Controls" unique_id=2016164888]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Replay"
+
+[node name="Actions" type="HBoxContainer" parent="Panel/Margin/Columns/Controls" unique_id=406604606]
+layout_mode = 2
+
+[node name="StopButton" type="Button" parent="Panel/Margin/Columns/Controls/Actions" unique_id=44743195]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stop"
+
+[node name="HitButton" type="Button" parent="Panel/Margin/Columns/Controls/Actions" unique_id=1437396976]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hit"
+
+[node name="SpeedLabel" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=707715618]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Speed 1.00x"
+
+[node name="SpeedControl" type="HSlider" parent="Panel/Margin/Columns/Controls" unique_id=1351834678]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = 0.25
+max_value = 2.0
+step = 0.25
+value = 1.0
+
+[node name="Stage" type="SubViewportContainer" parent="Panel/Margin/Columns" unique_id=1804923404]
+custom_minimum_size = Vector2(600, 480)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Preview" type="SubViewport" parent="Panel/Margin/Columns/Stage" unique_id=967482605]
+unique_name_in_owner = true
+size = Vector2i(700, 500)
+render_target_update_mode = 4
+
+[node name="Effects" type="Node2D" parent="Panel/Margin/Columns/Stage/Preview" unique_id=1671770827]
+unique_name_in_owner = true
+
+[node name="EditorSample" parent="Panel/Margin/Columns/Stage/Preview/Effects" unique_id=341124408 instance=ExtResource("2_iy54b")]
+position = Vector2(350, 250)
+
+[node name="Replay" type="Timer" parent="." unique_id=1028525315]
+unique_name_in_owner = true
+one_shot = true

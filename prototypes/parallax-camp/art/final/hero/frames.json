@@ -1,0 +1,305 @@
+{
+  "format": "parallax-camp.hero-frames.v1",
+  "viewport_px": [
+    480,
+    270
+  ],
+  "character": {
+    "id": "traveler-a-erwin",
+    "facing": "right",
+    "reference": "A-erwin",
+    "visible_body_target_px": [
+      32,
+      48
+    ]
+  },
+  "scale": {
+    "logical_pixel_downscale": "1/11",
+    "frame_size_px": [
+      64,
+      64
+    ],
+    "anchor_px": [
+      32,
+      57
+    ]
+  },
+  "actions": {
+    "idle": {
+      "sheet": "idle.png",
+      "frame_count": 4,
+      "frame_size_px": [
+        64,
+        64
+      ],
+      "loop": true,
+      "duration_ms": 180,
+      "frames": [
+        {
+          "index": 0,
+          "rect_px": [
+            0,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            17,
+            9,
+            41,
+            57
+          ],
+          "duration_ms": 180
+        },
+        {
+          "index": 1,
+          "rect_px": [
+            64,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            17,
+            9,
+            41,
+            57
+          ],
+          "duration_ms": 180
+        },
+        {
+          "index": 2,
+          "rect_px": [
+            128,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            17,
+            9,
+            41,
+            57
+          ],
+          "duration_ms": 180
+        },
+        {
+          "index": 3,
+          "rect_px": [
+            192,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            17,
+            9,
+            41,
+            57
+          ],
+          "duration_ms": 180
+        }
+      ]
+    },
+    "walk": {
+      "sheet": "walk.png",
+      "frame_count": 4,
+      "frame_size_px": [
+        64,
+        64
+      ],
+      "loop": true,
+      "duration_ms": 110,
+      "frames": [
+        {
+          "index": 0,
+          "rect_px": [
+            0,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            18,
+            14,
+            45,
+            57
+          ],
+          "duration_ms": 110
+        },
+        {
+          "index": 1,
+          "rect_px": [
+            64,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            19,
+            14,
+            43,
+            57
+          ],
+          "duration_ms": 110
+        },
+        {
+          "index": 2,
+          "rect_px": [
+            128,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            19,
+            14,
+            45,
+            57
+          ],
+          "duration_ms": 110
+        },
+        {
+          "index": 3,
+          "rect_px": [
+            192,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            19,
+            14,
+            43,
+            57
+          ],
+          "duration_ms": 110
+        }
+      ]
+    },
+    "jump": {
+      "sheet": "jump.png",
+      "frame_count": 4,
+      "frame_size_px": [
+        64,
+        64
+      ],
+      "loop": false,
+      "duration_ms": 120,
+      "frames": [
+        {
+          "index": 0,
+          "rect_px": [
+            0,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            20,
+            27,
+            42,
+            57
+          ],
+          "duration_ms": 120
+        },
+        {
+          "index": 1,
+          "rect_px": [
+            64,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            21,
+            17,
+            43,
+            56
+          ],
+          "duration_ms": 120
+        },
+        {
+          "index": 2,
+          "rect_px": [
+            128,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            20,
+            15,
+            43,
+            45
+          ],
+          "duration_ms": 120
+        },
+        {
+          "index": 3,
+          "rect_px": [
+            192,
+            0,
+            64,
+            64
+          ],
+          "anchor_px": [
+            32,
+            57
+          ],
+          "visible_bbox_in_cell_px": [
+            21,
+            19,
+            44,
+            54
+          ],
+          "duration_ms": 120
+        }
+      ]
+    }
+  }
+}

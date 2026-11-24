@@ -1,0 +1,631 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ridge_run.gd" id="1_vhdra"]
+[ext_resource type="Texture2D" path="res://art/final/sky.png" id="2_q0ddi"]
+[ext_resource type="Texture2D" path="res://art/final/sky_night.png" id="3_46qua"]
+[ext_resource type="Texture2D" path="res://art/final/far.png" id="4_1hek4"]
+[ext_resource type="Texture2D" path="res://art/final/mid.png" id="5_k58ei"]
+[ext_resource type="Texture2D" path="res://art/final/near.png" id="6_ed538"]
+[ext_resource type="Texture2D" path="res://art/final/closest.png" id="7_gyf8a"]
+[ext_resource type="PackedScene" path="res://scenes/trail_platform.tscn" id="8_604dt"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="9_si3ua"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="10_lxdmw"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="11_ksp3q"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="12_3hf48"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="13_w1k4b"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="14_ugdci"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="15_ym15d"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="16_exe0h"]
+[ext_resource type="Texture2D" path="res://art/final/ground.png" id="17_m5luy"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="18_57s8n"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="19_i52d7"]
+[ext_resource type="PackedScene" path="res://scenes/camera_rig.tscn" id="20_qyed3"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="21_pdvvf"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="22_dtd1r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0nmpd"]
+size = Vector2(402, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0li8n"]
+size = Vector2(210, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmwrx"]
+size = Vector2(150, 176)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dlq11"]
+size = Vector2(219, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0nc3o"]
+size = Vector2(238, 148)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3woy3"]
+size = Vector2(176, 206)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_30ogj"]
+size = Vector2(178, 174)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2e5v"]
+size = Vector2(444, 148)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fr7a7"]
+size = Vector2(91, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yl12p"]
+size = Vector2(16, 520)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfwtw"]
+size = Vector2(16, 520)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_328x5"]
+size = Vector2(39, 58)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt0dr"]
+size = Vector2(39, 58)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_l2inq"]
+light_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_367f1"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.1882353, 0.14509805, 0.19607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.90588236, 0.6784314, 0.39607844, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dj2o3"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.1882353, 0.14509805, 0.19607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.90588236, 0.6784314, 0.39607844, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xv8sh"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.1882353, 0.14509805, 0.19607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.90588236, 0.6784314, 0.39607844, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qvprs"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.09411765, 0.13725491, 0.19607843, 0.9607843)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.5411765, 0.57254905, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4tdiy"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.09411765, 0.13725491, 0.19607843, 0.9607843)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45882353, 0.58431375, 0.5372549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_el3ad"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.20784314, 0.25882354, 0.32156864, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.20784314, 0.25882354, 0.32156864, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkfau"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6509804, 0.80784315, 0.60784316, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6509804, 0.80784315, 0.60784316, 1)
+
+[node name="RidgeRun" type="Node2D" unique_id=174367864]
+script = ExtResource("1_vhdra")
+
+[node name="Sky" type="Parallax2D" parent="." unique_id=496171630]
+z_index = -7
+scroll_scale = Vector2(0.03, 0.15)
+scroll_offset = Vector2(-286, -14)
+repeat_size = Vector2(1080, 0)
+
+[node name="DaySky" type="Sprite2D" parent="Sky" unique_id=893637325]
+texture = ExtResource("2_q0ddi")
+centered = false
+
+[node name="NightSky" type="Sprite2D" parent="Sky" unique_id=921915210]
+self_modulate = Color(1, 1, 1, 0)
+texture = ExtResource("3_46qua")
+centered = false
+
+[node name="Far" type="Parallax2D" parent="." unique_id=1048668599]
+light_mask = 2
+z_index = -6
+scroll_scale = Vector2(0.1, 0.3)
+scroll_offset = Vector2(-542, 0)
+repeat_size = Vector2(1662, 0)
+
+[node name="Art" type="Sprite2D" parent="Far" unique_id=1852799646]
+light_mask = 2
+position = Vector2(0, 81)
+texture = ExtResource("4_1hek4")
+centered = false
+
+[node name="Mid" type="Parallax2D" parent="." unique_id=232076791]
+light_mask = 4
+z_index = -5
+scroll_scale = Vector2(0.24, 0.45)
+scroll_offset = Vector2(-305, 0)
+repeat_size = Vector2(1320, 0)
+
+[node name="Art" type="Sprite2D" parent="Mid" unique_id=1080294729]
+light_mask = 4
+position = Vector2(0, 102)
+texture = ExtResource("5_k58ei")
+centered = false
+
+[node name="Near" type="Parallax2D" parent="." unique_id=58195362]
+light_mask = 8
+z_index = -4
+scroll_scale = Vector2(0.45, 0.65)
+scroll_offset = Vector2(216, 0)
+repeat_size = Vector2(480, 0)
+repeat_times = 3
+
+[node name="Art" type="Sprite2D" parent="Near" unique_id=1431578287]
+light_mask = 8
+texture = ExtResource("6_ed538")
+centered = false
+
+[node name="Closest" type="Parallax2D" parent="." unique_id=1326630508]
+light_mask = 16
+z_index = -3
+scroll_scale = Vector2(0.7, 0.85)
+scroll_offset = Vector2(336, 0)
+repeat_size = Vector2(480, 0)
+repeat_times = 3
+
+[node name="Art" type="Sprite2D" parent="Closest" unique_id=1238251025]
+light_mask = 16
+texture = ExtResource("7_gyf8a")
+centered = false
+
+[node name="Platforms" type="Node2D" parent="." unique_id=1831887577]
+
+[node name="WarmUp" parent="Platforms" unique_id=1641047925 instance=ExtResource("8_604dt")]
+position = Vector2(0, 220)
+
+[node name="Surface" parent="Platforms/WarmUp" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("9_si3ua")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 402, 150)
+
+[node name="CollisionShape2D" parent="Platforms/WarmUp" index="1" unique_id=1731269941]
+position = Vector2(201, 75)
+shape = SubResource("RectangleShape2D_0nmpd")
+one_way_collision_margin = 2.0
+
+[node name="FirstLanding" parent="Platforms" unique_id=2141067792 instance=ExtResource("8_604dt")]
+position = Vector2(450, 220)
+
+[node name="Surface" parent="Platforms/FirstLanding" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("10_lxdmw")
+centered = false
+region_enabled = true
+region_rect = Rect2(450, 0, 210, 150)
+
+[node name="CollisionShape2D" parent="Platforms/FirstLanding" index="1" unique_id=1731269941]
+position = Vector2(105, 75)
+shape = SubResource("RectangleShape2D_0li8n")
+one_way_collision_margin = 2.0
+
+[node name="Step" parent="Platforms" unique_id=608374542 instance=ExtResource("8_604dt")]
+position = Vector2(660, 194)
+
+[node name="Surface" parent="Platforms/Step" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("11_ksp3q")
+centered = false
+region_enabled = true
+region_rect = Rect2(168, 0, 150, 176)
+
+[node name="CollisionShape2D" parent="Platforms/Step" index="1" unique_id=1731269941]
+position = Vector2(75, 88)
+shape = SubResource("RectangleShape2D_mmwrx")
+one_way_collision_margin = 2.0
+
+[node name="CheckpointRidge" parent="Platforms" unique_id=1720520009 instance=ExtResource("8_604dt")]
+position = Vector2(871, 170)
+
+[node name="Surface" parent="Platforms/CheckpointRidge" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("12_3hf48")
+centered = false
+region_enabled = true
+region_rect = Rect2(379, 0, 219, 200)
+
+[node name="CollisionShape2D" parent="Platforms/CheckpointRidge" index="1" unique_id=1731269941]
+position = Vector2(109.5, 100)
+shape = SubResource("RectangleShape2D_dlq11")
+one_way_collision_margin = 2.0
+
+[node name="LowerTrail" parent="Platforms" unique_id=1607644299 instance=ExtResource("8_604dt")]
+position = Vector2(1172, 222)
+
+[node name="Surface" parent="Platforms/LowerTrail" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("13_w1k4b")
+centered = false
+region_enabled = true
+region_rect = Rect2(188, 0, 238, 148)
+
+[node name="CollisionShape2D" parent="Platforms/LowerTrail" index="1" unique_id=1731269941]
+position = Vector2(119, 74)
+shape = SubResource("RectangleShape2D_0nc3o")
+one_way_collision_margin = 2.0
+
+[node name="UpperRidge" parent="Platforms" unique_id=879255843 instance=ExtResource("8_604dt")]
+position = Vector2(1468, 164)
+
+[node name="Surface" parent="Platforms/UpperRidge" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("14_ugdci")
+centered = false
+region_enabled = true
+region_rect = Rect2(484, 0, 176, 206)
+
+[node name="CollisionShape2D" parent="Platforms/UpperRidge" index="1" unique_id=1731269941]
+position = Vector2(88, 103)
+shape = SubResource("RectangleShape2D_3woy3")
+one_way_collision_margin = 2.0
+
+[node name="EastLanding" parent="Platforms" unique_id=2008479885 instance=ExtResource("8_604dt")]
+position = Vector2(1714, 196)
+
+[node name="Surface" parent="Platforms/EastLanding" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("15_ym15d")
+centered = false
+region_enabled = true
+region_rect = Rect2(238, 0, 178, 174)
+
+[node name="CollisionShape2D" parent="Platforms/EastLanding" index="1" unique_id=1731269941]
+position = Vector2(89, 87)
+shape = SubResource("RectangleShape2D_30ogj")
+one_way_collision_margin = 2.0
+
+[node name="FinishTrail" parent="Platforms" unique_id=1660114992 instance=ExtResource("8_604dt")]
+position = Vector2(1956, 222)
+
+[node name="Surface" parent="Platforms/FinishTrail" index="0" unique_id=511637109]
+texture_repeat = 3
+texture = ExtResource("16_exe0h")
+centered = false
+region_enabled = true
+region_rect = Rect2(480, 0, 444, 148)
+
+[node name="CollisionShape2D" parent="Platforms/FinishTrail" index="1" unique_id=1731269941]
+position = Vector2(222, 74)
+shape = SubResource("RectangleShape2D_p2e5v")
+one_way_collision_margin = 2.0
+
+[node name="Overlook" parent="Platforms" unique_id=1023454513 instance=ExtResource("8_604dt")]
+position = Vector2(1243, 163)
+
+[node name="Surface" parent="Platforms/Overlook" index="0" unique_id=511637109]
+texture_repeat = 2
+texture = ExtResource("17_m5luy")
+centered = false
+region_enabled = true
+region_rect = Rect2(259, 0, 91, 15)
+
+[node name="CollisionShape2D" parent="Platforms/Overlook" index="1" unique_id=1731269941]
+position = Vector2(45.5, 7.5)
+shape = SubResource("RectangleShape2D_fr7a7")
+one_way_collision = true
+one_way_collision_margin = 2.0
+
+[node name="MapWalls" type="StaticBody2D" parent="." unique_id=462170410]
+
+[node name="West" type="CollisionShape2D" parent="MapWalls" unique_id=1672935738]
+position = Vector2(-8, 140)
+shape = SubResource("RectangleShape2D_yl12p")
+
+[node name="East" type="CollisionShape2D" parent="MapWalls" unique_id=457162024]
+position = Vector2(2408, 140)
+shape = SubResource("RectangleShape2D_tfwtw")
+
+[node name="Start" type="Marker2D" parent="." unique_id=1155867613]
+unique_name_in_owner = true
+position = Vector2(105, 220)
+
+[node name="StartFlag" type="Node2D" parent="." unique_id=344450324]
+scale = Vector2(0.9, 0.84)
+position = Vector2(58, 220)
+
+[node name="Pole" type="Polygon2D" parent="StartFlag" unique_id=853074048]
+color = Color(0.4392157, 0.27450982, 0.21568628, 1)
+polygon = PackedVector2Array(-1, 0, -1, -58, 2, -58, 2, 0)
+
+[node name="PennantShadow" type="Polygon2D" parent="StartFlag" unique_id=1324467729]
+color = Color(0.15686275, 0.14117648, 0.22352941, 1)
+polygon = PackedVector2Array(1, -56, 30, -56, 25, -48, 30, -40, 1, -40)
+
+[node name="Pennant" type="Polygon2D" parent="StartFlag" unique_id=1141588668]
+color = Color(0.47058824, 0.7137255, 0.63529414, 1)
+polygon = PackedVector2Array(2, -55, 28, -55, 23, -48, 28, -42, 2, -42)
+
+[node name="Mark" type="Polygon2D" parent="StartFlag" unique_id=382051984]
+color = Color(0.20392157, 0.28627452, 0.3529412, 1)
+polygon = PackedVector2Array(12, -52, 16, -48, 12, -44, 8, -48)
+
+[node name="Checkpoint" type="Area2D" parent="." unique_id=71711345]
+unique_name_in_owner = true
+position = Vector2(955, 170)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Trigger" type="CollisionShape2D" parent="Checkpoint" unique_id=333181041]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_328x5")
+
+[node name="Flag" type="Node2D" parent="Checkpoint" unique_id=1109652145]
+scale = Vector2(0.9, 0.84)
+
+[node name="Pole" type="Polygon2D" parent="Checkpoint/Flag" unique_id=1809424268]
+color = Color(0.4392157, 0.27450982, 0.21568628, 1)
+polygon = PackedVector2Array(-1, 0, -1, -58, 2, -58, 2, 0)
+
+[node name="PennantShadow" type="Polygon2D" parent="Checkpoint/Flag" unique_id=693380255]
+color = Color(0.15686275, 0.14117648, 0.22352941, 1)
+polygon = PackedVector2Array(1, -56, 30, -56, 25, -48, 30, -40, 1, -40)
+
+[node name="Pennant" type="Polygon2D" parent="Checkpoint/Flag" unique_id=721042356]
+color = Color(1, 0.8156863, 0.45882353, 1)
+polygon = PackedVector2Array(2, -55, 28, -55, 23, -48, 28, -42, 2, -42)
+
+[node name="Mark" type="Polygon2D" parent="Checkpoint/Flag" unique_id=145308057]
+color = Color(0.20392157, 0.28627452, 0.3529412, 1)
+polygon = PackedVector2Array(12, -52, 16, -48, 12, -44, 8, -48)
+
+[node name="Spawn" type="Marker2D" parent="Checkpoint" unique_id=1214882635]
+position = Vector2(28, 0)
+
+[node name="Finish" type="Area2D" parent="." unique_id=1936983407]
+unique_name_in_owner = true
+position = Vector2(2240, 222)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Trigger" type="CollisionShape2D" parent="Finish" unique_id=717443683]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_dt0dr")
+
+[node name="Flag" type="Node2D" parent="Finish" unique_id=1893469015]
+scale = Vector2(0.9, 0.84)
+
+[node name="Pole" type="Polygon2D" parent="Finish/Flag" unique_id=839844370]
+color = Color(0.4392157, 0.27450982, 0.21568628, 1)
+polygon = PackedVector2Array(-1, 0, -1, -58, 2, -58, 2, 0)
+
+[node name="PennantShadow" type="Polygon2D" parent="Finish/Flag" unique_id=1882170975]
+color = Color(0.15686275, 0.14117648, 0.22352941, 1)
+polygon = PackedVector2Array(1, -56, 30, -56, 25, -48, 30, -40, 1, -40)
+
+[node name="Pennant" type="Polygon2D" parent="Finish/Flag" unique_id=1334370233]
+color = Color(0.58431375, 0.8784314, 0.74509805, 1)
+polygon = PackedVector2Array(2, -55, 28, -55, 23, -48, 28, -42, 2, -42)
+
+[node name="Mark" type="Polygon2D" parent="Finish/Flag" unique_id=865144414]
+color = Color(0.20392157, 0.28627452, 0.3529412, 1)
+polygon = PackedVector2Array(12, -52, 16, -48, 12, -44, 8, -48)
+
+[node name="TrailSigns" type="Node2D" parent="." unique_id=656480711]
+
+[node name="FirstGapSign" type="Node2D" parent="TrailSigns" unique_id=1618389742]
+position = Vector2(366, 220)
+
+[node name="Stake" type="Polygon2D" parent="TrailSigns/FirstGapSign" unique_id=871583250]
+color = Color(0.46666667, 0.31764707, 0.23529412, 1)
+polygon = PackedVector2Array(-2, 0, -2, -29, 2, -29, 2, 0)
+
+[node name="Board" type="PanelContainer" parent="TrailSigns/FirstGapSign" unique_id=1194944347]
+material = SubResource("CanvasItemMaterial_l2inq")
+offset_top = -34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_367f1")
+
+[node name="Text" type="Label" parent="TrailSigns/FirstGapSign/Board" unique_id=996776354]
+use_parent_material = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.8666667, 0.6509804, 1)
+text = "JUMP"
+
+[node name="HighLedgeSign" type="Node2D" parent="TrailSigns" unique_id=25307301]
+position = Vector2(1369, 222)
+
+[node name="Stake" type="Polygon2D" parent="TrailSigns/HighLedgeSign" unique_id=439573795]
+color = Color(0.46666667, 0.31764707, 0.23529412, 1)
+polygon = PackedVector2Array(-2, 0, -2, -29, 2, -29, 2, 0)
+
+[node name="Board" type="PanelContainer" parent="TrailSigns/HighLedgeSign" unique_id=1923953584]
+material = SubResource("CanvasItemMaterial_l2inq")
+offset_top = -34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dj2o3")
+
+[node name="Text" type="Label" parent="TrailSigns/HighLedgeSign/Board" unique_id=797390481]
+use_parent_material = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.8666667, 0.6509804, 1)
+text = "DOUBLE JUMP"
+
+[node name="FinishSign" type="Node2D" parent="TrailSigns" unique_id=164522353]
+position = Vector2(2180, 222)
+
+[node name="Stake" type="Polygon2D" parent="TrailSigns/FinishSign" unique_id=1782449172]
+color = Color(0.46666667, 0.31764707, 0.23529412, 1)
+polygon = PackedVector2Array(-2, 0, -2, -29, 2, -29, 2, 0)
+
+[node name="Board" type="PanelContainer" parent="TrailSigns/FinishSign" unique_id=1690474965]
+material = SubResource("CanvasItemMaterial_l2inq")
+offset_top = -34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xv8sh")
+
+[node name="Text" type="Label" parent="TrailSigns/FinishSign/Board" unique_id=1610270702]
+use_parent_material = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.8666667, 0.6509804, 1)
+text = "FINISH"
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1198963220 instance=ExtResource("18_57s8n")]
+unique_name_in_owner = true
+light_mask = 64
+position = Vector2(105, 220)
+collision_layer = 2
+script = ExtResource("19_i52d7")
+run_speed = 180.0
+jump_speed = 245.0
+air_jump_speed = 229.0
+gravity = 730.0
+run_acceleration = 1750.0
+run_brake = 2350.0
+fall_gravity_multiplier = 1.2
+coyote_time = 0.085
+jump_buffer_time = 0.1
+jump_release_multiplier = 0.52
+
+[node name="CameraRig" type="Node2D" parent="." unique_id=1801212460 instance=ExtResource("20_qyed3")]
+unique_name_in_owner = true
+process_priority = 20
+position = Vector2(240, 170)
+script = ExtResource("21_pdvvf")
+limits = Rect2(0, -80, 2400, 413)
+look_ahead_distance = 118.0
+
+[node name="Sfx" type="Node" parent="." unique_id=2087929167]
+unique_name_in_owner = true
+script = ExtResource("22_dtd1r")
+voices = 4
+
+[node name="Hud" type="CanvasLayer" parent="." unique_id=190496478]
+
+[node name="Overlay" type="Control" parent="Hud" unique_id=2044382024]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Controls" type="PanelContainer" parent="Hud/Overlay" unique_id=118407078]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 10.0
+offset_bottom = 10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qvprs")
+
+[node name="Copy" type="VBoxContainer" parent="Hud/Overlay/Controls" unique_id=1553337883]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Keys" type="Label" parent="Hud/Overlay/Controls/Copy" unique_id=279221889]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.93333334, 0.90588236, 0.84313726, 1)
+text = "A / D or arrows   Run      Space / W   Jump"
+
+[node name="JumpHint" type="Label" parent="Hud/Overlay/Controls/Copy" unique_id=841231350]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7176471, 0.7882353, 0.8156863, 1)
+text = "Tap to hop  ·  Press again in air  ·  R to restart"
+
+[node name="Progress" type="PanelContainer" parent="Hud/Overlay" unique_id=354208789]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -154.0
+offset_top = 10.0
+offset_right = -10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4tdiy")
+
+[node name="Column" type="VBoxContainer" parent="Hud/Overlay/Progress" unique_id=1714233414]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Title" type="Label" parent="Hud/Overlay/Progress/Column" unique_id=1725047851]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.85490197, 0.6039216, 1)
+text = "Ridge Run"
+
+[node name="CourseStatus" type="Label" parent="Hud/Overlay/Progress/Column" unique_id=1687043472]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.9490196, 0.9019608, 0.8117647, 1)
+text = "Reach the far flag"
+
+[node name="CourseProgress" type="ProgressBar" parent="Hud/Overlay/Progress/Column" unique_id=1651698748]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_el3ad")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xkfau")
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[editable path="Platforms/WarmUp"]
+[editable path="Platforms/FirstLanding"]
+[editable path="Platforms/Step"]
+[editable path="Platforms/CheckpointRidge"]
+[editable path="Platforms/LowerTrail"]
+[editable path="Platforms/UpperRidge"]
+[editable path="Platforms/EastLanding"]
+[editable path="Platforms/FinishTrail"]
+[editable path="Platforms/Overlook"]

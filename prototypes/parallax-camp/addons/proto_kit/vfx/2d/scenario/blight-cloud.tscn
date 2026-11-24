@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/blight-cloud/blight-cloud.tres" id="1_cje1c"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_etkvn"]
+
+[node name="BlightCloud" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_cje1c")
+animation = &"blight_cloud"
+frame = 2
+script = ExtResource("2_etkvn")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "blight-cloud"
+metadata/placement = "target"
+metadata/depth_hint = "front"

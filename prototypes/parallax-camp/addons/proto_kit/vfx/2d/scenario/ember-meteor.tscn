@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ember-meteor/ember-meteor.tres" id="1_4epey"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_738t3"]
+
+[node name="EmberMeteor" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_4epey")
+animation = &"ember_meteor"
+frame = 2
+offset = Vector2(-9.600002, -29.76)
+script = ExtResource("2_738t3")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ember-meteor"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

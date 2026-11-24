@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/camera_zone.gd" id="1_00kvm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ie8ec"]
+resource_local_to_scene = true
+size = Vector2(160, 164)
+
+[node name="CameraZone" type="Area2D" unique_id=2127270102]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_00kvm")
+
+[node name="Bounds" type="CollisionShape2D" parent="." unique_id=579050348]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_ie8ec")
+debug_color = Color(0.35, 0.85, 0.95, 0.28)

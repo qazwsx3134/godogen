@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="1_txy7i"]
+
+[node name="CameraRig" type="Node2D" unique_id=1801212460]
+process_priority = 20
+script = ExtResource("1_txy7i")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=106775107]
+unique_name_in_owner = true

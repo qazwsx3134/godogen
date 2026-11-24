@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_ienta"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-parry/spatial_part_0.gdshader" id="2_0sw1v"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-parry/part_0.res" id="3_mx5wh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-parry/spatial_part_1.gdshader" id="4_64ybg"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-parry/part_1.res" id="5_q7xv0"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/prism-parry/motion.res" id="6_27wow"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_maxbh"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_0sw1v")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 888
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.14
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.2475
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 4.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.76815116, 0.3515326)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_agfsv"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_64ybg")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.14
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.2475
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 4.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.76815116, 0.3515326)
+
+[node name="PrismParry" type="Node3D" unique_id=713716165]
+script = ExtResource("1_ienta")
+effect_id = "prism-parry"
+burst = true
+duration = 0.55
+start_duration = 0.055
+end_duration = 0.2475
+kind = 7
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "prism-parry"
+metadata/editor_preview_time = 0.14
+
+[node name="Parts" type="Node3D" parent="." unique_id=1573058896]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1250371433]
+material_override = SubResource("ShaderMaterial_maxbh")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_mx5wh")
+metadata/source_name = "utility-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=819369286]
+material_override = SubResource("ShaderMaterial_agfsv")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_q7xv0")
+metadata/source_name = "utility-detail-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1661760557]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_27wow")

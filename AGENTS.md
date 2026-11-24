@@ -49,6 +49,11 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - Don't give obvious guidance. The agent is a highly capable LLM, and the deliverable (a recorded video, or a live URL the user watches) surfaces its own mistakes — so keep the guides to what the model can't infer or discover fast.
 - When you change or remove a feature, describe the new state on its own terms. Name the new thing as if it were always the design.
 
+## 2D 角色步態：腳底接地
+
+- 所有有踩地步態的 2D 角色（玩家、敵人、NPC），新增或調整走跑動畫、移速、比例或腳底錨點時，必須將步態與碰撞後的實際地面位移對齊。同一次踩地期間，支撐腳應相對地面或移動平台維持穩定。
+- 驗收要在遊戲中檢查各支援方向的行走、跑步，以及加速、煞車與轉向。觀察或量測同一隻腳在單次接地期間的位置，依畫面解析度判斷漂移；有意設計的滑行使用明確的動作狀態。 [腳底滑行 Lesson 與驗證範例](prototypes/LESSONS.md)
+
 ## Godot 開發：畫面用 scene 與 node 組成
 
 `prototypes/` 裡的 Godot 專案，畫面與遊戲物件做成 `.tscn` scene，node 放在 scene 裡，讓人能在 2D 編輯器打開、直接拖曳調整位置、大小、文字與顏色。不要在程式裡用 `.new()` 一個個建立整個畫面。

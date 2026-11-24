@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://art/final/props/street_lamp.png" id="1_l6nu6"]
+
+[sub_resource type="Gradient" id="Gradient_nm1yq"]
+offsets = PackedFloat32Array(0, 0.32, 0.66, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.55, 0.55, 0.55, 1, 0.12, 0.12, 0.12, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y7mp3"]
+gradient = SubResource("Gradient_nm1yq")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="StreetLamp" type="Node2D" unique_id=1928722902]
+light_mask = 64
+
+[node name="Art" type="Sprite2D" parent="." unique_id=367006189]
+light_mask = 64
+position = Vector2(-64, -102.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_l6nu6")
+centered = false
+
+[node name="Light" type="PointLight2D" parent="." unique_id=1045433491]
+position = Vector2(0, -68)
+color = Color(1, 0.7411765, 0.4392157, 1)
+energy = 0.0
+range_item_cull_mask = 64
+texture = SubResource("GradientTexture2D_y7mp3")
+texture_scale = 1.35

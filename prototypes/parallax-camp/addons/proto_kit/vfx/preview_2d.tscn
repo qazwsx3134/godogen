@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/preview_2d.gd" id="1_dug0j"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/2d/pixel_effects.tscn" id="2_gvidt"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/2d/sheet_effect.tscn" id="3_51j7b"]
+
+[node name="VfxPreview2D" type="Node2D" unique_id=1561858190]
+script = ExtResource("1_dug0j")
+
+[node name="Background" type="Polygon2D" parent="." unique_id=1314645716]
+color = Color(0.05, 0.07, 0.12, 1)
+polygon = PackedVector2Array(0, 0, 900, 0, 900, 500, 0, 500)
+
+[node name="NativeEffects" parent="." unique_id=920543710 instance=ExtResource("2_gvidt")]
+unique_name_in_owner = true
+position = Vector2(180, 240)
+
+[node name="Sheet" parent="." unique_id=341124408 instance=ExtResource("3_51j7b")]
+position = Vector2(600, 240)
+scale = Vector2(4, 4)
+
+[node name="Caption" type="Label" parent="." unique_id=1527286550]
+offset_left = 40.0
+offset_top = 55.0
+offset_right = 40.0
+offset_bottom = 55.0
+text = "Native: burst / ring / explosion"
+
+[node name="Caption2" type="Label" parent="." unique_id=1165325228]
+offset_left = 480.0
+offset_top = 55.0
+offset_right = 480.0
+offset_bottom = 55.0
+text = "Sheet: replace SpriteFrames"
+
+[node name="Replay" type="Timer" parent="." unique_id=1861152145]
+unique_name_in_owner = true
+wait_time = 1.8
+autostart = true

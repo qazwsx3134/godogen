@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_a6bjn"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/spatial_part_0.gdshader" id="2_tgk7x"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/part_0.res" id="3_3uj4a"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/spatial_part_1.gdshader" id="4_0qfw6"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/part_1.res" id="5_py16c"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/spatial_part_2.gdshader" id="6_5a8ms"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/part_2.res" id="7_0srjs"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/spatial_part_3.gdshader" id="8_6fo5n"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/part_3.res" id="9_srear"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/spatial_part_4.gdshader" id="10_w10ml"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/part_4.res" id="11_5khms"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shatter/motion.res" id="12_8rbft"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hot8d"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_tgk7x")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 299.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 9.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.47932017, 0.7835378, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grubk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_0qfw6")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 54.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 9.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.47932017, 0.7835378, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qm1o0"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_5a8ms")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 432
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uQuantity = 9.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.47932017, 0.7835378, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ryqa2"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("8_6fo5n")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 24
+shader_parameter/source_instance_count = 31.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.47932017, 0.7835378, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ongx"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("10_w10ml")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.47932017, 0.7835378, 1)
+shader_parameter/uTime = 0.45
+
+[node name="IceShatter" type="Node3D" unique_id=476060847]
+script = ExtResource("1_a6bjn")
+effect_id = "ice-shatter"
+burst = true
+duration = 2.8
+start_duration = 0.27999999999999997
+end_duration = 1.26
+kind = 3
+variant = 3
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "ice-shatter"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=570294692]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1206162368]
+material_override = SubResource("ShaderMaterial_hot8d")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_3uj4a")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=673482602]
+material_override = SubResource("ShaderMaterial_grubk")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_py16c")
+metadata/source_name = "Part1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=251087055]
+material_override = SubResource("ShaderMaterial_qm1o0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_0srjs")
+metadata/source_name = "ice-shatter-crystals"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1649015861]
+material_override = SubResource("ShaderMaterial_ryqa2")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_srear")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1834554492]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, -1.36, 0)
+material_override = SubResource("ShaderMaterial_8ongx")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_5khms")
+metadata/source_name = "Part4"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=987803258]
+unique_name_in_owner = true
+libraries/ = ExtResource("12_8rbft")

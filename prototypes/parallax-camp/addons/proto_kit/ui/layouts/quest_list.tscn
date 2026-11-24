@@ -1,0 +1,155 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_58ft3"]
+
+[node name="QuestList" type="Control" unique_id=227095175]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_58ft3")
+metadata/ui_layout_id = "quest_list"
+metadata/authored_node_count = 27
+
+[node name="Backdrop" type="Panel" parent="." unique_id=110988484]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=1624671688]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=153318800]
+layout_mode = 2
+
+[node name="Heading" type="HBoxContainer" parent="SafeMargin/Body" unique_id=1652535708]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body/Heading" unique_id=703305348]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "冒險目標"
+autowrap_mode = 3
+
+[node name="Count" type="Label" parent="SafeMargin/Body/Heading" unique_id=2094352482]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"CaptionLabel"
+text = "0 / 12"
+
+[node name="QuestScroll" type="ScrollContainer" parent="SafeMargin/Body" unique_id=526738673]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Sections" type="VBoxContainer" parent="SafeMargin/Body/QuestScroll" unique_id=780266196]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Tier0" type="Label" parent="SafeMargin/Body/QuestScroll/Sections" unique_id=893083826]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "Fracture 0+"
+autowrap_mode = 3
+
+[node name="RowTemplate" type="PanelContainer" parent="SafeMargin/Body/QuestScroll/Sections" unique_id=590131568]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate" unique_id=981417374]
+layout_mode = 2
+
+[node name="Heading" type="HBoxContainer" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content" unique_id=1868273047]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content/Heading" unique_id=1723453158]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "林地獵手"
+autowrap_mode = 3
+
+[node name="Reward" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content/Heading" unique_id=1737855889]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "◆"
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content" unique_id=1609250254]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "單局擊敗 100 個敵人"
+autowrap_mode = 3
+
+[node name="Progress" type="ProgressBar" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content" unique_id=1091375432]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+value = 35.0
+show_percentage = false
+
+[node name="Count" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/RowTemplate/Content" unique_id=304064475]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "35 / 100"
+autowrap_mode = 3
+
+[node name="Tier1" type="Label" parent="SafeMargin/Body/QuestScroll/Sections" unique_id=1730089228]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "Fracture 1+"
+autowrap_mode = 3
+
+[node name="LockedRow" type="PanelContainer" parent="SafeMargin/Body/QuestScroll/Sections" unique_id=1761591927]
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow" unique_id=1259580329]
+layout_mode = 2
+
+[node name="Heading" type="HBoxContainer" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content" unique_id=1322378461]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content/Heading" unique_id=2129978678]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "深層試煉"
+autowrap_mode = 3
+
+[node name="Reward" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content/Heading" unique_id=1736507904]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "◆"
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content" unique_id=1658294577]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "難度 1 解鎖"
+autowrap_mode = 3
+
+[node name="Progress" type="ProgressBar" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content" unique_id=862310210]
+visible = false
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+show_percentage = false
+
+[node name="Count" type="Label" parent="SafeMargin/Body/QuestScroll/Sections/LockedRow/Content" unique_id=516496971]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "鎖定 · 0 / 1"
+autowrap_mode = 3

@@ -1,0 +1,2082 @@
+[
+  {
+    "id": "arc-ray",
+    "name": "分岔雷流",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/arc-ray.js",
+    "sha256": "2562169738731f3cb798154e1af1e239c807e86f7ed408e4c2307dd7a4ed5417",
+    "preset": {
+      "id": "arc-ray",
+      "quantity": {
+        "min": 1,
+        "max": 12,
+        "default": 6,
+        "label": "電弧數量",
+        "unit": "道",
+        "help": "端點之間的獨立電弧數，保留兩端耀光及原射程。"
+      },
+      "lifecycle": {
+        "start": 0.4,
+        "end": 0.6
+      },
+      "name": "分岔雷流",
+      "english": "Forked Lightning Stream",
+      "category": "beam",
+      "color": "#2878ff",
+      "description": "藍白閃電連接兩端，小閃電在旁跳動，打中時炸出火花。",
+      "tags": "閃電 電擊 雷射 電弧射線 Arc ray",
+      "maxParticles": 768,
+      "kind": 1,
+      "variant": 3,
+      "duration": 5,
+      "burst": false,
+      "seed": 73496,
+      "schools": [
+        "storm"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#2878ff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 6
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/arc-ray.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "arcane-matrix",
+    "name": "浮符矩陣",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/arcane-matrix.js",
+    "sha256": "7b9d89f84d0e4172580ea61dd7015e4c43964b9684041bb70b307ea45829849e",
+    "preset": {
+      "id": "arcane-matrix",
+      "quantity": {
+        "min": 1,
+        "max": 18,
+        "default": 9,
+        "label": "浮空晶體數量",
+        "unit": "枚",
+        "help": "晶體及各自的小環一起增減，地面矩陣保持完整。"
+      },
+      "lifecycle": {
+        "start": 0.7,
+        "end": 1
+      },
+      "name": "浮符矩陣",
+      "english": "Floating Rune Matrix",
+      "kind": 2,
+      "variant": 4,
+      "color": "#bd9aff",
+      "duration": 5,
+      "burst": false,
+      "description": "方格魔法圖案一格格連起來，空中的符號上下移動、重新排隊。",
+      "category": "area",
+      "tags": "奧術 Arcane 法術 魔法 奧術矩陣 Arcane matrix",
+      "schools": [
+        "arcane"
+      ],
+      "maxParticles": 512,
+      "seed": 322133,
+      "previewTime": 1.4,
+      "thumbnailTime": 1.4
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#bd9aff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 9
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/arcane-matrix.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "arcane-missile",
+    "name": "符晶飛彈",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/arcane-missile.js",
+    "sha256": "0a089f28516208cb8781085e880fac2a6dbbbed614b29459752f380fde439db4",
+    "preset": {
+      "id": "arcane-missile",
+      "spread": {
+        "min": 0.5,
+        "max": 3,
+        "default": 1,
+        "label": "投射物散布範圍",
+        "help": "拉開晶核與配對尾跡的繞行間距；晶核大小、尾跡長度與整組前進方向不變。"
+      },
+      "quantity": {
+        "min": 1,
+        "max": 6,
+        "default": 3,
+        "label": "晶核數量",
+        "unit": "枚",
+        "help": "晶核與配對尾跡一起增減；整組共同飛行及命中。"
+      },
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.8
+      },
+      "name": "符晶飛彈",
+      "english": "Runic Crystal Missiles",
+      "category": "projectile",
+      "color": "#c99aff",
+      "description": "三顆魔法水晶一邊繞圈一邊前進，身後拖著發光圖案。",
+      "tags": "魔法 螺旋 法師 奧術飛彈 Arcane missile",
+      "maxParticles": 768,
+      "kind": 0,
+      "variant": 3,
+      "duration": 5,
+      "burst": false,
+      "seed": 36748,
+      "schools": [
+        "arcane"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#c99aff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 3,
+      "spread": 1
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/arcane-missile.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "astral-convergence",
+    "name": "星環聚爆",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/astral-convergence.js",
+    "sha256": "2bc0bb99a3ae766f3d7fec5a6e4badae569b1aacc6e30c7f6b631f5e51fb6225",
+    "preset": {
+      "id": "astral-convergence",
+      "quantity": {
+        "min": 1,
+        "max": 20,
+        "default": 10,
+        "label": "爆發星束數量",
+        "unit": "道",
+        "help": "聚合後向外放射的星束數量；前段星軌與星座保留。",
+        "previewTime": 1.45
+      },
+      "lifecycle": {
+        "start": 0.34,
+        "end": 1.53
+      },
+      "name": "星環聚爆",
+      "english": "Astral Ring Detonation",
+      "kind": 3,
+      "variant": 7,
+      "color": "#c1b8ff",
+      "duration": 3.4,
+      "burst": true,
+      "description": "星光繞圈聚到中央，縮成一團後炸開，留下閃亮的光痕。",
+      "category": "burst",
+      "tags": "星界 Astral 法術 魔法 星軌匯爆 Astral convergence",
+      "schools": [
+        "astral"
+      ],
+      "maxParticles": 512,
+      "seed": 402189,
+      "previewTime": 0.35,
+      "thumbnailTime": 0.35
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#c1b8ff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 10
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/astral-convergence.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "astral-gate",
+    "name": "星紋之門",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/astral-gate.js",
+    "sha256": "67269f20e758dcc000f9a54380c7143102303b6e9a4c3c65f87cab32b05278aa",
+    "preset": {
+      "id": "astral-gate",
+      "lifecycle": {
+        "start": 0.8,
+        "end": 0.8
+      },
+      "name": "星紋之門",
+      "english": "Gate of Astral Tracery",
+      "category": "portal",
+      "color": "#c1b8ff",
+      "description": "發光門框一段段展開，門內星光流動，停止使用後慢慢關上。",
+      "tags": "門 傳送 空間 星界 Astral 星隙門扉 Astral gate",
+      "maxParticles": 512,
+      "kind": 8,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 385854,
+      "schools": [
+        "astral"
+      ],
+      "previewTime": 1.4,
+      "thumbnailTime": 1.4
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#c1b8ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/astral-gate.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "azure-sweep",
+    "name": "蒼刃迴斬",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/azure-sweep.js",
+    "sha256": "7dcb7c80eb33006217b5f3b3362b2fb95be9e4088d54b7889350af4138e4a4bb",
+    "preset": {
+      "id": "azure-sweep",
+      "name": "蒼刃迴斬",
+      "english": "Azure Blade Sweep",
+      "category": "area",
+      "kind": 2,
+      "variant": 10,
+      "schools": [
+        "arcane"
+      ],
+      "color": "#2878ff",
+      "seed": 829641,
+      "duration": 0.85,
+      "burst": true,
+      "maxParticles": 12,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0.08,
+        "end": 0.43
+      },
+      "previewTime": 0.32,
+      "thumbnailTime": 0.32,
+      "description": "藍白刀光掃出接近一整圈，停留一下後，尾巴追上前端並消失。",
+      "tags": "斬擊 迴旋 刀光 劍氣 藍色 奧術 slash sweep sword blade arc azure spin arcane 蒼藍迴旋斬 Azure Sweep"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#2878ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/azure-sweep.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "billowing-airburst",
+    "name": "烈焰空爆",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/billowing-airburst.js",
+    "sha256": "a41e45a1038f80ccea24464c18480a893cb0b2338316035ff820c6f1be054b92",
+    "preset": {
+      "id": "billowing-airburst",
+      "name": "烈焰空爆",
+      "english": "Billowing Airburst",
+      "category": "burst",
+      "kind": 3,
+      "variant": 11,
+      "schools": [
+        "fire"
+      ],
+      "color": "#ff7a24",
+      "seed": 829648,
+      "duration": 2.4,
+      "burst": true,
+      "renderStyle": "toon",
+      "maxParticles": 128,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0.15,
+        "end": 1.8
+      },
+      "previewTime": 0.22,
+      "thumbnailTime": 0.22,
+      "quantity": {
+        "min": 2,
+        "max": 6,
+        "default": 4,
+        "label": "噴出煙尾",
+        "unit": "條",
+        "help": "調整向外噴出的主煙尾數量；密度只改變裝飾火星，不減少煙尾或爆心。",
+        "previewTime": 0.22
+      },
+      "description": "火球在空中炸開，粗大的煙尾往四周噴出，火焰慢慢變成煙霧散去。",
+      "tags": "火焰 爆炸 空爆 煙霧 煙尾 噴發 命中 火球 飛彈 fire explosion airburst billowing smoke jets impact 烈焰空爆 Billowing Airburst"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff7a24",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 4
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/billowing-airburst.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "black-hole",
+    "name": "渦光黑洞",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/black-hole.js",
+    "sha256": "677d996b49fdafa8c7d77aedf8b500f31887d7da56ff151e43acea857a6200e2",
+    "preset": {
+      "id": "black-hole",
+      "name": "渦光黑洞",
+      "english": "Luminous Vortex Black Hole",
+      "category": "area",
+      "kind": 2,
+      "variant": 9,
+      "schools": [
+        "astral"
+      ],
+      "color": "#ffab42",
+      "seed": 719903,
+      "duration": 6,
+      "burst": false,
+      "maxParticles": 256,
+      "defaultDensity": 1,
+      "lifecycle": {
+        "start": 1.1,
+        "end": 1.4
+      },
+      "previewTime": 2.2,
+      "thumbnailTime": 2.2,
+      "sizeRange": {
+        "min": 0.25,
+        "max": 12,
+        "default": 6
+      },
+      "detailRange": {
+        "min": 0.25,
+        "max": 4,
+        "default": 2
+      },
+      "previewActiveDuration": 13.7,
+      "description": "黑洞周圍的亮光不斷往內捲，後面的景物也像被吸力拉彎。",
+      "tags": "黑洞 引力 重力 吸積盤 扭曲 星界 black hole gravity gravitational lens accretion distortion astral 黑洞 Black Hole"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 2,
+      "color": "#ffab42",
+      "size": 6,
+      "density": 1
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/black-hole.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "burning-ground",
+    "name": "炎紋灼地",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/burning-ground.js",
+    "sha256": "100278fbe501a1e4a36fdbb839a3776ec67502acd30890ebed28ea0db71011c5",
+    "preset": {
+      "id": "burning-ground",
+      "lifecycle": {
+        "start": 0.7,
+        "end": 1
+      },
+      "name": "炎紋灼地",
+      "english": "Flame-Etched Ground",
+      "category": "area",
+      "color": "#ff914a",
+      "description": "地面裂縫發出紅光，火舌不斷冒出又散去，像正在燃燒。",
+      "tags": "火焰 地板 傷害 範圍 燃燒地面 Burning ground",
+      "maxParticles": 1024,
+      "kind": 2,
+      "variant": 1,
+      "duration": 5,
+      "burst": false,
+      "seed": 91870,
+      "schools": [
+        "fire"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff914a",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/burning-ground.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "charged-beam",
+    "name": "蓄能光炮",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/charged-beam.js",
+    "sha256": "26a20d003eed6b6eaf026a81078880bec7606a0e3d04935e64b8283e543fc995",
+    "preset": {
+      "id": "charged-beam",
+      "lifecycle": {
+        "start": 1.6,
+        "end": 0.6
+      },
+      "name": "蓄能光炮",
+      "english": "Charged Light Cannon",
+      "category": "beam",
+      "color": "#f6c76c",
+      "description": "先聚起亮光再持續發射，打中的地方不斷噴出亮光與光圈。",
+      "tags": "雷射 蓄力 大招 科幻 蓄力光束 Charged beam",
+      "maxParticles": 768,
+      "kind": 1,
+      "variant": 2,
+      "duration": 5,
+      "burst": false,
+      "seed": 64309
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#f6c76c",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/charged-beam.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "continuous-beam",
+    "name": "繞絲光束",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/continuous-beam.js",
+    "sha256": "806e80eefa18f66db6e3bc944b1af48af060b758d52cd3536603f27500204636",
+    "preset": {
+      "id": "continuous-beam",
+      "lifecycle": {
+        "start": 0.4,
+        "end": 0.6
+      },
+      "name": "繞絲光束",
+      "english": "Threadwoven Beam",
+      "category": "beam",
+      "color": "#ff6555",
+      "description": "細光線持續往前射，光絲繞著它轉，打中時冒出火花。",
+      "tags": "雷射 激光 武器 科幻 持續光束 Continuous beam",
+      "maxParticles": 512,
+      "kind": 1,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 45935
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff6555",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/continuous-beam.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "darkchain-detonation",
+    "name": "闇鏈崩陣",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/darkchain-detonation.js",
+    "sha256": "6d59242b8e6a42728f8f58a50ac7123c50fcb073453da22ff50cd72367ff8125",
+    "preset": {
+      "id": "darkchain-detonation",
+      "name": "闇鏈崩陣",
+      "english": "Darkchain Sigil Rupture",
+      "category": "area",
+      "kind": 2,
+      "variant": 14,
+      "schools": [
+        "dark"
+      ],
+      "color": "#8300ff",
+      "seed": 829645,
+      "duration": 5.15,
+      "burst": true,
+      "maxParticles": 384,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0.45,
+        "end": 1.35
+      },
+      "previewTime": 3.3,
+      "thumbnailTime": 3.3,
+      "description": "魔法陣把鎖鏈和煙吸向黑球，黑球縮小後炸開，震散鎖鏈並噴出紅紫閃電。",
+      "tags": "闇鏈 聚爆 黑暗 紫色 魔法陣 鎖鏈 聚集 蓄力 脈動 能量球 爆炸 darkchain detonation dark purple lightning discharge magic circle sigil chains charge pulse orb explosion 暗能 雷裂 電弧 壓力波 闇鏈聚爆 Darkchain Detonation"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#8300ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/darkchain-detonation.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "dimensional-rend",
+    "name": "裂空碎斬",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/dimensional-rend.js",
+    "sha256": "4d2cb5e859c19b0ae1d5405771ae834f47f5fd1523adae7095c86401446cac18",
+    "preset": {
+      "id": "dimensional-rend",
+      "name": "裂空碎斬",
+      "english": "Rift-Shattering Slashes",
+      "category": "area",
+      "kind": 6,
+      "variant": 1,
+      "schools": [
+        "astral"
+      ],
+      "color": "#729dff",
+      "seed": 671423,
+      "duration": 3.4,
+      "burst": true,
+      "maxParticles": 128,
+      "defaultDensity": 0.3,
+      "lifecycle": {
+        "start": 0.2,
+        "end": 2.4
+      },
+      "previewTime": 0.64,
+      "thumbnailTime": 0.64,
+      "sizeRange": {
+        "min": 0.25,
+        "max": 4,
+        "default": 2
+      },
+      "panelCount": {
+        "min": 0,
+        "max": 32,
+        "default": 9
+      },
+      "quantity": {
+        "min": 1,
+        "max": 32,
+        "default": 18,
+        "label": "斬痕數量",
+        "unit": "道",
+        "help": "一次施放劃出的斬痕總數；空間切片由粒子密度控制。"
+      },
+      "spread": {
+        "min": 0.5,
+        "max": 4,
+        "default": 2,
+        "label": "散布範圍",
+        "help": "只改變斬痕之間的距離，不改斬痕長度、數量或演出時間。"
+      },
+      "description": "刀光劃過時，背景像碎玻璃一樣錯開、散開，再慢慢恢復。",
+      "tags": "斬擊 次元 空間 裂縫 連斬 星界 slash cut rift dimensional rend spatial astral 次元裂斬 Dimensional Rend"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#729dff",
+      "size": 2,
+      "density": 0.3,
+      "panelCount": 9,
+      "quantity": 18,
+      "spread": 2
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/dimensional-rend.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "dust-devil",
+    "name": "飛砂風旋",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/dust-devil.js",
+    "sha256": "16685fdbe536198fc5a359cff3a2b63bf69f4302b7099042ac6f68af63ba38b0",
+    "preset": {
+      "id": "dust-devil",
+      "lifecycle": {
+        "start": 1.7,
+        "end": 1.4
+      },
+      "name": "飛砂風旋",
+      "english": "Sand-Swept Vortex",
+      "category": "vortex",
+      "color": "#dcbb87",
+      "description": "一圈圈沙塵交錯往上捲，中央留著空隙，旁邊有砂石飛動。",
+      "tags": "沙 土 龍捲風 沙漠 卡通 賽璐璐 沙塵旋風 Dust devil",
+      "maxParticles": 1024,
+      "kind": 4,
+      "variant": 1,
+      "duration": 5,
+      "burst": false,
+      "seed": 165366,
+      "renderStyle": "toon",
+      "schools": [
+        "sand"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#dcbb87",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/dust-devil.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "energy-burst",
+    "name": "雷弧綻爆",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/energy-burst.js",
+    "sha256": "2748c6ef41210f1da09458b814f05055eabd045d691bad81d57edd4ba26e3056",
+    "preset": {
+      "id": "energy-burst",
+      "quantity": {
+        "previewTime": 0.35,
+        "min": 1,
+        "max": 24,
+        "default": 12,
+        "label": "主放電數量",
+        "unit": "道",
+        "help": "每道主放電及其兩條子分岔一起增減；裝飾碎電另由密度調整。"
+      },
+      "lifecycle": {
+        "start": 0.27999999999999997,
+        "end": 1.26
+      },
+      "name": "雷弧綻爆",
+      "english": "Lightning Arc Burst",
+      "category": "burst",
+      "color": "#2878ff",
+      "description": "藍白亮光突然炸開，閃電向四周伸展，最後剩下零星電光。",
+      "tags": "科幻 命中 能量 雷電 放電 電弧 能量爆裂 Energy burst",
+      "maxParticles": 768,
+      "kind": 3,
+      "variant": 1,
+      "duration": 2.8,
+      "burst": true,
+      "seed": 128618,
+      "renderStyle": "toon",
+      "schools": [
+        "storm"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#2878ff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 12
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/energy-burst.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "energy-vortex",
+    "name": "符環渦流",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/energy-vortex.js",
+    "sha256": "7f4b13e9a9e6bcc6e02b4b83c3c3592d0b10c1787369da7157b19b65249cc765",
+    "preset": {
+      "id": "energy-vortex",
+      "lifecycle": {
+        "start": 1.7,
+        "end": 1.4
+      },
+      "name": "符環渦流",
+      "english": "Runic Ring Vortex",
+      "category": "vortex",
+      "color": "#bba5ff",
+      "description": "發光帶繞圈往上捲，魔法圖案沿著中央的空隙流動。",
+      "tags": "魔法 能量 傳送 龍捲風 卡通 賽璐璐 能量漩渦 Energy vortex",
+      "maxParticles": 768,
+      "kind": 4,
+      "variant": 3,
+      "duration": 5,
+      "burst": false,
+      "seed": 183740,
+      "renderStyle": "toon",
+      "schools": [
+        "arcane"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#bba5ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/energy-vortex.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "fire-explosion",
+    "name": "白熱炎爆",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/fire-explosion.js",
+    "sha256": "9f6d7b1190f60c7f1777d0dcba02e2fbed40b957bee2d46770ac864d5c72b917",
+    "preset": {
+      "id": "fire-explosion",
+      "lifecycle": {
+        "start": 0.27999999999999997,
+        "end": 1.26
+      },
+      "name": "白熱炎爆",
+      "english": "White-Hot Fireburst",
+      "category": "burst",
+      "color": "#ff5c26",
+      "description": "火球炸開並吹出一圈煙，火焰慢慢變成煙霧，留下小火星。",
+      "tags": "火焰 爆破 命中 卡通 賽璐璐 火焰爆炸 Fire explosion",
+      "maxParticles": 256,
+      "kind": 3,
+      "variant": 0,
+      "duration": 2.8,
+      "burst": true,
+      "seed": 119431,
+      "renderStyle": "toon",
+      "schools": [
+        "fire"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff5c26",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/fire-explosion.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "fire-vortex",
+    "name": "捲焰風旋",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/fire-vortex.js",
+    "sha256": "4785eb91d960bc8199518a595b6257d71e4ee2e1843894e06dd2a9e89399e880",
+    "preset": {
+      "id": "fire-vortex",
+      "lifecycle": {
+        "start": 1.7,
+        "end": 1.4
+      },
+      "name": "捲焰風旋",
+      "english": "Flame-Swept Vortex",
+      "category": "vortex",
+      "color": "#ff884b",
+      "description": "橙色火焰繞圈往上捲，底下的煙塵也被火光照亮。",
+      "tags": "火焰 龍捲風 旋風 卡通 賽璐璐 火焰旋風 Fire vortex",
+      "maxParticles": 1024,
+      "kind": 4,
+      "variant": 2,
+      "duration": 5,
+      "burst": false,
+      "seed": 174553,
+      "renderStyle": "toon",
+      "schools": [
+        "fire"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff884b",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/fire-vortex.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "fireball",
+    "name": "熾焰火球",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/fireball.js",
+    "sha256": "0765e3f9332ed8a31d1fe5387e6f044be740f84a64fb806451b8a3a98007af5f",
+    "preset": {
+      "id": "fireball",
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.8
+      },
+      "name": "熾焰火球",
+      "english": "Blazing Fireball",
+      "category": "projectile",
+      "color": "#ff823e",
+      "description": "一顆向前飛的火球，火焰往後翻捲，像拖著燃燒的尾巴。",
+      "tags": "火焰 法師 技能 飛行 火球 Fireball",
+      "maxParticles": 768,
+      "kind": 0,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 9187,
+      "schools": [
+        "fire"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff823e",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/fireball.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "flame-surge",
+    "name": "翻湧炎潮",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/flame-surge.js",
+    "sha256": "edeab85599aa77811bd7f4bb6cc95cb2e10dccd26385daf1aaa81928d24edb5a",
+    "preset": {
+      "id": "flame-surge",
+      "quantity": {
+        "min": 1,
+        "max": 10,
+        "default": 5,
+        "label": "火舌數量",
+        "unit": "道",
+        "help": "獨立翻捲火舌的數量，保留煙霧與火星。"
+      },
+      "lifecycle": {
+        "start": 0.30000000000000004,
+        "end": 1.35
+      },
+      "name": "翻湧炎潮",
+      "english": "Surging Flame Tide",
+      "kind": 3,
+      "variant": 4,
+      "color": "#ff823e",
+      "duration": 3,
+      "burst": true,
+      "description": "大片火焰像扇子一樣往上翻，邊緣散成小火星。",
+      "category": "burst",
+      "tags": "火焰 Fire 法術 魔法 火瀑噴湧 Flame surge",
+      "schools": [
+        "fire"
+      ],
+      "maxParticles": 512,
+      "seed": 302119,
+      "previewTime": 0.7,
+      "thumbnailTime": 0.7
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ff823e",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/flame-surge.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "frost-field",
+    "name": "六芒霜陣",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/frost-field.js",
+    "sha256": "3c2bed6fcc300d029841911a565c842708b78b883282bbee62bfaca2e1313486",
+    "preset": {
+      "id": "frost-field",
+      "lifecycle": {
+        "start": 0.7,
+        "end": 1
+      },
+      "name": "六芒霜陣",
+      "english": "Sixfold Frost Sigil",
+      "category": "area",
+      "color": "#9bdfff",
+      "description": "雪花形的魔法圖案向外亮起，上方有小冰屑慢慢閃光。",
+      "tags": "冰凍 緩速 範圍 雪 冰霜領域 Frost field",
+      "maxParticles": 512,
+      "kind": 2,
+      "variant": 2,
+      "duration": 5,
+      "burst": false,
+      "seed": 101057,
+      "schools": [
+        "ice"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#9bdfff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/frost-field.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "golden-chain-rain",
+    "name": "金鏈驟雨",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/golden-chain-rain.js",
+    "sha256": "26bbe8c0f96ad3e8ae053d28f70b457b55a2cbc5e4dbfc94d5daa91f29bf9dda",
+    "preset": {
+      "textureDensity": {
+        "min": 0.25,
+        "max": 3,
+        "default": 0.7
+      },
+      "crackBloom": {
+        "min": 0,
+        "max": 5,
+        "default": 0.15
+      },
+      "crackBloomSpread": {
+        "min": 0.25,
+        "max": 3,
+        "default": 1
+      },
+      "id": "golden-chain-rain",
+      "name": "金鏈驟雨",
+      "english": "Golden Chain Rain",
+      "category": "area",
+      "kind": 2,
+      "variant": 15,
+      "schools": [
+        "light"
+      ],
+      "color": "#ffd166",
+      "seed": 829647,
+      "duration": 4.8,
+      "burst": true,
+      "maxParticles": 1590,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0.35,
+        "end": 1.1
+      },
+      "previewTime": 1.65,
+      "thumbnailTime": 1.65,
+      "quantity": {
+        "min": 1,
+        "max": 12,
+        "default": 8,
+        "label": "每波鎖鏈數量",
+        "unit": "條",
+        "help": "每波落下的鎖鏈條數，固定連續三波；裝飾密度不會減少鎖鏈或鏈節。"
+      },
+      "spread": {
+        "min": 0.5,
+        "max": 2,
+        "default": 1,
+        "label": "落點散布範圍",
+        "help": "拉開鎖鏈起點與落點的水平間距；鏈節粗細、落下高度與演出時間不變。"
+      },
+      "description": "金鏈連落三波，箭頭半截插地；金黃裂縫散出柔光，大量金色碎片沿裂縫浮起。",
+      "tags": "金鏈 鎖鏈 驟雨 聖光 金色 落擊 三波 範圍 地裂 插地 漣漪 水波 碎片 golden chain rain holy light gold cracks embedded arrows ripples fragments"
+    },
+    "default_options": {
+      "spriteChains": true,
+      "speed": 1,
+      "detail": 1,
+      "color": "#ffd166",
+      "size": 1,
+      "density": 0.5,
+      "crackBloomSpread": 1,
+      "crackBloom": 0.15,
+      "textureDensity": 0.7,
+      "quantity": 8,
+      "spread": 1
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/golden-chain-rain.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "ground-fog",
+    "name": "貼地薄霧",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/ground-fog.js",
+    "sha256": "acd6a5c3a554e9d9b91c90c45c6fd596cb849ec96b7593e08925d1b43313d243",
+    "preset": {
+      "id": "ground-fog",
+      "lifecycle": {
+        "start": 0.5,
+        "end": 1.2
+      },
+      "name": "貼地薄霧",
+      "english": "Ground-Hugging Mist",
+      "category": "smoke",
+      "color": "#a6c9ca",
+      "description": "薄霧貼著地面鋪開，讓場景有神祕感，也能遮住低處。",
+      "tags": "霧 環境 地面 地面煙霧 Ground fog",
+      "maxParticles": 128,
+      "kind": 5,
+      "variant": 1,
+      "duration": 5,
+      "burst": false,
+      "seed": 202114
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#a6c9ca",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/ground-fog.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "healing-field",
+    "name": "療光法陣",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/healing-field.js",
+    "sha256": "253100b0aa9254b3f454e0b06444e571c9e17949bc9e64facd26e117f5a0f23d",
+    "preset": {
+      "id": "healing-field",
+      "lifecycle": {
+        "start": 0.7,
+        "end": 1
+      },
+      "name": "療光法陣",
+      "english": "Healing Sigil",
+      "category": "area",
+      "color": "#86e9b2",
+      "description": "地上的魔法圖案一圈圈發光，小十字向上飄，適合補血時使用。",
+      "tags": "回血 治療 輔助 光環 治療領域 Healing field",
+      "maxParticles": 512,
+      "kind": 2,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 82683,
+      "schools": [
+        "light"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#86e9b2",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/healing-field.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "ice-shard",
+    "name": "霜晶飛矢",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/ice-shard.js",
+    "sha256": "cd5a30f03856fc3827740cb63361e54236987afbe07119fd699c708dfe03e290",
+    "preset": {
+      "id": "ice-shard",
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.8
+      },
+      "name": "霜晶飛矢",
+      "english": "Frostcrystal Dart",
+      "category": "projectile",
+      "color": "#b3dcff",
+      "description": "一簇尖冰向前飛，身後掉落旋轉的小冰塊與細霜。",
+      "tags": "冰 魔法 射擊 冰晶彈 Ice shard",
+      "maxParticles": 512,
+      "kind": 0,
+      "variant": 2,
+      "duration": 5,
+      "burst": false,
+      "seed": 27561,
+      "schools": [
+        "ice"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#b3dcff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/ice-shard.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "ice-shatter",
+    "name": "裂晶霜爆",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/ice-shatter.js",
+    "sha256": "5e7ce6cde24e6d8caf604f1d5fa5c4a397d83423372933c957b03dfd79dae855",
+    "preset": {
+      "id": "ice-shatter",
+      "quantity": {
+        "min": 1,
+        "max": 18,
+        "default": 9,
+        "label": "主晶片數量",
+        "unit": "枚",
+        "help": "向外爆散的大晶片數量；小冰屑仍由粒子密度控制。"
+      },
+      "lifecycle": {
+        "start": 0.27999999999999997,
+        "end": 1.26
+      },
+      "name": "裂晶霜爆",
+      "english": "Shattering Frostburst",
+      "category": "burst",
+      "color": "#b8e5ff",
+      "description": "冰柱先亮起裂紋，再炸成一塊塊飛散的小冰晶。",
+      "tags": "冰 碎片 破碎 命中 卡通 賽璐璐 冰晶碎裂 Ice shatter",
+      "maxParticles": 768,
+      "kind": 3,
+      "variant": 3,
+      "duration": 2.8,
+      "burst": true,
+      "seed": 146992,
+      "renderStyle": "toon",
+      "schools": [
+        "ice"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#b8e5ff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 9
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/ice-shatter.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "impact-frame",
+    "name": "Impact Frame",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/impact-frame.js",
+    "sha256": "fa89b752e10ae744575999d35fa4bfe39572bfd994879d8d0b128d5c9f6ce898",
+    "preset": {
+      "id": "impact-frame",
+      "name": "Impact Frame",
+      "renderMode": "postprocess"
+    },
+    "default_options": {},
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/impact-frame.tscn",
+    "port_method": "native_canvas_postprocess",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "magic-barrier",
+    "name": "符網結界",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/magic-barrier.js",
+    "sha256": "9fbeea9d2c4a2567b80e34c5fcedc86b406c1bef84a8d0a4fa1e8bf8e191d57e",
+    "preset": {
+      "id": "magic-barrier",
+      "lifecycle": {
+        "start": 0.7,
+        "end": 1
+      },
+      "name": "符網結界",
+      "english": "Runic Mesh Barrier",
+      "category": "area",
+      "color": "#bba3ff",
+      "description": "半圓形光罩從地面升起，表面有發光格子與閃動的小方塊。",
+      "tags": "護盾 防禦 法陣 範圍 魔法結界 Magic barrier",
+      "maxParticles": 768,
+      "kind": 2,
+      "variant": 3,
+      "duration": 5,
+      "burst": false,
+      "seed": 110244,
+      "schools": [
+        "arcane"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#bba3ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/magic-barrier.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "painterly-grass",
+    "name": "風拂草地",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/painterly-grass.js",
+    "sha256": "2137a165ca0c1134706ea18ce3acf6ad301acb56360b4767ce1dd2d985d15064",
+    "preset": {
+      "id": "painterly-grass",
+      "name": "風拂草地",
+      "english": "Windswept Meadow",
+      "category": "environment",
+      "kind": 10,
+      "variant": 0,
+      "schools": [
+        "nature"
+      ],
+      "color": "#829544",
+      "maxParticles": 512,
+      "defaultDensity": 0.75,
+      "seed": 607319,
+      "duration": 5,
+      "burst": false,
+      "lifecycle": {
+        "start": 0.6,
+        "end": 0.8
+      },
+      "previewMode": "continuous",
+      "previewTime": 2.2,
+      "thumbnailTime": 2.2,
+      "description": "像畫筆畫出的草地，點綴白色小花，草尖和花朵會隨風輕輕擺動。",
+      "tags": "草地 草叢 白花 手繪 油畫 筆觸 植被 環境 自然 grass painterly meadow foliage flowers wind Nature 手繪草地 Painterly Grass"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#829544",
+      "size": 1,
+      "density": 0.75
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/painterly-grass.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "plasma-bolt",
+    "name": "電漿尖矢",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/plasma-bolt.js",
+    "sha256": "1bfd893fdbc1544b41b33ff9f5576c1b347da2855b635a56c051fa03bfbf5fc4",
+    "preset": {
+      "id": "plasma-bolt",
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.8
+      },
+      "name": "電漿尖矢",
+      "english": "Plasma Dart",
+      "category": "projectile",
+      "color": "#73e3ff",
+      "description": "亮白箭頭帶著藍色閃電往前飛，身後留下細小火花。",
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2,
+      "tags": "科幻 能量 子彈 電漿彈 Plasma bolt",
+      "maxParticles": 512,
+      "kind": 0,
+      "variant": 1,
+      "duration": 5,
+      "burst": false,
+      "seed": 18374
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#73e3ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/plasma-bolt.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "prism-guard",
+    "name": "稜晶護壁",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/prism-guard.js",
+    "sha256": "361225a20e6ee3d8e6f3cae788aa56af6fa3f00fe4504bf9ca3cee7d1b4dcbf0",
+    "preset": {
+      "id": "prism-guard",
+      "quantity": {
+        "min": 1,
+        "max": 7,
+        "default": 7,
+        "label": "護盾盾片數量",
+        "unit": "片",
+        "help": "盾片與各自稜光一起增減；最多保留完整七片盾面。"
+      },
+      "lifecycle": {
+        "start": 0.3,
+        "end": 0.65
+      },
+      "name": "稜晶護壁",
+      "english": "Prismatic Crystal Bulwark",
+      "category": "shield",
+      "color": "#73e3ff",
+      "description": "幾片水晶盾拼成彎曲護牆，停止使用後再一片片收回。",
+      "tags": "護盾 防禦 格擋 保護 聖光 Light 稜光護盾 Prism guard",
+      "maxParticles": 512,
+      "kind": 7,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 367480,
+      "schools": [
+        "light"
+      ],
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#73e3ff",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 7
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/prism-guard.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "prism-parry",
+    "name": "稜晶瞬擋",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/prism-parry.js",
+    "sha256": "06dbaf90606ca2f47f54bebda79da588f7f42b7294dadda9c51e5e1ef8f6aa08",
+    "preset": {
+      "id": "prism-parry",
+      "quantity": {
+        "min": 1,
+        "max": 4,
+        "default": 4,
+        "label": "格擋盾片數量",
+        "unit": "片",
+        "help": "受壓盾片與稜光一起增減，接觸亮線及碎光保留。"
+      },
+      "lifecycle": {
+        "start": 0.055,
+        "end": 0.2475
+      },
+      "name": "稜晶瞬擋",
+      "english": "Prismatic Crystal Block",
+      "category": "shield",
+      "color": "#ffe3a0",
+      "description": "一道亮線突然閃過，小片水晶盾擋下一擊，散出碎光後消失。",
+      "tags": "格擋 彈反 接觸 防禦 聖光 Light 折光格擋 Prism parry",
+      "maxParticles": 512,
+      "kind": 7,
+      "variant": 1,
+      "duration": 0.55,
+      "burst": true,
+      "seed": 376667,
+      "schools": [
+        "light"
+      ],
+      "previewTime": 0.14,
+      "thumbnailTime": 0.14
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ffe3a0",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 4
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/prism-parry.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "pulse-beam",
+    "name": "環脈射線",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/pulse-beam.js",
+    "sha256": "3d85ebec67c765173b7858d4362366ae22239b7dc479e85993d330b9cd611fce",
+    "preset": {
+      "id": "pulse-beam",
+      "quantity": {
+        "min": 1,
+        "max": 8,
+        "default": 4,
+        "label": "脈衝波數",
+        "unit": "道",
+        "help": "固定射程內的主要脈衝波數。流速保持不變，數量增加時脈衝更密。"
+      },
+      "lifecycle": {
+        "start": 0.4,
+        "end": 0.6
+      },
+      "name": "環脈射線",
+      "english": "Ringpulse Ray",
+      "category": "beam",
+      "color": "#71e7dc",
+      "description": "光線上亮起一顆顆光球，光圈沿著光線往前跑。",
+      "tags": "雷射 激光 脈衝 射擊 脈衝光束 Pulse beam",
+      "maxParticles": 512,
+      "kind": 1,
+      "variant": 1,
+      "duration": 5,
+      "burst": false,
+      "seed": 55122
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#71e7dc",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 4
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/pulse-beam.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "radiant-beam",
+    "name": "日輪輝柱",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/radiant-beam.js",
+    "sha256": "0931023510a7097068f3af6f9489f2ef234b92033711a96152e6ee9f6d98d9bc",
+    "preset": {
+      "id": "radiant-beam",
+      "lifecycle": {
+        "start": 0.4,
+        "end": 0.6
+      },
+      "name": "日輪輝柱",
+      "english": "Solar Halo Beam",
+      "kind": 1,
+      "variant": 4,
+      "color": "#ffe3a0",
+      "duration": 5,
+      "burst": false,
+      "description": "圓形印記不斷射出明亮光柱，打中的地方像花瓣一樣綻開。",
+      "category": "beam",
+      "tags": "聖光 Light 法術 魔法 聖輝光束 Radiant beam",
+      "schools": [
+        "light"
+      ],
+      "maxParticles": 512,
+      "seed": 342147,
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#ffe3a0",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/radiant-beam.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "shockwave",
+    "name": "揚塵震波",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/shockwave.js",
+    "sha256": "12caa5ad5ccb494626cefd132ce92f89e7fda8c1f245a3e8b303791c7d018206",
+    "preset": {
+      "id": "shockwave",
+      "lifecycle": {
+        "start": 0.27999999999999997,
+        "end": 1.26
+      },
+      "name": "揚塵震波",
+      "english": "Dust-Raising Shockwave",
+      "category": "burst",
+      "color": "#f0cf9d",
+      "description": "一圈塵土向外衝，捲起大片灰塵，小石頭再落回地面。",
+      "tags": "衝擊 地面 爆炸 範圍 卡通 賽璐璐 衝擊波 Shockwave",
+      "maxParticles": 512,
+      "kind": 3,
+      "variant": 2,
+      "duration": 2.8,
+      "burst": true,
+      "seed": 137805,
+      "renderStyle": "toon"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#f0cf9d",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/shockwave.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "smoke-column",
+    "name": "湧升煙柱",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/smoke-column.js",
+    "sha256": "f060953de337470797fe43c4eb479e1ca88925fb52783d541b1d233a6ca80063",
+    "preset": {
+      "id": "smoke-column",
+      "lifecycle": {
+        "start": 0.5,
+        "end": 1.2
+      },
+      "name": "湧升煙柱",
+      "english": "Billowing Smoke Column",
+      "category": "smoke",
+      "color": "#aeb9cb",
+      "description": "一團團煙往上冒，越高越散，也慢慢變淡。",
+      "tags": "煙 環境 燃燒 煙柱 Smoke column",
+      "maxParticles": 128,
+      "kind": 5,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 192927
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#aeb9cb",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/smoke-column.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "smoke-puff",
+    "name": "驟散煙團",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/smoke-puff.js",
+    "sha256": "1a095859075d35d1a09ca5abb25c49e0bd2f484ab716523547e078c3a4a24761",
+    "preset": {
+      "id": "smoke-puff",
+      "lifecycle": {
+        "start": 0.35000000000000003,
+        "end": 1.575
+      },
+      "name": "驟散煙團",
+      "english": "Dispersing Smoke Puff",
+      "category": "smoke",
+      "color": "#b1afc8",
+      "description": "一團煙快速膨脹再散去，適合出現、消失或落地時使用。",
+      "tags": "煙 消失 忍者 落地 消散煙團 Smoke puff",
+      "maxParticles": 96,
+      "kind": 5,
+      "variant": 3,
+      "duration": 3.5,
+      "burst": true,
+      "seed": 220488
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#b1afc8",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/smoke-puff.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "soul-siphon",
+    "name": "暗能汲流",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/soul-siphon.js",
+    "sha256": "31eec701a50b00ea3c3c7afb04b5419b812d2199b04443ab86fff434d0b3a8cf",
+    "preset": {
+      "id": "soul-siphon",
+      "quantity": {
+        "min": 1,
+        "max": 18,
+        "default": 9,
+        "label": "每輪能量珠",
+        "unit": "顆",
+        "help": "每輪回流的能量珠數量，分股回到施法端；不等於同時可見數。"
+      },
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.65
+      },
+      "name": "暗能汲流",
+      "english": "Dark Energy Siphon",
+      "category": "beam",
+      "color": "#a883e8",
+      "description": "一股股黑暗魔力從目標流回使用者，停止後把剩下的魔力收完。",
+      "tags": "汲取 吸收 靈魂 黑暗 Dark 靈魂汲流 Soul siphon",
+      "maxParticles": 512,
+      "kind": 1,
+      "variant": 5,
+      "duration": 5,
+      "burst": false,
+      "seed": 395041,
+      "schools": [
+        "dark"
+      ],
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#a883e8",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 9
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/soul-siphon.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "spell-indicator-circle",
+    "name": "紅色圓形預警",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/spell-indicator-circle.js",
+    "sha256": "6dbbb39be166998a4be45662f364bae4d65e5324483cd3389dd2c35f126c6f9f",
+    "preset": {
+      "id": "spell-indicator-circle",
+      "name": "紅色圓形預警",
+      "english": "Red Circle Spell Indicator",
+      "category": "area",
+      "kind": 2,
+      "variant": 16,
+      "schools": [
+        "arcane"
+      ],
+      "indicatorShape": "circle",
+      "color": "#ff303e",
+      "seed": 829650,
+      "duration": 2.15,
+      "burst": true,
+      "maxParticles": 0,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0,
+        "end": 0.15
+      },
+      "previewTime": 1,
+      "thumbnailTime": 1,
+      "sizeRange": {
+        "min": 0.25,
+        "max": 20,
+        "default": 3
+      },
+      "description": "紅色圓圈標出危險區，顏色慢慢填滿提醒攻擊將到，倒數結束後消失。",
+      "tags": "紅色 圓形 預警 危險 攻擊 範圍 倒數 指示器 技能 奧術 red circle spell indicator telegraph warning aoe countdown danger arcane"
+    },
+    "default_options": {
+      "color": "#ff303e",
+      "size": 3,
+      "detail": 1,
+      "angleDeg": 360,
+      "warningDuration": 2,
+      "progressMode": "auto",
+      "speed": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/spell-indicator-circle.tscn"
+  },
+  {
+    "id": "spell-indicator-sector",
+    "name": "紅色扇形預警",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/spell-indicator-sector.js",
+    "sha256": "0525a8aff6b150443dbdeedc75c01894914357c9a9fd75b2fddd69b56f119160",
+    "preset": {
+      "id": "spell-indicator-sector",
+      "name": "紅色扇形預警",
+      "english": "Red Sector Spell Indicator",
+      "category": "area",
+      "kind": 2,
+      "variant": 17,
+      "schools": [
+        "arcane"
+      ],
+      "indicatorShape": "sector",
+      "color": "#ff303e",
+      "seed": 829651,
+      "duration": 2.15,
+      "burst": true,
+      "maxParticles": 0,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0,
+        "end": 0.15
+      },
+      "previewTime": 1,
+      "thumbnailTime": 1,
+      "sizeRange": {
+        "min": 0.25,
+        "max": 20,
+        "default": 3
+      },
+      "description": "紅色扇形標出攻擊方向，顏色慢慢填滿提醒攻擊將到，大小和角度能調整。",
+      "tags": "紅色 扇形 預警 危險 攻擊 範圍 角度 倒數 指示器 技能 奧術 red sector cone spell indicator telegraph warning aoe countdown angle arcane"
+    },
+    "default_options": {
+      "color": "#ff303e",
+      "size": 3,
+      "detail": 1,
+      "angleDeg": 90,
+      "warningDuration": 2,
+      "progressMode": "auto",
+      "speed": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/spell-indicator-sector.tscn"
+  },
+  {
+    "id": "spiral-gale",
+    "name": "旋流風矛",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/spiral-gale.js",
+    "sha256": "598c6795182283c6fdcb2cf72590b3e174f99929bb948fb451b0e0e91a6ed33c",
+    "preset": {
+      "id": "spiral-gale",
+      "lifecycle": {
+        "start": 0.35,
+        "end": 0.8
+      },
+      "name": "旋流風矛",
+      "english": "Spiraling Wind Spear",
+      "kind": 0,
+      "variant": 6,
+      "color": "#b4e5d5",
+      "duration": 5,
+      "burst": false,
+      "description": "旋轉的風像長矛往前衝，身後的風痕慢慢變細、消失。",
+      "category": "projectile",
+      "tags": "風 Wind 法術 魔法 螺旋風槍 Spiral gale",
+      "schools": [
+        "wind"
+      ],
+      "maxParticles": 512,
+      "seed": 412196,
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#b4e5d5",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/spiral-gale.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "steam-jet",
+    "name": "沖天汽柱",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/steam-jet.js",
+    "sha256": "ef9bda389df8db66768eb372a970788851e9067b7b15eef80dc36d8b61c955c0",
+    "preset": {
+      "id": "steam-jet",
+      "lifecycle": {
+        "start": 0.5,
+        "end": 1.2
+      },
+      "name": "沖天汽柱",
+      "english": "Rising Steam Jet",
+      "category": "smoke",
+      "color": "#d1dfe8",
+      "description": "一股細長蒸汽快速往上衝，到頂端後散成薄霧。",
+      "tags": "蒸氣 工業 噴射 蒸汽噴發 Steam jet",
+      "maxParticles": 96,
+      "kind": 5,
+      "variant": 2,
+      "duration": 5,
+      "burst": false,
+      "seed": 211301,
+      "schools": [
+        "water"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#d1dfe8",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/steam-jet.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "thunder-strike",
+    "name": "渦雷落擊",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/thunder-strike.js",
+    "sha256": "1cf7356716b494e1f9d63c06e91e8bc126b32f93acaf5e9f386568fdfe1b3a1a",
+    "preset": {
+      "id": "thunder-strike",
+      "lifecycle": {
+        "start": 0.26,
+        "end": 1.1700000000000002
+      },
+      "name": "渦雷落擊",
+      "english": "Vortex Lightning Strike",
+      "kind": 3,
+      "variant": 5,
+      "color": "#2878ff",
+      "duration": 2.6,
+      "burst": true,
+      "description": "上方先聚起電光，再劈下藍白閃電，打中地面時炸出火花。",
+      "category": "burst",
+      "tags": "風暴 Storm 法術 魔法 雷霆落擊 Thunder strike",
+      "schools": [
+        "storm"
+      ],
+      "maxParticles": 512,
+      "seed": 332140,
+      "previewTime": 0.36,
+      "thumbnailTime": 0.36
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#2878ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/thunder-strike.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "venom-stream",
+    "name": "濺蝕毒流",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/venom-stream.js",
+    "sha256": "42400b0dddc1aab66a030f1507233935b130a2546f8da44161daf5deb52b1f45",
+    "preset": {
+      "id": "venom-stream",
+      "quantity": {
+        "min": 1,
+        "max": 16,
+        "default": 8,
+        "label": "每輪液團",
+        "unit": "團",
+        "help": "每輪噴出的主要液團數量；零星液滴與末端濺蝕保留，不等於同時可見數。"
+      },
+      "lifecycle": {
+        "start": 0.25,
+        "end": 0.7
+      },
+      "name": "濺蝕毒流",
+      "english": "Corrosive Venom Jet",
+      "category": "beam",
+      "color": "#acdc6f",
+      "description": "毒液往目標噴去，途中濺出水滴，停止後剩下的毒液會流完。",
+      "tags": "噴流 毒液 腐蝕 劇毒 Poison 劇毒噴流 Venom stream",
+      "maxParticles": 512,
+      "kind": 1,
+      "variant": 6,
+      "duration": 5,
+      "burst": false,
+      "seed": 422602,
+      "schools": [
+        "poison"
+      ],
+      "previewTime": 1.2,
+      "thumbnailTime": 1.2
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#acdc6f",
+      "size": 1,
+      "density": 0.5,
+      "quantity": 8
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/venom-stream.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "weapon-smear",
+    "name": "流光刃影",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/weapon-smear.js",
+    "sha256": "9f9acd4105e57290c597122544ef84c9f225cce49432e30f8699927f0644ed49",
+    "preset": {
+      "id": "weapon-smear",
+      "name": "流光刃影",
+      "english": "Gleaming Blade Trail",
+      "category": "area",
+      "kind": 2,
+      "variant": 11,
+      "schools": [
+        "arcane"
+      ],
+      "color": "#2878ff",
+      "seed": 829642,
+      "duration": 4,
+      "burst": false,
+      "maxParticles": 0,
+      "defaultDensity": 0.5,
+      "lifecycle": {
+        "start": 0.001,
+        "end": 0.18
+      },
+      "previewMode": "continuous",
+      "previewTime": 0.45,
+      "thumbnailTime": 0.45,
+      "sizeRange": {
+        "min": 0.25,
+        "max": 1,
+        "default": 1
+      },
+      "description": "揮劍時留下透明的藍色光痕，停手後很快消失。",
+      "tags": "武器 拖影 殘影 斬擊 刀光 smear slash weapon trail sword blade arcane 武器拖影 Slash Smear"
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#2878ff",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/weapon-smear.tscn",
+    "port_method": "native_dynamic_ribbon",
+    "visual_acceptance": "pending_gpu_browser"
+  },
+  {
+    "id": "wind-vortex",
+    "name": "捲葉風旋",
+    "source": "00gamedevs",
+    "source_file": "vfx-example/three-effect/wind-vortex.js",
+    "sha256": "4ff184f7757dc8485584b3cd3123b4c7753b308f243087f2362da53abaa84f5c",
+    "preset": {
+      "id": "wind-vortex",
+      "lifecycle": {
+        "start": 1.7,
+        "end": 1.4
+      },
+      "name": "捲葉風旋",
+      "english": "Leaf-Swept Vortex",
+      "category": "vortex",
+      "color": "#a4dfd1",
+      "description": "旋風不停往上捲，葉子穿過中央，地面的灰塵也被捲進去。",
+      "tags": "風 龍捲風 旋風 卡通 賽璐璐 風旋 Wind vortex",
+      "maxParticles": 768,
+      "kind": 4,
+      "variant": 0,
+      "duration": 5,
+      "burst": false,
+      "seed": 156179,
+      "renderStyle": "toon",
+      "schools": [
+        "wind"
+      ]
+    },
+    "default_options": {
+      "speed": 1,
+      "detail": 1,
+      "color": "#a4dfd1",
+      "size": 1,
+      "density": 0.5
+    },
+    "status": "ported_native_godot",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/00gamedevs/wind-vortex.tscn",
+    "port_method": "source_geometry_glsl_with_30fps_cpu_channels",
+    "visual_acceptance": "pending_gpu_browser"
+  }
+]

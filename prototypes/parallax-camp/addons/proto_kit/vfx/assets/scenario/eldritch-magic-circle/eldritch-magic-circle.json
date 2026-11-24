@@ -1,0 +1,553 @@
+{
+  "frames": [
+    {
+      "filename": "eldritch-magic-circle_00",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_01",
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_02",
+      "frame": {
+        "x": 192,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_03",
+      "frame": {
+        "x": 288,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_04",
+      "frame": {
+        "x": 384,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_05",
+      "frame": {
+        "x": 480,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_06",
+      "frame": {
+        "x": 576,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_07",
+      "frame": {
+        "x": 672,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_08",
+      "frame": {
+        "x": 768,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_09",
+      "frame": {
+        "x": 864,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_10",
+      "frame": {
+        "x": 960,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_11",
+      "frame": {
+        "x": 1056,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_12",
+      "frame": {
+        "x": 1152,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_13",
+      "frame": {
+        "x": 1248,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_14",
+      "frame": {
+        "x": 1344,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_15",
+      "frame": {
+        "x": 1440,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_16",
+      "frame": {
+        "x": 1536,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_17",
+      "frame": {
+        "x": 1632,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_18",
+      "frame": {
+        "x": 1728,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_19",
+      "frame": {
+        "x": 1824,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_20",
+      "frame": {
+        "x": 1920,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_21",
+      "frame": {
+        "x": 2016,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_22",
+      "frame": {
+        "x": 2112,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    },
+    {
+      "filename": "eldritch-magic-circle_23",
+      "frame": {
+        "x": 2208,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 48
+      },
+      "duration": 83
+    }
+  ],
+  "meta": {
+    "app": "Pixel VFX Forge (scenario.com/explorations/pixel-vfx-forge)",
+    "version": "1",
+    "image": "eldritch-magic-circle.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2304,
+      "h": 48
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "eldritch-magic-circle",
+        "from": 0,
+        "to": 23,
+        "direction": "forward"
+      }
+    ],
+    "fps": 12,
+    "loop": true
+  }
+}

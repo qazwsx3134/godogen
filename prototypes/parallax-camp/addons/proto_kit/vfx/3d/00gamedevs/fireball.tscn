@@ -1,0 +1,133 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_a3mbk"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/spatial_part_0.gdshader" id="2_pyy2q"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/part_0.res" id="3_878ae"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/spatial_part_1.gdshader" id="4_pyy2q"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/part_1.res" id="5_siese"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/spatial_part_2.gdshader" id="6_31gv5"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/spatial_part_1_depth.gdshader" id="6_pyy2q"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/part_2.res" id="7_2cugw"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/spatial_part_3.gdshader" id="8_jqbne"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/part_3.res" id="9_lvhec"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fireball/motion.res" id="10_kq43v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hyx8y"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_pyy2q")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 384.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.8
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_noao1"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_pyy2q")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 5760
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_if826"]
+resource_local_to_scene = true
+render_priority = 5
+shader = ExtResource("6_31gv5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 72
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uImpactUp = Vector3(0, 1, 0)
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ursrj"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("8_jqbne")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[node name="Fireball" type="Node3D" unique_id=2056995823]
+script = ExtResource("1_a3mbk")
+effect_id = "fireball"
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "fireball"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=1254322192]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=757741072]
+material_override = SubResource("ShaderMaterial_hyx8y")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_878ae")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=373250752]
+material_override = SubResource("ShaderMaterial_noao1")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_siese")
+metadata/source_name = "projectile-core"
+metadata/source_depth_shader = ExtResource("6_pyy2q")
+metadata/source_transparent_shader = ExtResource("4_pyy2q")
+metadata/source_depth_mode = "active"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=478524563]
+visible = false
+material_override = SubResource("ShaderMaterial_if826")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_2cugw")
+metadata/source_name = "lifecycle-impact"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1041859535]
+visible = false
+material_override = SubResource("ShaderMaterial_ursrj")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_lvhec")
+metadata/source_name = "lifecycle-contact-glow"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=471971141]
+unique_name_in_owner = true
+libraries/ = ExtResource("10_kq43v")

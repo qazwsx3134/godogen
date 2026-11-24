@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ion-orb/ion-orb.tres" id="1_7wv36"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_h3w6p"]
+
+[node name="IonOrb" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_7wv36")
+animation = &"ion_orb"
+frame = 2
+script = ExtResource("2_h3w6p")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ion-orb"
+metadata/placement = "caster-hand"
+metadata/depth_hint = "front"
