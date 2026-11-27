@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 `git log -1 -- docs/mz-dream` 查核） | 2026-11-28 | docs(mz-dream): 收錄鏡頭、草地、角色遮擋的 WebGL 畫面研究與參考圖集，PNG 標頭和切框 JSON 驗證通過 |
 | 本次提交（以 `git log -1 -- prototypes/one-more-rock` 查核） | 2026-11-28 | feat(one-more-rock): 收錄採石、搬運和工坊原型、露頭礦片、八路升級、拾運與破石機、共用 F1 開發面板。六項 Godot 回歸與 Web 匯出已有證據，手機真機待驗 |
 | 本次提交（以 git log 查核） | 2026-11-25 | feat(parallax-camp): 新增森林營地與跑跳試驗道、分件旅人和鏡頭系統；沿用 60／144 FPS 測試證據 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | feat(walker-tps): expand combat and urban environments；整理提交，測試未重跑 |
@@ -42,6 +43,7 @@
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
+| 《夢靨植人》畫面研究 | 已整理原作畫面與 Godot 做法，下一步是鏡頭、植被遮擋和躲藏的最小試作 | [PROGRESS](docs/mz-dream/PROGRESS.md) | — |
 | One More Rock 石頭裡有什麼？ | V0.2 可採礦、推車卸貨和進屋開石，V0.3 已接入天賦與自動化切片。下一步是真機橫向試玩、經濟及存檔 | [PROGRESS](prototypes/one-more-rock/PROGRESS.md) | [實作與里程碑](docs/incremental/One-more-rock/IMPLEMENTATION.md#六個里程碑與工期) |
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | debt-commission 萬事屋吐槽 ADV | 故事為功能展示（橫式＋直式）與桂短篇；11-12 直式／橫式可切換與功能展示進階段落（未提交，待作者看畫面）；11-12 程式結構改善 D1–D7 完成（D3 延後），完整測試 56/57（`reading_scenes` 改動前就失敗）；介面圖待作者看畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |

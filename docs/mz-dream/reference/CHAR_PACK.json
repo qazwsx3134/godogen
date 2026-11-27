@@ -1,0 +1,1629 @@
+{
+ "emi": "data:image/png;base64,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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPuovqi6G9RjrddIAAAAASUVORK5CYII=",
+ "meta": {
+  "packed": true,
+  "texel": 0.005,
+  "frames": {
+   "prince_S_idle0": [
+    0,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_idle1": [
+    63,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_walk0": [
+    126,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_walk1": [
+    189,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_walk2": [
+    252,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_walk3": [
+    315,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_jump": [
+    378,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_fall": [
+    441,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_S_glide": [
+    504,
+    0,
+    61,
+    107,
+    30.5,
+    107,
+    0.002913
+   ],
+   "prince_N_idle0": [
+    567,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_idle1": [
+    630,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_walk0": [
+    693,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_walk1": [
+    756,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_walk2": [
+    819,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_walk3": [
+    882,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_jump": [
+    945,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_fall": [
+    1008,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_N_glide": [
+    1071,
+    0,
+    61,
+    108,
+    30.5,
+    108,
+    0.002885
+   ],
+   "prince_E_idle0": [
+    1134,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_idle1": [
+    1181,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_walk0": [
+    1228,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_walk1": [
+    1275,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_walk2": [
+    1322,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_walk3": [
+    1369,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_jump": [
+    1416,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_fall": [
+    1463,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "prince_E_glide": [
+    1510,
+    0,
+    45,
+    106,
+    22.5,
+    106,
+    0.002941
+   ],
+   "rabbit_S_idle0": [
+    1557,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_idle1": [
+    1603,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_walk0": [
+    1649,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_walk1": [
+    1695,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_walk2": [
+    1741,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_walk3": [
+    1787,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_jump": [
+    1833,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_fall": [
+    1879,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_S_glide": [
+    1925,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_idle0": [
+    1971,
+    0,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_idle1": [
+    0,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_walk0": [
+    46,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_walk1": [
+    92,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_walk2": [
+    138,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_walk3": [
+    184,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_jump": [
+    230,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_fall": [
+    276,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_N_glide": [
+    322,
+    110,
+    44,
+    55,
+    22.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_idle0": [
+    368,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_idle1": [
+    402,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_walk0": [
+    436,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_walk1": [
+    470,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_walk2": [
+    504,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_walk3": [
+    538,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_jump": [
+    572,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_fall": [
+    606,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "rabbit_E_glide": [
+    640,
+    110,
+    32,
+    55,
+    16.0,
+    55,
+    0.005094
+   ],
+   "dot_S_idle0": [
+    674,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_idle1": [
+    703,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_walk0": [
+    732,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_walk1": [
+    761,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_walk2": [
+    790,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_walk3": [
+    819,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_jump": [
+    848,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_fall": [
+    877,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_S_glide": [
+    906,
+    110,
+    27,
+    49,
+    13.5,
+    49,
+    0.005957
+   ],
+   "dot_N_idle0": [
+    935,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_idle1": [
+    962,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_walk0": [
+    989,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_walk1": [
+    1016,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_walk2": [
+    1043,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_walk3": [
+    1070,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_jump": [
+    1097,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_fall": [
+    1124,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_N_glide": [
+    1151,
+    110,
+    25,
+    49,
+    12.5,
+    49,
+    0.005957
+   ],
+   "dot_E_idle0": [
+    1178,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_idle1": [
+    1203,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_walk0": [
+    1228,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_walk1": [
+    1253,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_walk2": [
+    1278,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_walk3": [
+    1303,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_jump": [
+    1328,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_fall": [
+    1353,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "dot_E_glide": [
+    1378,
+    110,
+    23,
+    49,
+    11.5,
+    49,
+    0.005957
+   ],
+   "kuro_S_idle0": [
+    1403,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_idle1": [
+    1433,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_walk0": [
+    1463,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_walk1": [
+    1493,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_walk2": [
+    1523,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_walk3": [
+    1553,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_jump": [
+    1583,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_fall": [
+    1613,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_S_glide": [
+    1643,
+    110,
+    28,
+    59,
+    14.0,
+    59,
+    0.004912
+   ],
+   "kuro_N_idle0": [
+    1673,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_idle1": [
+    1702,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_walk0": [
+    1731,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_walk1": [
+    1760,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_walk2": [
+    1789,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_walk3": [
+    1818,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_jump": [
+    1847,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_fall": [
+    1876,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_N_glide": [
+    1905,
+    110,
+    27,
+    59,
+    13.5,
+    59,
+    0.004912
+   ],
+   "kuro_E_idle0": [
+    1934,
+    110,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_idle1": [
+    1963,
+    110,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_walk0": [
+    1992,
+    110,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_walk1": [
+    2021,
+    110,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_walk2": [
+    0,
+    171,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_walk3": [
+    29,
+    171,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_jump": [
+    58,
+    171,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_fall": [
+    87,
+    171,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "kuro_E_glide": [
+    116,
+    171,
+    27,
+    58,
+    13.5,
+    58,
+    0.005
+   ],
+   "shiba_S_idle0": [
+    145,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_idle1": [
+    171,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_walk0": [
+    197,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_walk1": [
+    223,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_walk2": [
+    249,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_walk3": [
+    275,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_jump": [
+    301,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_fall": [
+    327,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_S_glide": [
+    353,
+    171,
+    24,
+    41,
+    12.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_idle0": [
+    379,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_idle1": [
+    403,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_walk0": [
+    427,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_walk1": [
+    451,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_walk2": [
+    475,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_walk3": [
+    499,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_jump": [
+    523,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_fall": [
+    547,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_N_glide": [
+    571,
+    171,
+    22,
+    41,
+    11.0,
+    41,
+    0.006923
+   ],
+   "shiba_E_idle0": [
+    595,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_idle1": [
+    619,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_walk0": [
+    643,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_walk1": [
+    667,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_walk2": [
+    691,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_walk3": [
+    715,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_jump": [
+    739,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_fall": [
+    763,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "shiba_E_glide": [
+    787,
+    171,
+    22,
+    42,
+    11.0,
+    42,
+    0.00675
+   ],
+   "straw_S_idle0": [
+    811,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_idle1": [
+    839,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_walk0": [
+    867,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_walk1": [
+    895,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_walk2": [
+    923,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_walk3": [
+    951,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_jump": [
+    979,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_fall": [
+    1007,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_S_glide": [
+    1035,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_idle0": [
+    1063,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_idle1": [
+    1091,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_walk0": [
+    1119,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_walk1": [
+    1147,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_walk2": [
+    1175,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_walk3": [
+    1203,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_jump": [
+    1231,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_fall": [
+    1259,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_N_glide": [
+    1287,
+    171,
+    26,
+    52,
+    13.0,
+    52,
+    0.0054
+   ],
+   "straw_E_idle0": [
+    1315,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_idle1": [
+    1341,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_walk0": [
+    1367,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_walk1": [
+    1393,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_walk2": [
+    1419,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_walk3": [
+    1445,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_jump": [
+    1471,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_fall": [
+    1497,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "straw_E_glide": [
+    1523,
+    171,
+    24,
+    52,
+    12.0,
+    52,
+    0.0054
+   ],
+   "ogre_S_idle0": [
+    1549,
+    171,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_S_idle1": [
+    1638,
+    171,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_S_walk0": [
+    1727,
+    171,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_S_walk1": [
+    1816,
+    171,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_S_walk2": [
+    1905,
+    171,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_S_walk3": [
+    0,
+    292,
+    87,
+    119,
+    43.5,
+    119,
+    0.005217
+   ],
+   "ogre_N_idle0": [
+    89,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_N_idle1": [
+    178,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_N_walk0": [
+    267,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_N_walk1": [
+    356,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_N_walk2": [
+    445,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_N_walk3": [
+    534,
+    292,
+    87,
+    116,
+    43.5,
+    116,
+    0.005357
+   ],
+   "ogre_E_idle0": [
+    623,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ],
+   "ogre_E_idle1": [
+    698,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ],
+   "ogre_E_walk0": [
+    773,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ],
+   "ogre_E_walk1": [
+    848,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ],
+   "ogre_E_walk2": [
+    923,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ],
+   "ogre_E_walk3": [
+    998,
+    292,
+    73,
+    118,
+    36.5,
+    118,
+    0.005263
+   ]
+  }
+ }
+}
