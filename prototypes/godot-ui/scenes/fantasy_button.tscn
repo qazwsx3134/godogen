@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/juicy_button.gd" id="1_rns7w"]
+[ext_resource type="Texture2D" path="res://assets/kenney/fantasy/panel-009.png" id="2_wp05s"]
+
+[node name="FantasyButton" type="Button" unique_id=1455128973]
+text = "Button"
+script = ExtResource("1_rns7w")
+
+[node name="Shadow" type="NinePatchRect" parent="." unique_id=1203882103]
+unique_name_in_owner = true
+self_modulate = Color(0, 0, 0, 0.5)
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_wp05s")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16

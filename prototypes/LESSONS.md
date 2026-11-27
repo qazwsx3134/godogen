@@ -129,6 +129,7 @@
 - **半透明 CPUParticles3D 粉塵（`vertex_color_use_as_albedo`＋`color_ramp`）整局第一次發射時黑一格，之後正常**（2026-11-26，one-more-rock；Compatibility，xvfb 下觀察，真 GPU 未驗證）→ `_ready` 在視野外先 `restart()` 一次暖身；擷取命中畫面用 `--fixed-fps 60` 按畫格數抓，不要按毫秒。
 - **按住連續動作時偶爾少一下、節奏斷掉**：重複計時器到期時動畫還沒收回，呼叫被擋掉卻照樣重設計時器（2026-11-26，one-more-rock）→ 計時器到期且動作已結束才觸發與重設。
 - **godot-kit `camera_shake.gd` 只吃 Camera2D**（2026-11-26，one-more-rock）→ 3D 第一人稱的命中後座用 Camera3D 的 `h_offset`／`v_offset` tween 回 0；只移投影，不影響瞄準與視角。
+- **同一個 ButtonGroup 設在幾個子場景實例上，讀回來卻各自一組、不互斥**：ButtonGroup 預設 `resource_local_to_scene = true`，每個實例各複製一份（2026-11-27，godot-ui）→ 用產生器建時設 `resource_local_to_scene = false`；改實例內子節點屬性前先 `root.set_editable_instance(實例, true)`，否則 `pack()` 不會存。
 
 ## 匯出與網頁版
 

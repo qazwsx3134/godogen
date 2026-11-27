@@ -1,5 +1,7 @@
 # godot-ui
 
+[目前進度與驗證](PROGRESS.md)
+
 可重複使用、不同風格的 Godot 4.7 UI 元件。原則：
 
 1. **用 `offset_transform_*`（visual only）做動畫**：Godot 4.7 的 Control 偏移變換，不改 `position`／`scale`，Container 不會重排、也不會覆蓋動畫；visual only 時點擊範圍維持原樣，不會因縮小而變難點。
@@ -17,6 +19,8 @@
 | `scenes/card.tscn`＋`scripts/card_hand.gd` | Slay the Spire 式手牌：每張卡包在 dummy slot（純 Control）裡，HBox 只排 slot；抽牌時 tween slot 的 `custom_minimum_size.x` 展開，打出時收到 0 再刪；扇形旋轉與弧度放在 slot 的 offset transform，卡自己的 hover 抬起疊在上面 | `slot_width`（小於卡寬即重疊）、`fan_deg`、`arc`、`duration` |
 | `scenes/inventory.tscn`＋`scripts/inventory.gd`、`scenes/item_slot.tscn`＋`scripts/item_slot.gd` | 背包：`GridContainer`（6 欄×24 格，格子預先放在 scene 裡，可直接在編輯器改欄數、增減格）。打開時格子依序縮放出場；點一格選起（抬起＋變色），再點另一格放下：空格移動、同物品疊加、不同交換；`Loot` 隨機加一件，會疊到同物品，數量變動時數字會彈一下 | `Grid.columns`、`start_items`／`start_counts`、`loot_pool`；格子大小在 `item_slot.tscn` 的 `custom_minimum_size` |
 | `addons/proto_kit/ui_anim/tween_once.gd` | tweenOnce：當 Control 的腳本，覆寫 `_set` 追蹤 `tracked_property`，一被寫入就彈一下；也可手動 `punch()` | `tracked_property`、`punch_scale`、`duration` |
+| `scenes/fantasy_demo.tscn`＋`scenes/fantasy_theme.tres` | 奇幻花邊框風格（Kenney Fantasy UI Borders）：任務面板、背包、地點發現橫幅、主選單。樣式全在 Theme 的 type variation：`FantasyPanel`（深底花框面板）、`Button`（白底主按鈕）、`OutlineButton`（白框次按鈕）、`TextButton`（純文字選項）、`FantasySlot`（道具格，toggle＋`ButtonGroup` 單選）、Label 的 `PanelTitle`／`PanelHeader`／`BannerSmall`／`BannerBig`／`SlotCount` | 在編輯器開 `fantasy_theme.tres` 改顏色、字級、`modulate_color` 與 content margin；面板花框換款：換 `assets/kenney/fantasy/` 的貼圖後重跑 `tools/build_fantasy.gd` |
+| `scenes/fantasy_button.tscn`、`scenes/fantasy_slot.tscn` | 奇幻風按鈕（沿用 `juicy_button.gd` 的擠壓、音效與陰影，無樣式覆寫，靠 `theme_type_variation` 換外觀）與道具格（icon＋`%Count`） | 按鈕的 `theme_type_variation`、`shadow_dir`；道具格的 `icon`、`Count.text`、`button_group` |
 
 `ui_anim/` 放在 godot-kit（`godot-kit/addons/proto_kit/ui_anim/`），本專案的是 `sync.sh godot-ui` 的副本，**改 kit 不改副本**。
 
@@ -31,6 +35,8 @@
 - `assets/kenney/button_frame.png`：Kenney UI Pack – Pixel Adventure 2.0 `Tiles/Large tiles/Thick outline/tile_0000.png`，CC0
 - `assets/items/*.png`：MorbidEmber Pixel RPG Starter Pack v1.1，MIT（授權檔在同目錄）
 - `assets/kenney/mouse_left.png`：Kenney Input Prompts 1.5A，CC0
+- `assets/kenney/fantasy/*.png`：Kenney Fantasy UI Borders 1.0（`PNG/Default` 的 panel-000／002／009、panel-border-000／009、panel-transparent-center-002／009、divider-fade-003），CC0。`panel-dark-000.png` 與 `divider-fade-003-flip.png` 由 `tools/build_fantasy.gd` 合成：前者是 panel-000 填深色後疊上 panel-border-000
+- `assets/kenney/gradient-radial.png`：Kenney Development Essentials 1.1，CC0，奇幻示範的背景光暈
 - `assets/sfx/*.ogg`：選低頻、不尖銳的（頻譜重心約 200～800Hz）。Kenney UI Audio `rollover6`→hover；Impact Sounds `impactSoft_medium_000`→unhover；Interface Sounds 1.0 `bong_001`→press、`drop_002`→appear、`maximize_008`／`minimize_008`→overlay 開關、`drop_004`／`confirmation_001`→抽牌／出牌。皆 CC0，來源 `D:\repo\game-sound`
 
 背包道具格使用 Kenney UI Audio 的 `assets/sfx/rollover2.ogg`。要換音效，先把音檔放進專案的 `assets/sfx/`，再開啟 `scenes/item_slot.tscn`。選根節點 `ItemSlot`，把音檔拖到 Inspector 的 **Hover Sound**，存檔即可更新使用該場景的道具格。程式預設值在 `scripts/item_slot.gd` 的 `hover_sound`。
@@ -42,4 +48,7 @@
 ```bash
 godot --headless --path . -s tools/build_scenes.gd   # 製作工具：只在要重建時跑，會覆蓋 scenes/
 timeout 60 godot --headless --path . -s tests/test_ui.gd </dev/null   # 單元測試，印 ALL PASS
+godot --headless --path . -s tools/build_fantasy.gd   # 製作工具：重建 fantasy_* scene 與 Theme（新貼圖要先 --import 再跑一次）
+timeout 60 godot --headless --path . -s tests/test_fantasy.gd </dev/null   # 奇幻 UI 測試，印 ALL PASS
+godot --path . res://scenes/fantasy_demo.tscn   # 開奇幻 UI 示範
 ```

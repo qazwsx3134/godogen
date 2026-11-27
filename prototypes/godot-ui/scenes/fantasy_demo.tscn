@@ -1,0 +1,315 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://scenes/fantasy_theme.tres" id="1_v4mav"]
+[ext_resource type="Script" path="res://scripts/fantasy_demo.gd" id="2_kpd4p"]
+[ext_resource type="Texture2D" path="res://assets/kenney/gradient-radial.png" id="3_e31xg"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/container_tween.gd" id="4_kupmr"]
+[ext_resource type="AudioStream" path="res://assets/sfx/appear.ogg" id="5_v5wup"]
+[ext_resource type="PackedScene" path="res://scenes/fantasy_button.tscn" id="6_xs80i"]
+[ext_resource type="Script" path="res://scripts/juicy_button.gd" id="7_jvc3f"]
+[ext_resource type="PackedScene" path="res://scenes/fantasy_slot.tscn" id="8_iymf7"]
+[ext_resource type="Texture2D" path="res://assets/items/short_sword_01.png" id="9_04sup"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/tween_once.gd" id="10_o236h"]
+[ext_resource type="Texture2D" path="res://assets/items/book_01.png" id="11_c3fa3"]
+[ext_resource type="Texture2D" path="res://assets/items/crystal_01.png" id="12_sxxlr"]
+[ext_resource type="Texture2D" path="res://assets/kenney/fantasy/divider-fade-003.png" id="13_6php7"]
+[ext_resource type="Texture2D" path="res://assets/kenney/fantasy/divider-fade-003-flip.png" id="14_shspj"]
+[ext_resource type="Texture2D" path="res://assets/kenney/fantasy/panel-009.png" id="15_rr8w6"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_5ru74"]
+resource_local_to_scene = false
+
+[node name="FantasyDemo" type="Control" unique_id=1522938669]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_v4mav")
+script = ExtResource("2_kpd4p")
+
+[node name="Bg" type="ColorRect" parent="." unique_id=1916996541]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.13333334, 0.19215687, 0.22745098, 1)
+
+[node name="Glow" type="TextureRect" parent="." unique_id=1306397460]
+modulate = Color(0.55, 0.72, 0.74, 0.35)
+texture_filter = 2
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("3_e31xg")
+expand_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=475215345]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 40
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=1012924174]
+layout_mode = 2
+theme_override_constants/separation = 36
+script = ExtResource("4_kupmr")
+appear_sound = ExtResource("5_v5wup")
+
+[node name="Quest" type="PanelContainer" parent="Margin/Layout" unique_id=901125132]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"FantasyPanel"
+
+[node name="Body" type="VBoxContainer" parent="Margin/Layout/Quest" unique_id=960300568]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Layout/Quest/Body" unique_id=1785685117]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PanelTitle"
+text = "Quest"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="Margin/Layout/Quest/Body" unique_id=2010349154]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Label"
+text = "Gather moon apples in the orchard, guarded by wolves.
+Return for a bountiful reward!"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Accept" type="Button" parent="Margin/Layout/Quest/Body" unique_id=1455128973 instance=ExtResource("6_xs80i")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Accept quest"
+script = ExtResource("7_jvc3f")
+shadow_dir = 2
+
+[node name="Row" type="HBoxContainer" parent="Margin/Layout" unique_id=220171828]
+layout_mode = 2
+theme_override_constants/separation = 56
+alignment = 1
+
+[node name="Inventory" type="PanelContainer" parent="Margin/Layout/Row" unique_id=826970293]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"FantasyPanel"
+
+[node name="Body" type="VBoxContainer" parent="Margin/Layout/Row/Inventory" unique_id=212821049]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Margin/Layout/Row/Inventory/Body" unique_id=236018847]
+layout_mode = 2
+theme_type_variation = &"PanelHeader"
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="Slots" type="HBoxContainer" parent="Margin/Layout/Row/Inventory/Body" unique_id=247700160]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+script = ExtResource("4_kupmr")
+delay_between_element = 0.05
+
+[node name="Sword" parent="Margin/Layout/Row/Inventory/Body/Slots" unique_id=1875165362 instance=ExtResource("8_iymf7")]
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+theme_type_variation = &"FantasySlot"
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_5ru74")
+icon = ExtResource("9_04sup")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Count" parent="Margin/Layout/Row/Inventory/Body/Slots/Sword" index="0" unique_id=821946645]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 20.0
+offset_bottom = 12.0
+theme_type_variation = &"SlotCount"
+text = "3"
+horizontal_alignment = 1
+script = ExtResource("10_o236h")
+
+[node name="Book" parent="Margin/Layout/Row/Inventory/Body/Slots" unique_id=881172711 instance=ExtResource("8_iymf7")]
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+theme_type_variation = &"FantasySlot"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_5ru74")
+icon = ExtResource("11_c3fa3")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Count" parent="Margin/Layout/Row/Inventory/Body/Slots/Book" index="0" unique_id=821946645]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 20.0
+offset_bottom = 12.0
+theme_type_variation = &"SlotCount"
+text = "0"
+horizontal_alignment = 1
+script = ExtResource("10_o236h")
+
+[node name="Crystal" parent="Margin/Layout/Row/Inventory/Body/Slots" unique_id=709576398 instance=ExtResource("8_iymf7")]
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+theme_type_variation = &"FantasySlot"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_5ru74")
+icon = ExtResource("12_sxxlr")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Count" parent="Margin/Layout/Row/Inventory/Body/Slots/Crystal" index="0" unique_id=821946645]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 20.0
+offset_bottom = 12.0
+theme_type_variation = &"SlotCount"
+text = "0"
+horizontal_alignment = 1
+script = ExtResource("10_o236h")
+
+[node name="Side" type="VBoxContainer" parent="Margin/Layout/Row" unique_id=83764446]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Location" type="HBoxContainer" parent="Margin/Layout/Row/Side" unique_id=490452531]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Left" type="NinePatchRect" parent="Margin/Layout/Row/Side/Location" unique_id=1478491591]
+custom_minimum_size = Vector2(150, 18)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("13_6php7")
+patch_margin_right = 22
+
+[node name="Text" type="VBoxContainer" parent="Margin/Layout/Row/Side/Location" unique_id=586193755]
+layout_mode = 2
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="Caption" type="Label" parent="Margin/Layout/Row/Side/Location/Text" unique_id=1930500351]
+layout_mode = 2
+theme_type_variation = &"BannerSmall"
+text = "Location discovered"
+horizontal_alignment = 1
+
+[node name="Place" type="Label" parent="Margin/Layout/Row/Side/Location/Text" unique_id=304056249]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BannerBig"
+text = "Mystic Vale"
+horizontal_alignment = 1
+
+[node name="Right" type="NinePatchRect" parent="Margin/Layout/Row/Side/Location" unique_id=337739105]
+custom_minimum_size = Vector2(150, 18)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("14_shspj")
+patch_margin_left = 22
+
+[node name="Menu" type="VBoxContainer" parent="Margin/Layout/Row/Side" unique_id=830919115]
+layout_mode = 2
+theme_override_constants/separation = 6
+script = ExtResource("4_kupmr")
+anim_type = 1
+delay_between_element = 0.06
+
+[node name="Continue" type="Button" parent="Margin/Layout/Row/Side/Menu" unique_id=2054341655 instance=ExtResource("6_xs80i")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"OutlineButton"
+text = "Continue"
+script = ExtResource("7_jvc3f")
+shadow_dir = 2
+
+[node name="NewGame" parent="Margin/Layout/Row/Side/Menu" unique_id=1404690225 instance=ExtResource("6_xs80i")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"TextButton"
+text = "New game"
+script = ExtResource("7_jvc3f")
+shadow_dir = 2
+
+[node name="Shadow" parent="Margin/Layout/Row/Side/Menu/NewGame" index="0" unique_id=1203882103]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(0, 0, 0, 0.5)
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.0
+offset_bottom = 6.0
+texture = ExtResource("15_rr8w6")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="Options" parent="Margin/Layout/Row/Side/Menu" unique_id=1515842205 instance=ExtResource("6_xs80i")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"TextButton"
+text = "Options"
+script = ExtResource("7_jvc3f")
+shadow_dir = 2
+
+[node name="Shadow" parent="Margin/Layout/Row/Side/Menu/Options" index="0" unique_id=1203882103]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(0, 0, 0, 0.5)
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.0
+offset_bottom = 6.0
+texture = ExtResource("15_rr8w6")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[editable path="Margin/Layout/Row/Inventory/Body/Slots/Sword"]
+[editable path="Margin/Layout/Row/Inventory/Body/Slots/Book"]
+[editable path="Margin/Layout/Row/Inventory/Body/Slots/Crystal"]
+[editable path="Margin/Layout/Row/Side/Menu/NewGame"]
+[editable path="Margin/Layout/Row/Side/Menu/Options"]
