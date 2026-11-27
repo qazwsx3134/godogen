@@ -69,8 +69,10 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - **產生器只作為製作工具**：scene 儲存後就是可維護的來源檔。正常開啟、執行、匯入與測試不得自動重建它；重新產生前先檢查 diff，保留人工編輯。序列化時驗證 owner、子 scene instance 關係與 pack 前後 node 數量。
 - **編輯器驗收**：README 列出主要 scene、可調整的 node／export 欄位。驗證直接修改一個 UI 間距或靜態文字後執行仍然保留，且戰鬥移動、生命值等執行狀態不會反向污染原始 scene。
 - **共用模組優先**：新增功能先查 `prototypes/godot-kit/README.md`。適用時用 `sync.sh <project>` 同步並引用現成模組，副本不可直接改；外部套件只在確有需要時引入，記錄來源、版本、授權與匯出限制。
+- **強烈建議每個 Godot 原型接入開發面板**。用 [godot-dev-panel](prototypes/godot-dev-panel/README.md) 共用模組提供開發者專用 F1 入口，並註冊本遊戲的調參、除錯與壓力測試。發布版維持關閉。
 - **共用鏡頭優先**：新增 2D／3D 跟隨、死區、群組取景或鏡頭轉場時，先評估 [Godot Kit 的 Phantom Camera](prototypes/godot-kit/docs/PHANTOM-CAMERA.md)。
 - **共用 UI 素材**：製作像素介面、道具圖示或操作提示前，查 [共用素材索引](prototypes/godot-assets/README.md) 與 [Godot UI 素材使用指南](prototypes/godot-assets/AGENTS.md)。把實際用到的素材與授權複製進該遊戲的 `res://`。
+- **3D 模型優先找 model-assets**：Godot 原型需要 3D 模型、天空盒或牆地貼圖時，先查 repo 外的 `D:\repo\godot\model-assets`（WSL：`/mnt/d/repo/godot/model-assets`）的 `README.md` 索引（Kenney Survival／Prototype／Castle／City／Food 等套件、全景天空盒、像素牆地貼圖）。有合用的就用 GLB／PNG，不要自己用 primitive 拼或重做；把用到的檔案與授權複製進該遊戲的 `res://`，並在遊戲 README 記下包名與版本。
 - 現有原型大多仍在程式裡建畫面。改到哪個畫面，就順手把它轉成 scene；debt-commission 的轉換進度記在它的 README「Scene 轉換進度」。
 # 全域偏好
 

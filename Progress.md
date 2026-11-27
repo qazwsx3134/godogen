@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 `git log -1 -- AGENTS.md` 查核） | 2026-11-28 | docs(repo): 加入共用 F1 開發面板和外部 3D 素材索引的使用原則，供後續 Godot 原型套用。純文件更新 |
 | 本次提交（以 `git log -1 -- docs/mz-dream` 查核） | 2026-11-28 | docs(mz-dream): 收錄鏡頭、草地、角色遮擋的 WebGL 畫面研究與參考圖集，PNG 標頭和切框 JSON 驗證通過 |
 | 本次提交（以 `git log -1 -- prototypes/one-more-rock` 查核） | 2026-11-28 | feat(one-more-rock): 收錄採石、搬運和工坊原型、露頭礦片、八路升級、拾運與破石機、共用 F1 開發面板。六項 Godot 回歸與 Web 匯出已有證據，手機真機待驗 |
 | 本次提交（以 git log 查核） | 2026-11-25 | feat(parallax-camp): 新增森林營地與跑跳試驗道、分件旅人和鏡頭系統；沿用 60／144 FPS 測試證據 |
