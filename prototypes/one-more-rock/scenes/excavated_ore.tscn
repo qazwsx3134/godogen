@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://excavation_debris.gd" id="1_gl2xm"]
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="2_8x0je"]
+[ext_resource type="Shape3D" path="res://assets/minerals/raw_ore_hull.tres" id="3_5cwqf"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n1ade"]
+friction = 0.75
+bounce = 0.31
+
+[node name="ExcavatedOre" type="RigidBody3D" unique_id=1792135207]
+collision_layer = 256
+collision_mask = 260
+mass = 0.45
+physics_material_override = SubResource("PhysicsMaterial_n1ade")
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
+linear_damp = 0.36
+angular_damp = 0.51
+script = ExtResource("1_gl2xm")
+
+[node name="ShapeMesh" type="MeshInstance3D" parent="." unique_id=841637510]
+mesh = ExtResource("2_8x0je")
+
+[node name="HitShape" type="CollisionShape3D" parent="." unique_id=743994741]
+shape = ExtResource("3_5cwqf")

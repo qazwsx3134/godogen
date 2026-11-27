@@ -1,0 +1,218 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="1_8q7wp"]
+[ext_resource type="FontFile" path="res://assets/NotoSansTC.ttf" id="2_1cbu5"]
+[ext_resource type="AudioStream" path="res://assets/sfx/mine_hit.wav" id="3_alwdp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k3rhk"]
+size = Vector3(1.34, 1.6, 0.96)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kydf"]
+albedo_color = Color(0.21960784, 0.29803923, 0.3019608, 1)
+metallic = 0.27
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="BoxMesh_y6315"]
+size = Vector3(1.39, 0.28, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qpu8m"]
+albedo_color = Color(0.4, 0.47843137, 0.4627451, 1)
+metallic = 0.34
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="BoxMesh_1fq3y"]
+size = Vector3(0.73, 0.14, 0.63)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pon64"]
+albedo_color = Color(0.7137255, 0.6039216, 0.39215687, 1)
+metallic = 0.18
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="BoxMesh_j2426"]
+size = Vector3(0.58, 0.084, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7orbk"]
+size = Vector3(0.17, 1.46, 0.89)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njwtc"]
+albedo_color = Color(0.31764707, 0.24313726, 0.20392157, 1)
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="BoxMesh_5n8gs"]
+size = Vector3(0.21, 0.11, 1.11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2dckq"]
+size = Vector3(0.05, 0.7, 0.61)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a6rh1"]
+size = Vector3(0.17, 1.46, 0.89)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7ptgi"]
+size = Vector3(0.21, 0.11, 1.11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pf34d"]
+size = Vector3(0.05, 0.7, 0.61)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ndom8"]
+size = Vector3(1.42, 0.26, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e5cuc"]
+size = Vector3(0.71, 0.19, 0.025)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cnt4s"]
+top_radius = 0.19
+bottom_radius = 0.19
+height = 0.5
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rkb85"]
+top_radius = 0.085
+bottom_radius = 0.085
+height = 0.75
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="BoxMesh_hvol2"]
+size = Vector3(0.68, 0.16, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aoact"]
+size = Vector3(0.065, 0.085, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ohcg7"]
+size = Vector3(0.065, 0.085, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yskp6"]
+size = Vector3(0.065, 0.085, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gbmpe"]
+size = Vector3(0.065, 0.085, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bkmg0"]
+size = Vector3(0.065, 0.085, 0.18)
+
+[node name="OreCrusher" type="StaticBody3D" unique_id=2098944164]
+visible = false
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1832307956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_k3rhk")
+disabled = true
+
+[node name="Bed" type="MeshInstance3D" parent="." unique_id=1893208903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_y6315")
+
+[node name="Anvil" type="MeshInstance3D" parent="." unique_id=2002675151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
+material_override = SubResource("StandardMaterial3D_qpu8m")
+mesh = SubResource("BoxMesh_1fq3y")
+
+[node name="FeedTray" type="MeshInstance3D" parent="." unique_id=1872289083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0.49)
+material_override = SubResource("StandardMaterial3D_pon64")
+mesh = SubResource("BoxMesh_j2426")
+
+[node name="LeftUpright" type="MeshInstance3D" parent="." unique_id=1062071739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_7orbk")
+
+[node name="LeftSkid" type="MeshInstance3D" parent="." unique_id=1769956588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.055, 0)
+material_override = SubResource("StandardMaterial3D_njwtc")
+mesh = SubResource("BoxMesh_5n8gs")
+
+[node name="LeftGuide" type="MeshInstance3D" parent="." unique_id=664235934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31, 1, 0)
+material_override = SubResource("StandardMaterial3D_pon64")
+mesh = SubResource("BoxMesh_2dckq")
+
+[node name="RightUpright" type="MeshInstance3D" parent="." unique_id=254792705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_a6rh1")
+
+[node name="RightSkid" type="MeshInstance3D" parent="." unique_id=953648986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.055, 0)
+material_override = SubResource("StandardMaterial3D_njwtc")
+mesh = SubResource("BoxMesh_7ptgi")
+
+[node name="RightGuide" type="MeshInstance3D" parent="." unique_id=17938963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31, 1, 0)
+material_override = SubResource("StandardMaterial3D_pon64")
+mesh = SubResource("BoxMesh_pf34d")
+
+[node name="Crossbeam" type="MeshInstance3D" parent="." unique_id=1722829823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49, 0)
+material_override = SubResource("StandardMaterial3D_qpu8m")
+mesh = SubResource("BoxMesh_ndom8")
+
+[node name="Nameplate" type="MeshInstance3D" parent="." unique_id=617896184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.48, 0.51)
+material_override = SubResource("StandardMaterial3D_pon64")
+mesh = SubResource("BoxMesh_e5cuc")
+
+[node name="Cylinder" type="MeshInstance3D" parent="." unique_id=1649366180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("CylinderMesh_cnt4s")
+
+[node name="PressHead" type="Node3D" parent="." unique_id=1467450668]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0.02)
+
+[node name="Piston" type="MeshInstance3D" parent="PressHead" unique_id=967828134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0)
+material_override = SubResource("StandardMaterial3D_qpu8m")
+mesh = SubResource("CylinderMesh_rkb85")
+
+[node name="JawBlock" type="MeshInstance3D" parent="PressHead" unique_id=1843163450]
+material_override = SubResource("StandardMaterial3D_qpu8m")
+mesh = SubResource("BoxMesh_hvol2")
+
+[node name="Tooth0" type="MeshInstance3D" parent="PressHead" unique_id=77449692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.116, 0.14)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_aoact")
+
+[node name="Tooth1" type="MeshInstance3D" parent="PressHead" unique_id=1372056333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.116, 0.14)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_ohcg7")
+
+[node name="Tooth2" type="MeshInstance3D" parent="PressHead" unique_id=1393558954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.116, 0.14)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_yskp6")
+
+[node name="Tooth3" type="MeshInstance3D" parent="PressHead" unique_id=222120360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.116, 0.14)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_gbmpe")
+
+[node name="Tooth4" type="MeshInstance3D" parent="PressHead" unique_id=1893551671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.116, 0.14)
+material_override = SubResource("StandardMaterial3D_4kydf")
+mesh = SubResource("BoxMesh_bkmg0")
+
+[node name="CarriedOre" type="MeshInstance3D" parent="." unique_id=43799394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57, 0.06)
+visible = false
+mesh = ExtResource("1_8q7wp")
+
+[node name="Status" type="Label3D" parent="." unique_id=1805220672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.48, 0.534)
+pixel_size = 0.0034
+double_sided = false
+modulate = Color(0.25490198, 0.2, 0.14901961, 1)
+text = "破石待命"
+font = ExtResource("2_1cbu5")
+font_size = 41
+outline_size = 0
+
+[node name="PressSound" type="AudioStreamPlayer3D" parent="." unique_id=1297353426]
+stream = ExtResource("3_alwdp")
+volume_db = -19.0
+pitch_scale = 0.66
+max_distance = 14.0

@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/polyfork/ore_barrow.glb" id="1_bttn7"]
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="2_p2bbo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4n44e"]
+size = Vector3(1.2, 1.28, 1.8)
+
+[node name="Cart" type="StaticBody3D" unique_id=882634150]
+collision_layer = 2
+collision_mask = 0
+
+[node name="HitShape" type="CollisionShape3D" parent="." unique_id=1309796524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64, 0)
+shape = SubResource("BoxShape3D_4n44e")
+
+[node name="CartBody" type="Node3D" parent="." unique_id=173866327]
+unique_name_in_owner = true
+
+[node name="OreBarrow" type="Node3D" parent="CartBody" unique_id=1218875396 instance=ExtResource("1_bttn7")]
+transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 0, 0, 0)
+
+[node name="LoadGroups" type="Node3D" parent="CartBody" unique_id=988350096]
+unique_name_in_owner = true
+transform = Transform3D(0.8, 0, 0, 0, 1, 0, 0, 0, 0.66, 0, -0.045, 0.26)
+
+[node name="Load1" type="Node3D" parent="CartBody/LoadGroups" unique_id=599563171]
+visible = false
+
+[node name="Stone" type="MeshInstance3D" parent="CartBody/LoadGroups/Load1" unique_id=985830706]
+transform = Transform3D(-1.1835473, -0.18070674, -0.6353795, 0, 1.0034689, -0.482316, 0.6600475, -0.32402968, -1.1393145, -0.16430384, 0.7875619, -0.5198197)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone2" type="MeshInstance3D" parent="CartBody/LoadGroups/Load1" unique_id=1093558373]
+transform = Transform3D(1.325759, -0.07902994, -0.26917812, 0, 0.9995299, -0.49594578, 0.28073066, 0.37322125, 1.2712017, 0.19096264, 0.80645716, -0.5830396)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone3" type="MeshInstance3D" parent="CartBody/LoadGroups/Load1" unique_id=1501103484]
+transform = Transform3D(0.34906814, 0.49107546, 1.1825714, 0, 0.94143873, -0.6606927, -1.3094265, 0.13091135, 0.31525093, -0.15036075, 0.88733494, -0.4171051)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone4" type="MeshInstance3D" parent="CartBody/LoadGroups/Load1" unique_id=1322380349]
+transform = Transform3D(0.79451495, -0.35991338, 1.0249584, 0, 0.9732488, 0.5775668, -1.0978127, -0.2604785, 0.7417885, 0.26102465, 0.76676023, -0.4638334)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Load2" type="Node3D" parent="CartBody/LoadGroups" unique_id=1371636068]
+visible = false
+
+[node name="Stone" type="MeshInstance3D" parent="CartBody/LoadGroups/Load2" unique_id=1238417669]
+transform = Transform3D(0.025394958, -0.3443778, -1.316536, 0, 1.012898, -0.4477697, 1.3549176, 0.006454606, 0.024675576, -0.14824066, 0.8893918, -0.46053624)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone2" type="MeshInstance3D" parent="CartBody/LoadGroups/Load2" unique_id=1461427002]
+transform = Transform3D(1.2421707, -0.10393431, 0.53930616, 0, 1.0377859, 0.3380009, -0.5417183, -0.2383234, 1.2366395, 0.10759885, 0.91216743, -0.29103813)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone3" type="MeshInstance3D" parent="CartBody/LoadGroups/Load2" unique_id=755108684]
+transform = Transform3D(-0.36308765, -0.20661986, 1.3127688, 0, 1.0481441, 0.27879924, -1.3056086, 0.057460647, -0.36507884, -0.16856723, 0.934388, -0.18266585)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone4" type="MeshInstance3D" parent="CartBody/LoadGroups/Load2" unique_id=184463498]
+transform = Transform3D(-1.3179842, 0.08770985, 0.3027565, 0, 1.0012081, -0.4901916, -0.31522083, -0.36672762, -1.2658689, 0.21570686, 0.9275308, -0.17635246)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Load3" type="Node3D" parent="CartBody/LoadGroups" unique_id=1507020660]
+visible = false
+
+[node name="Stone" type="MeshInstance3D" parent="CartBody/LoadGroups/Load3" unique_id=471140775]
+transform = Transform3D(-0.94096184, -0.17720446, 0.97400314, 0, 1.0411359, 0.32011664, -0.9752115, 0.17098098, -0.939796, -0.21151704, 0.8975972, -0.13556309)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone2" type="MeshInstance3D" parent="CartBody/LoadGroups/Load3" unique_id=225772274]
+transform = Transform3D(-0.37355667, 0.33412525, 1.2644037, 0, 1.01182, -0.45186985, -1.302652, -0.09581586, -0.36258835, 0.18969914, 0.9057691, -0.13185325)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone3" type="MeshInstance3D" parent="CartBody/LoadGroups/Load3" unique_id=1119691676]
+transform = Transform3D(0.9923317, -0.08819976, -0.9402103, 0, 1.0619919, -0.16836444, 0.92288923, 0.09483632, 1.0109562, -0.14434381, 0.9783097, 0.100686245)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone4" type="MeshInstance3D" parent="CartBody/LoadGroups/Load3" unique_id=1975494617]
+transform = Transform3D(1.2599882, -0.11241206, -0.49070552, 0, 1.0253565, -0.39696622, 0.4988751, 0.28391448, 1.2393545, 0.20964654, 0.9787343, 0.12085287)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Load4" type="Node3D" parent="CartBody/LoadGroups" unique_id=922852649]
+visible = false
+
+[node name="Stone" type="MeshInstance3D" parent="CartBody/LoadGroups/Load4" unique_id=765900341]
+transform = Transform3D(-1.354191, 0.009581011, 0.050966736, 0, 1.0392759, -0.33017328, -0.051121294, -0.2537987, -1.3500968, -0.13910793, 1.0274434, 0.17368674)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone2" type="MeshInstance3D" parent="CartBody/LoadGroups/Load4" unique_id=1997896091]
+transform = Transform3D(0.9770117, -0.28352222, -0.890545, 0, 0.9885381, -0.5318769, 0.9390924, 0.29497048, 0.926504, 0.17542754, 0.9715396, 0.22489738)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone3" type="MeshInstance3D" parent="CartBody/LoadGroups/Load4" unique_id=578133161]
+transform = Transform3D(0.83210635, 0.07512797, -1.0933948, 0, 1.065617, 0.12374067, 1.0696007, -0.058446534, 0.8506172, -0.15121876, 1.0768765, 0.3329455)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone4" type="MeshInstance3D" parent="CartBody/LoadGroups/Load4" unique_id=874661305]
+transform = Transform3D(0.612531, -0.07748859, 1.2365373, 0, 1.0663271, 0.112929545, -1.2088227, -0.039264783, 0.62657446, 0.23544303, 1.0162927, 0.3579671)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Load5" type="Node3D" parent="CartBody/LoadGroups" unique_id=624295876]
+visible = false
+
+[node name="Stone" type="MeshInstance3D" parent="CartBody/LoadGroups/Load5" unique_id=1621945398]
+transform = Transform3D(-0.49403557, -0.51695126, -1.1070927, 0, 0.91454923, -0.7217043, 1.2618936, -0.20238812, -0.43343052, -0.2130796, 1.1046386, 0.49648955)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone2" type="MeshInstance3D" parent="CartBody/LoadGroups/Load5" unique_id=1767238056]
+transform = Transform3D(-0.96423125, 0.38574985, -0.838795, 0, 0.9182665, 0.71368283, 0.9522105, 0.39061952, -0.84938395, 0.16807604, 1.0643216, 0.3645718)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone3" type="MeshInstance3D" parent="CartBody/LoadGroups/Load5" unique_id=31988479]
+transform = Transform3D(-0.7713985, -0.2729604, -1.0870463, 0, 1.0170436, -0.43159634, 1.1141773, -0.18898359, -0.75261426, -0.13385724, 1.1245723, 0.52640474)
+mesh = ExtResource("2_p2bbo")
+
+[node name="Stone4" type="MeshInstance3D" parent="CartBody/LoadGroups/Load5" unique_id=1290403187]
+transform = Transform3D(-0.383453, 0.14810093, 1.3200108, 0, 1.058658, -0.2007348, -1.2997732, -0.043692037, -0.38942334, 0.16896778, 1.0766212, 0.64182836)
+mesh = ExtResource("2_p2bbo")
+
+[node name="CartSocket" type="Marker3D" parent="CartBody" unique_id=2014022535]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.97, 0.26)

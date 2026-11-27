@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[node name="Field" type="HBoxContainer" unique_id=569939689]
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="." unique_id=1178880839]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="Number" type="SpinBox" parent="." unique_id=478368578]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(104, 0)
+layout_mode = 2
+alignment = 2
+
+[node name="Toggle" type="CheckButton" parent="." unique_id=1429264026]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Value" type="Label" parent="." unique_id=1555858561]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0.54509807, 0.8980392, 0.79607844, 1)
+layout_mode = 2
+
+[node name="Command" type="Button" parent="." unique_id=2061511438]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 0

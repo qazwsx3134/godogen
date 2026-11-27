@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="1_pf36o"]
+
+[node name="PickupOre" type="Node3D" unique_id=728794232]
+
+[node name="Ore" type="MeshInstance3D" parent="." unique_id=2096694215]
+mesh = ExtResource("1_pf36o")

@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[node name="Section" type="VBoxContainer" unique_id=203237863]
+theme_override_constants/separation = 6
+
+[node name="SectionTitle" type="Button" parent="." unique_id=40950707]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+toggle_mode = true
+text = "Run"
+alignment = 0
+
+[node name="Fields" type="VBoxContainer" parent="." unique_id=791131827]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6

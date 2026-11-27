@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/kenney-adventure/panel_brown.png" id="1_o4pww"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_umkv4"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("1_o4pww")
+texture_margin_left = 11.0
+texture_margin_top = 11.0
+texture_margin_right = 11.0
+texture_margin_bottom = 11.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eq17p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtily"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8627451, 0.54901963, 0.22745098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lojau"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8627451, 0.54901963, 0.22745098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwvsd"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8627451, 0.54901963, 0.22745098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[node name="Talent" type="PanelContainer" unique_id=1137814920]
+custom_minimum_size = Vector2(131, 103)
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_umkv4")
+
+[node name="Select" type="Button" parent="." unique_id=812417784]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_eq17p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vtily")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lojau")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mwvsd")
+
+[node name="Copy" type="VBoxContainer" parent="Select" unique_id=1410791938]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Name" type="Label" parent="Select/Copy" unique_id=1252864757]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+theme_override_colors/font_color = Color(0.23921569, 0.16078432, 0.101960786, 1)
+text = "鍛鋼槌"
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="Select/Copy" unique_id=677702305]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.45882353, 0.27058825, 0.13333334, 1)
+text = "30 幣"
+horizontal_alignment = 1

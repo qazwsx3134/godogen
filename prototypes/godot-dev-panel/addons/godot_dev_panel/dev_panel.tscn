@@ -1,0 +1,144 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/godot_dev_panel/dev_panel.gd" id="1_panel"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iekj8"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.19215687, 0.26666668, 0.3019608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30980393, 0.47058824, 0.42745098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lho3"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.14509805, 0.19215687, 0.23137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.21176471, 0.2627451, 0.30588236, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6m43o"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.14901961, 0.28627452, 0.25490198, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36862746, 0.5921569, 0.5372549, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme_nh6m5"]
+default_font_size = 15
+Button/styles/hover = SubResource("StyleBoxFlat_iekj8")
+Button/styles/normal = SubResource("StyleBoxFlat_8lho3")
+Button/styles/pressed = SubResource("StyleBoxFlat_6m43o")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jrn1"]
+bg_color = Color(0.07058824, 0.10980392, 0.14509805, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.23529412, 0.3254902, 0.36862746, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="DevPanel" type="CanvasLayer" unique_id=197682717]
+process_mode = 3
+layer = 100
+script = ExtResource("1_panel")
+
+[node name="Overlay" type="Control" parent="." unique_id=44996616]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource("Theme_nh6m5")
+
+[node name="Scrim" type="ColorRect" parent="Overlay" unique_id=129093305]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.018, 0.024, 0.034, 0.45)
+
+[node name="Card" type="PanelContainer" parent="Overlay" unique_id=1252585361]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5jrn1")
+
+[node name="Padding" type="MarginContainer" parent="Overlay/Card" unique_id=61818180]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Card/Padding" unique_id=2098814230]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Heading" type="HBoxContainer" parent="Overlay/Card/Padding/Content" unique_id=952762]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Overlay/Card/Padding/Content/Heading" unique_id=1353346104]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "開發面板"
+
+[node name="Close" type="Button" parent="Overlay/Card/Padding/Content/Heading" unique_id=1919607576]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 34)
+layout_mode = 2
+text = "關閉 · F1"
+
+[node name="Hint" type="Label" parent="Overlay/Card/Padding/Content" unique_id=577250196]
+modulate = Color(0.654902, 0.7411765, 0.78431374, 1)
+layout_mode = 2
+text = "遊戲已暫停 · 關閉後繼續"
+
+[node name="Divider" type="HSeparator" parent="Overlay/Card/Padding/Content" unique_id=50947902]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Overlay/Card/Padding/Content" unique_id=64808453]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Sections" type="VBoxContainer" parent="Overlay/Card/Padding/Content/Scroll" unique_id=13317301]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Preview" type="AudioStreamPlayer" parent="." unique_id=1524109485]
+unique_name_in_owner = true

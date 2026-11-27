@@ -1,0 +1,148 @@
+[gd_scene format=4 uid="uid://ipostxhdtyty"]
+
+[ext_resource type="Script" uid="uid://c4a2hl474b64v" path="res://player.gd" id="1_3vyb7"]
+[ext_resource type="PackedScene" path="res://scenes/electric_drill.tscn" id="2_drill"]
+[ext_resource type="AudioStream" uid="uid://bvrbkie8yijhr" path="res://assets/sfx/pickaxe_swing.wav" id="3_qhqgy"]
+
+[ext_resource type="AudioStream" path="res://assets/sfx/drill_whizz_loop.wav" id="4_drill_motor"]
+
+[ext_resource type="AudioStream" path="res://assets/sfx/foley_footstep_gravel_2.wav" id="5_gravel"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
+radius = 0.3
+height = 1.68
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3vyb7"]
+albedo_color = Color(0.6039216, 0.4117647, 0.2627451, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g2els"]
+top_radius = 0.042
+bottom_radius = 0.051
+height = 0.93
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qhqgy"]
+albedo_color = Color(0.35686275, 0.28627452, 0.22745098, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dqkch"]
+top_radius = 0.056
+bottom_radius = 0.057
+height = 0.27
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qlg0r"]
+cull_mode = 2
+albedo_color = Color(0.39607844, 0.44705883, 0.4745098, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tuyoq"]
+_surfaces = [{
+"aabb": AABB(-0.46, 0.72, -0.066, 0.86, 0.20999998, 0.132),
+"format": 34359738375,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 108,
+"vertex_data": PackedByteArray("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")
+}]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_work_glove"]
+albedo_color = Color(0.24, 0.2, 0.16, 1)
+roughness = 0.96
+
+[sub_resource type="SphereMesh" id="SphereMesh_work_glove"]
+material = SubResource("StandardMaterial3D_work_glove")
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sleeve"]
+albedo_color = Color(0.26, 0.34, 0.3, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sleeve"]
+material = SubResource("StandardMaterial3D_sleeve")
+top_radius = 0.077
+bottom_radius = 0.112
+height = 1.0
+radial_segments = 8
+
+[node name="Player" type="CharacterBody3D" unique_id=761430880]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_3vyb7")
+
+[node name="Body" type="CollisionShape3D" parent="." unique_id=907385154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
+shape = SubResource("CapsuleShape3D_g2els")
+
+[node name="Eyes" type="Camera3D" parent="." unique_id=115798706]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9915619, 0.12963414, 0, -0.12963414, 0.9915619, 0, 1.57, 0)
+fov = 66.0
+far = 120.0
+
+[node name="Pickaxe" type="Node3D" parent="Eyes" unique_id=651055567]
+unique_name_in_owner = true
+transform = Transform3D(0.18991092, 0.32448202, -0.9266311, 0.13354802, 0.92649746, 0.3518056, 0.97267604, -0.19056153, 0.13261807, 0.72, -0.8799999, -1.11)
+
+[node name="WoodenHaft" type="MeshInstance3D" parent="Eyes/Pickaxe" unique_id=1863202591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+material_override = SubResource("StandardMaterial3D_3vyb7")
+mesh = SubResource("CylinderMesh_g2els")
+
+[node name="Grip" type="MeshInstance3D" parent="Eyes/Pickaxe" unique_id=54020716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = SubResource("StandardMaterial3D_qhqgy")
+mesh = SubResource("CylinderMesh_dqkch")
+
+[node name="PickaxeHead" type="MeshInstance3D" parent="Eyes/Pickaxe" unique_id=1954051315]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_qlg0r")
+mesh = SubResource("ArrayMesh_tuyoq")
+
+[node name="PickaxeTip" type="Marker3D" parent="Eyes/Pickaxe" unique_id=1260553389]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46, 0.72, 0)
+
+[node name="Drill" parent="Eyes/Pickaxe" instance=ExtResource("2_drill")]
+unique_name_in_owner = true
+
+[node name="Hand" type="MeshInstance3D" parent="Eyes/Pickaxe" unique_id=1088812897]
+unique_name_in_owner = true
+transform = Transform3D(0.18, 0, 0, 0, 0.19, 0, 0, 0, 0.16, 0.016, 0.15, 0.045)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_work_glove")
+
+[node name="Thumb" type="MeshInstance3D" parent="Eyes/Pickaxe" unique_id=2038006668]
+transform = Transform3D(0.07, 0.024, 0, -0.022, 0.12, 0, 0, 0, 0.07, -0.042, 0.2, 0.045)
+cast_shadow = 0
+mesh = SubResource("SphereMesh_work_glove")
+
+[node name="Forearm" type="MeshInstance3D" parent="Eyes" unique_id=1017701655]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.4, 0, 0, 0, 1, 0.62, -0.72, -0.74)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_sleeve")
+
+[node name="ElbowAnchor" type="Marker3D" parent="Eyes" unique_id=1020794225]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.62, -0.4)
+
+[node name="PackSocket" type="Marker3D" parent="." unique_id=1752170217]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 1.34, 0.21)
+
+[node name="SwingSound" type="AudioStreamPlayer" parent="." unique_id=65919912]
+unique_name_in_owner = true
+stream = ExtResource("3_qhqgy")
+volume_db = -7.0
+
+[node name="DrillSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_drill_motor")
+volume_db = -14.0
+
+
+[node name="FootstepSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_gravel")
+volume_db = -10.0
+max_polyphony = 2

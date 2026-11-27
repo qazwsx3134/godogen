@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://embedded_mineral.gd" id="1_bhimv"]
+[ext_resource type="ArrayMesh" path="res://assets/minerals/amethyst_cluster.res" id="2_lm0ka"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ig0rt"]
+size = Vector3(0.43, 0.39, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kwseq"]
+albedo_color = Color(1, 0.8392157, 0.49803922, 1)
+roughness = 0.35
+emission_enabled = true
+emission = Color(0.6627451, 0.45490196, 0.19215687, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_04kv1"]
+top_radius = 0.048
+bottom_radius = 0.095
+height = 0.235
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_p0pmb"]
+top_radius = 0.056
+bottom_radius = 0.086
+height = 0.201
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_a5vta"]
+top_radius = 0.064
+bottom_radius = 0.077
+height = 0.167
+radial_segments = 5
+rings = 0
+
+[node name="EmbeddedMineral" type="StaticBody3D" unique_id=1002335710]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_bhimv")
+
+[node name="HitShape" type="CollisionShape3D" parent="." unique_id=442762622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.11)
+shape = SubResource("BoxShape3D_ig0rt")
+
+[node name="Crystals" type="Node3D" parent="." unique_id=1831002213]
+unique_name_in_owner = true
+
+[node name="Calcite" type="Node3D" parent="Crystals" unique_id=660242258]
+unique_name_in_owner = true
+
+[node name="Fragment1" type="MeshInstance3D" parent="Crystals/Calcite" unique_id=2105597484]
+transform = Transform3D(0.9582439, -0.2831226, -0.040128145, 0, 0.14033166, -0.99010456, 0.2859522, 0.94876164, 0.13447195, -0.08, 0.03, 0.09)
+material_override = SubResource("StandardMaterial3D_kwseq")
+mesh = SubResource("CylinderMesh_04kv1")
+
+[node name="Fragment2" type="MeshInstance3D" parent="Crystals/Calcite" unique_id=1394257482]
+transform = Transform3D(0.9820042, -0.1888589, 0, 0.050519545, 0.26268503, -0.9635582, 0.18197654, 0.9462182, 0.26749888, 0.075, -0.08, 0.062)
+material_override = SubResource("StandardMaterial3D_kwseq")
+mesh = SubResource("CylinderMesh_p0pmb")
+
+[node name="Fragment3" type="MeshInstance3D" parent="Crystals/Calcite" unique_id=112277429]
+transform = Transform3D(0.9875471, -0.11092359, 0.11156474, 0.14471526, 0.3623201, -0.92075056, 0.061710745, 0.92542964, 0.3738605, 0.07, 0.086, 0.066)
+material_override = SubResource("StandardMaterial3D_kwseq")
+mesh = SubResource("CylinderMesh_a5vta")
+
+[node name="Amethyst" type="MeshInstance3D" parent="Crystals" unique_id=1059713650]
+unique_name_in_owner = true
+transform = Transform3D(0.46660647, 0, 0, 0, -2.0396017e-08, -0.46660647, 0, 0.46660647, -2.0396017e-08, -0.0073292037, 0.022492433, -0.0032977844)
+visible = false
+mesh = ExtResource("2_lm0ka")

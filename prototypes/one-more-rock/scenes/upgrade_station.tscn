@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kenney-workshop/workbench-anvil.glb" id="1_p8vvq"]
+[ext_resource type="FontFile" path="res://assets/NotoSansTC.ttf" id="2_vrfa0"]
+[ext_resource type="PackedScene" path="res://assets/polyfork/miner_lantern.glb" id="3_e8m3m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bq08v"]
+size = Vector3(1.38, 1.11, 1.16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_07enx"]
+albedo_color = Color(0.33333334, 0.22745098, 0.15686275, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_ca2or"]
+size = Vector3(0.064, 0.68, 0.076)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kroi5"]
+size = Vector3(0.064, 0.68, 0.076)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3lwlc"]
+albedo_color = Color(0.36078432, 0.39607844, 0.38431373, 1)
+metallic = 0.2
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="BoxMesh_5u247"]
+size = Vector3(1.24, 0.06, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2qnli"]
+albedo_color = Color(0.3137255, 0.21568628, 0.15686275, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_l80xp"]
+size = Vector3(1.18, 0.27, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uh0bs"]
+albedo_color = Color(0.8039216, 0.6745098, 0.45882353, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_5kn7d"]
+size = Vector3(1.114, 0.21, 0.025)
+
+[node name="UpgradeStation" type="StaticBody3D" unique_id=1002981053]
+collision_layer = 6
+collision_mask = 0
+
+[node name="HitShape" type="CollisionShape3D" parent="." unique_id=961398518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_bq08v")
+
+[node name="AnvilWorkbench" type="Node3D" parent="." unique_id=1336750933 instance=ExtResource("1_p8vvq")]
+transform = Transform3D(3.7, 0, 0, 0, 3.7, 0, 0, 0, 3.7, 0, -0.632, 0)
+
+[node name="ToolBoard" type="Node3D" parent="." unique_id=1949120592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.42, -0.46)
+
+[node name="Post" type="MeshInstance3D" parent="ToolBoard" unique_id=1855193842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.48, -0.2, 0)
+material_override = SubResource("StandardMaterial3D_07enx")
+mesh = SubResource("BoxMesh_ca2or")
+
+[node name="Post2" type="MeshInstance3D" parent="ToolBoard" unique_id=613061822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, -0.2, 0)
+material_override = SubResource("StandardMaterial3D_07enx")
+mesh = SubResource("BoxMesh_kroi5")
+
+[node name="TopRail" type="MeshInstance3D" parent="ToolBoard" unique_id=1128617279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+material_override = SubResource("StandardMaterial3D_3lwlc")
+mesh = SubResource("BoxMesh_5u247")
+
+[node name="SignBacking" type="Node3D" parent="." unique_id=1975152244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.48, -0.455)
+
+[node name="Frame" type="MeshInstance3D" parent="SignBacking" unique_id=610027573]
+material_override = SubResource("StandardMaterial3D_2qnli")
+mesh = SubResource("BoxMesh_l80xp")
+
+[node name="Face" type="MeshInstance3D" parent="SignBacking" unique_id=1886041782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.024)
+material_override = SubResource("StandardMaterial3D_uh0bs")
+mesh = SubResource("BoxMesh_5kn7d")
+
+[node name="Sign" type="Label3D" parent="." unique_id=1461463088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.48499998, -0.411)
+pixel_size = 0.0038
+double_sided = false
+modulate = Color(0.25882354, 0.18039216, 0.13725491, 1)
+text = "工坊升級"
+font = ExtResource("2_vrfa0")
+font_size = 56
+outline_size = 0
+
+[node name="AnvilLantern" type="Node3D" parent="." unique_id=1468169137 instance=ExtResource("3_e8m3m")]
+transform = Transform3D(0.68, 0, 0, 0, 0.68, 0, 0, 0, 0.68, -0.43, 0.247, 0.17)

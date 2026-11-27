@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://stock_pile.gd" id="1_a3jth"]
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="2_amps6"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a3jth"]
+friction = 0.82
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_amps6"]
+size = Vector3(1.6, 0.14, 1.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w48wa"]
+size = Vector3(0.1, 1.24, 1.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_clotu"]
+size = Vector3(1.6, 1.24, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vejh2"]
+size = Vector3(0.1, 1.24, 1.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qem81"]
+size = Vector3(1.6, 1.24, 0.1)
+
+[sub_resource type="MultiMesh" id="MultiMesh_2llyn"]
+transform_format = 1
+custom_aabb = AABB(-7, -2, -7, 14, 7, 14)
+mesh = ExtResource("2_amps6")
+
+[node name="StockPile" type="Node3D" unique_id=2072630039]
+script = ExtResource("1_a3jth")
+
+[node name="BinColliders" type="StaticBody3D" parent="." unique_id=1868801824]
+collision_layer = 32
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_a3jth")
+
+[node name="Floor" type="CollisionShape3D" parent="BinColliders" unique_id=1823254490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.07, 0)
+shape = SubResource("BoxShape3D_amps6")
+
+[node name="Side" type="CollisionShape3D" parent="BinColliders" unique_id=1280367068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.76, 0.57, 0)
+shape = SubResource("BoxShape3D_w48wa")
+
+[node name="End" type="CollisionShape3D" parent="BinColliders" unique_id=64770559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57, -0.59)
+shape = SubResource("BoxShape3D_clotu")
+
+[node name="Side2" type="CollisionShape3D" parent="BinColliders" unique_id=287293484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.76, 0.57, 0)
+shape = SubResource("BoxShape3D_vejh2")
+
+[node name="End2" type="CollisionShape3D" parent="BinColliders" unique_id=1777098905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57, 0.59)
+shape = SubResource("BoxShape3D_qem81")
+
+[node name="Middle" type="MultiMeshInstance3D" parent="." unique_id=583108310]
+unique_name_in_owner = true
+multimesh = SubResource("MultiMesh_2llyn")
+
+[node name="Bulk" type="Node3D" parent="." unique_id=215881981]
+unique_name_in_owner = true
+visible = false
+
+[node name="Mound" type="MeshInstance3D" parent="Bulk" unique_id=1475893251]
+transform = Transform3D(2.9, 0, 0, 0, 1.9, 0, 0, 0, 2.7, -0.37, 0.1, -0.25)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound2" type="MeshInstance3D" parent="Bulk" unique_id=897823997]
+transform = Transform3D(-1.9322004, 0, 2.0134041, 0, 2.4, 0, -2.1625452, 0, -1.7989452, 0, 0.16, -0.25)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound3" type="MeshInstance3D" parent="Bulk" unique_id=2021319563]
+transform = Transform3D(-0.3252426, 0, -2.6829658, 0, 2.9, 0, 2.8817039, 0, -0.30281207, 0.37, 0.1, -0.25)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound4" type="MeshInstance3D" parent="Bulk" unique_id=634579292]
+transform = Transform3D(2.3656027, 0, 1.5617876, 0, 1.9, 0, -1.6774756, 0, 2.2024577, -0.37, 0.16, 0)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound5" type="MeshInstance3D" parent="Bulk" unique_id=702289026]
+transform = Transform3D(-2.8270464, 0, 0.60180324, 0, 2.4, 0, -0.6463813, 0, -2.6320777, 0, 0.1, 0)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound6" type="MeshInstance3D" parent="Bulk" unique_id=1951954808]
+transform = Transform3D(1.4015839, 0, -2.363721, 0, 2.9, 0, 2.5388114, 0, 1.3049229, 0.37, 0.16, 0)
+mesh = ExtResource("2_amps6")
+
+[node name="Mound7" type="MeshInstance3D" parent="Bulk" unique_id=1094409260]
+transform = Transform3D(0.9593626, 0, 2.5479784, 0, 1.9, 0, -2.7367177, 0, 0.8931997, -0.37, 0.1, 0.25)
+mesh = ExtResource("2_amps6")

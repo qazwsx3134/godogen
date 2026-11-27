@@ -126,6 +126,9 @@
 - **物體掉到一半洞滑開，就永遠在地底掉、不計分**（2026-11-22，hole-eater）→ 刪除區只掛在洞底會跟著洞走；場景最底下再放一個固定的全域刪除區（`Abyss`），接到同一個計分函式。
 - **測試物體「比洞大」用邊長判斷，結果卡住吞不下**（2026-11-22，hole-eater）→ 方形物體能不能掉進圓洞看對角線（3.6m 箱子對角線 5.1m），洞直徑要大於對角線。
 - **角色太貼畫面底部，調鏡頭偏移卻看不出效果**（2026-11-24，parallax-camp）→ 先核對鏡頭下限有沒有把中心夾住；調整取景偏移與下限，並在高台和邊界補足可見美術。 [Godot 2D Camera 移植與調校指南](godot-2d-camera/README.md)
+- **半透明 CPUParticles3D 粉塵（`vertex_color_use_as_albedo`＋`color_ramp`）整局第一次發射時黑一格，之後正常**（2026-11-26，one-more-rock；Compatibility，xvfb 下觀察，真 GPU 未驗證）→ `_ready` 在視野外先 `restart()` 一次暖身；擷取命中畫面用 `--fixed-fps 60` 按畫格數抓，不要按毫秒。
+- **按住連續動作時偶爾少一下、節奏斷掉**：重複計時器到期時動畫還沒收回，呼叫被擋掉卻照樣重設計時器（2026-11-26，one-more-rock）→ 計時器到期且動作已結束才觸發與重設。
+- **godot-kit `camera_shake.gd` 只吃 Camera2D**（2026-11-26，one-more-rock）→ 3D 第一人稱的命中後座用 Camera3D 的 `h_offset`／`v_offset` tween 回 0；只移投影，不影響瞄準與視角。
 
 ## 匯出與網頁版
 
@@ -150,6 +153,12 @@
 
 - **draw call 很高，以為是貼圖散在多張** → 每個 Polygon2D／Line2D／`draw_circle` 都單獨一次 draw call；大量重複物件改成共用貼圖的 Sprite2D、同類放同一 z 層（670 → 280）。先一層層 `visible=false` 量。（[CLAUDE.md](../CLAUDE.md) 2026-10-15）
 - **shader 特效一個節點一個材質**，大量用會變慢 → 每秒幾十次的命中特效用形狀，限制 `max_shader_effects`。（[pixel-vfx](godot-kit/skills/pixel-vfx/SKILL.md#坑)）
+- **可挖地形每擊都卡一下**：每次挖掘重建整座格子岩體的網格＋trimesh 碰撞（7400 格約 30ms）（2026-11-26，one-more-rock）→ 切成 6×6×6 區塊，每擊只重建被改格子及其六鄰所在的區塊（降到 1–2ms）；一般挖掘用 `--headless` 連挖 12 秒量最差幀，不要只看平均。
+- **岩塊坍落那一下卡 18–77ms**：`ArrayMesh.create_convex_shape(true, true)` 的簡化步驟很貴（2026-11-26，one-more-rock）→ 執行期產生的剛體直接 `ConvexPolygonShape3D.points = 頂點陣列`。
+- **貼地挖時每擊多 8ms**：懸空判定每次從地面 BFS 整座岩體（2026-11-26，one-more-rock）→ 只從剛挖掉的格子的鄰居往外找，碰到地面就停；設搜尋上限（超過當作有根，代價是巨大懸空岩不掉）。
+- **每座岩體第一次被敲仍卡 24–32ms**：原始外形第一擊才換成格子網格（2026-11-26，one-more-rock）→ 玩家走近時在背景每幀預建幾個隱藏區塊、碰撞先 `disabled`，第一擊只切換顯示。
+- **挖口出現新斷面後，舊外皮仍擋準星或懸在空中**（2026-11-28，one-more-rock）→ 岩材格的中心採樣可能漏掉外殼；依命中區與鄰近失去支撐的外皮裁切，過濾極窄多邊形，讓顯示和碰撞一起更新。最後一格岩材消失時清掉整層外殼。用多條射線比對挖前與挖後的深度，渲染時可把原外殼上色診斷。 [岩體回歸](one-more-rock/tests/excavation_loop.gd)
+- **從岩面法線往內找礦片落點，礦片露出後卻被原站位的岩緣遮住**（2026-11-28，one-more-rock）→ 等新碰撞形狀同步後，從玩家原本的視角往挖口中心與鄰近位置射線，確認命中新的裂面且背後仍有岩材，再放可採物。用實際準星回測。 [礦片回歸](one-more-rock/tests/mineral_loop.gd)
 
 ## 美術、素材與 AI 生圖
 
@@ -174,6 +183,8 @@
 - **角色一跑就變小，跳起才播到蹲姿**（2026-11-25，parallax-camp）→ 分件共用頭身像素尺寸與腳底錨點，用跨步與擺臂畫出跑感；起跳、頂點、下落由實際垂直速度選姿勢，離地後直接進上升。 [旅人分件與驗證](parallax-camp/README.md#角色分件)
 - **2D 角色走跑時，踩地的鞋底黏著地面往前滑**（2026-11-25，parallax-camp）→ 先比對碰撞後的實際位移與步態的腳底位移，兩者須在接地期互相抵銷。幀動畫可按移動距離取格，並在需要時補償格間餘量。量單次接地期間同一隻腳相對支撐面的位置，驗證各移動方向及加速、煞車、轉向。Ridge Run 左右方向各量 17 個接地樣本，60 與 144 FPS 下最大漂移均為 1 像素。 [旅人跑步驗證](parallax-camp/PROGRESS.md)
 
+- **匯入 Polyfork GLB 後模型只有白色**（2026-11-27，one-more-rock）→ 檢查網格材質是否使用 `COLOR_0`。有頂點色的網格在匯入時啟用 `vertex_color_use_as_albedo`，保留線性色彩，並重新匯出 Web 驗證。（[匯入腳本](one-more-rock/assets/polyfork/vertex_color_import.gd)）
+
 ## 音效與手機震動
 
 - **桌面 Chromium 也有 `navigator.vibrate`** → 偵測再加 `navigator.maxTouchPoints > 0` 或 `(pointer: coarse)`，用真瀏覽器驗證；iPhone Safari 沒有這個 API。（[CLAUDE.md](../CLAUDE.md) 2026-10-03、[web-release](godot-kit/skills/godot-prototype-to-itch/references/web-release.md#5-手機震動網頁)）
@@ -182,6 +193,7 @@
 - **修好時鐘後，玩家的延遲校準值還是錯的（1～2 秒）**（2026-11-03，kagura-dango）→ 校準存在 user://（瀏覽器 IndexedDB），會跨版本留著；讀取時把超出合理範圍（±400 ms）的值歸零，校準結果也夾在範圍內。改了時鐘就假設舊校準全部作廢。
 
 - **爆炸尾音被短光效壽命或回合結算切掉**（2026-11-11，walker-tps）→ 光效結束後讓音效播完並設最長存活上限；結算只清實彈，不清仍在收尾的命中特效。headless 測試退出前 stop 播放器、釋放場景並等待 audio driver 消化移除，避免把未清理的測試資源當遊戲洩漏。（[音效說明](walker-tps/assets/sound/README.md)）
+- **敲擊樣本的前置空白拖慢回饋，長尾讓連敲互相遮蓋**（2026-11-28，one-more-rock）→ 保留原檔，裁出接觸點起音的短版並淡掉長尾。連續馬達聲擷取穩定段，接點交疊淡化；一般命中和發現礦物各有自己的觸發。headless 可驗事件路由，音量與延遲要在真機試聽。 [採石場音效](one-more-rock/README.md#音效配方)
 
 ## 存檔與劇本
 
@@ -214,3 +226,4 @@
 | debt-commission | [DIALOGIC-EVALUATION](debt-commission/docs/DIALOGIC-EVALUATION.md)、[PLAN-LOG-AVATAR-TUTORIAL](debt-commission/docs/PLAN-LOG-AVATAR-TUTORIAL.md) | 劇本系統選型、`ui_style_role` 覆寫 |
 | sugarcane-tanks（已搬出 repo） | skill [godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md) | 測試與平衡量測、打擊感、網頁匯出整套做法 |
 | walker-tps | [README「已知的坑」](walker-tps/README.md#已知的坑) | 四足 IK 步態：可及範圍、支撐期長度、整組緊急抬腳；跳躍越過外牆後無越界恢復（待修） |
+| one-more-rock | [PROGRESS「專案調校心得」](one-more-rock/PROGRESS.md#專案調校心得) | 採掘破壞量與掉落顆數獨立調校、礦片與工坊聲音分工、已知礦物的加工和庫存 |

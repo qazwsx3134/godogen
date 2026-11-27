@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="1_2oih8"]
+[ext_resource type="Shape3D" path="res://assets/minerals/raw_ore_hull.tres" id="2_gci65"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_671pa"]
+friction = 0.72
+bounce = 0.28
+
+[node name="PileRock" type="RigidBody3D" unique_id=2096583463]
+collision_layer = 0
+collision_mask = 48
+mass = 0.3
+physics_material_override = SubResource("PhysicsMaterial_671pa")
+freeze = true
+freeze_mode = 1
+linear_damp = 0.46
+angular_damp = 0.77
+
+[node name="Shell" type="MeshInstance3D" parent="." unique_id=997231190]
+mesh = ExtResource("1_2oih8")
+
+[node name="Hull" type="CollisionShape3D" parent="." unique_id=1278354510]
+shape = ExtResource("2_gci65")

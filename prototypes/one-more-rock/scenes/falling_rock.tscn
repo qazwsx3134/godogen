@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://excavation_debris.gd" id="1_7fblv"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e8xk3"]
+friction = 0.75
+bounce = 0.18
+
+[node name="FallingRock" type="RigidBody3D" unique_id=593667522]
+collision_layer = 256
+collision_mask = 260
+mass = 0.45
+physics_material_override = SubResource("PhysicsMaterial_e8xk3")
+contact_monitor = true
+max_contacts_reported = 5
+linear_damp = 0.36
+angular_damp = 0.51
+script = ExtResource("1_7fblv")
+lands_as_ore = false
+
+[node name="ShapeMesh" type="MeshInstance3D" parent="." unique_id=2013805056]
+
+[node name="HitShape" type="CollisionShape3D" parent="." unique_id=1880539697]

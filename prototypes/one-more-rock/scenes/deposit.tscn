@@ -1,0 +1,124 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://deposit.gd" id="1_gnh6o"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t637e"]
+cull_mode = 2
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(0.9490196, 0.93333334, 0.93333334, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_iv2y1"]
+_surfaces = [{
+"aabb": AABB(-0.46, -0.32, -0.01, 0.98, 0.6, 0.18),
+"attribute_data": PackedByteArray("vJ2A/7ydgP+8nYD/oYlw/6GJcP+hiXD/rJmG/6yZhv+smYb/zLCR/8ywkf/MsJH/0rac/9K2nP/Stpz/qZSB/6mUgf+plIH/vqWJ/76lif++pYn/sqCM/7KgjP+yoIz/"),
+"format": 34359738383,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("H4XrvrgeBb4K1yO8CtejPArXI717FC4+CtejvgrXo74K1yM9CtejvgrXo74K1yM9CtejPArXI717FC4+CtejPSlcj74K16M8CtejPSlcj74K16M8CtejPArXI717FC4+hevRPlyPQr6WQws9hevRPlyPQr6WQws9CtejPArXI717FC4+uB4FPwrXoz1vEoM7uB4FPwrXoz1vEoM7CtejPArXI717FC4+exQuPnE9ij6mm8Q8exQuPnE9ij6mm8Q8CtejPArXI717FC4+rkfhvSlcjz4K16M7rkfhvSlcjz4K16M7CtejPArXI717FC4+XI/Cvo/C9T1YOTQ9XI/Cvo/C9T1YOTQ9CtejPArXI717FC4+H4XrvrgeBb4K1yO8hl3tfuOfZZWGXe1+459llYZd7X7jn2WVOYgyU2ZAGo45iDJTZkAajjmIMlNmQBqO8YiVU4BAQ47xiJVTgEBDjvGIlVOAQEOOup99fcRhBpO6n319xGEGk7qffX3EYQaT1JMbnAFkjZ3UkxucAWSNndSTG5wBZI2d13sEqXVx0JnXewSpdXHQmdd7BKl1cdCZkHUypVh5OZaQdTKlWHk5lpB1MqVYeTmWwWAIdyahwJHBYAh3JqHAkcFgCHcmocCR")
+}]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ammg"]
+cull_mode = 2
+albedo_color = Color(0.41960785, 0.38431373, 0.34117648, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6tid1"]
+size = Vector3(1.01, 0.59, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ru4xb"]
+albedo_color = Color(0.6117647, 0.58431375, 0.5294118, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_102md"]
+size = Vector3(0.24, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7snlp"]
+albedo_color = Color(0.5921569, 0.5254902, 0.45882353, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6buej"]
+albedo_color = Color(0.69803923, 0.6431373, 0.57254905, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y56wd"]
+albedo_color = Color(0.6117647, 0.58431375, 0.5294118, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_igck6"]
+albedo_color = Color(0.5921569, 0.5254902, 0.45882353, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_au4r8"]
+albedo_color = Color(0.69803923, 0.6431373, 0.57254905, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gnh6o"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.9372549, 0.81960785, 0.627451, 0.67)
+
+[sub_resource type="TorusMesh" id="TorusMesh_t637e"]
+inner_radius = 0.29
+outer_radius = 0.33
+rings = 16
+ring_segments = 6
+
+[node name="Vein" type="StaticBody3D" unique_id=1062823187 groups=["quarry_deposits"]]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_gnh6o")
+
+[node name="Shell" type="MeshInstance3D" parent="." unique_id=62349120]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.78, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_t637e")
+mesh = SubResource("ArrayMesh_iv2y1")
+
+[node name="Scar" type="MeshInstance3D" parent="." unique_id=443058462]
+unique_name_in_owner = true
+transform = Transform3D(0.91, 0, 0, 0, 0.87, 0, 0, 0, 0.28, 0, 0, 0.012)
+visible = false
+material_override = SubResource("StandardMaterial3D_1ammg")
+mesh = SubResource("ArrayMesh_iv2y1")
+
+[node name="Hitbox" type="CollisionShape3D" parent="." unique_id=94742473]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.085)
+shape = SubResource("BoxShape3D_6tid1")
+
+[node name="Loose" type="Node3D" parent="." unique_id=455353442]
+unique_name_in_owner = true
+visible = false
+
+[node name="Ore" type="MeshInstance3D" parent="Loose" unique_id=844825793]
+transform = Transform3D(0.60512, 0.3504892, 0.7148337, 0.2674886, 0.7561796, -0.59719545, -0.74985313, 0.55258477, 0.3638275, -0.17, -0.015, 0.03)
+material_override = SubResource("StandardMaterial3D_ru4xb")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="Ore2" type="MeshInstance3D" parent="Loose" unique_id=729579442]
+transform = Transform3D(-0.33120695, 0.93214583, 0.14630862, 0.106914066, 0.19113685, -0.9757234, -0.9374814, -0.30752397, -0.16296536, 0.12, 0.014, -0.1)
+material_override = SubResource("StandardMaterial3D_7snlp")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="Ore3" type="MeshInstance3D" parent="Loose" unique_id=2033143244]
+transform = Transform3D(-0.9545239, 0.15127817, 0.25690272, -0.29548436, -0.36539933, -0.88270736, -0.03966227, -0.91847605, 0.39348274, -0.11, 0.02, 0.19)
+material_override = SubResource("StandardMaterial3D_6buej")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="Ore4" type="MeshInstance3D" parent="Loose" unique_id=2078936635]
+transform = Transform3D(-0.053034484, -0.4622775, 0.8851479, -0.7000057, -0.61493945, -0.36309987, 0.71216524, -0.6388654, -0.2909839, 0.12, 0.032, 0.14)
+material_override = SubResource("StandardMaterial3D_y56wd")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="Ore5" type="MeshInstance3D" parent="Loose" unique_id=1795725808]
+transform = Transform3D(0.5064579, -0.86059934, -0.05356374, -0.8037803, -0.49368304, 0.3319852, -0.31214976, -0.12508306, -0.9417625, 0.26, 0.02, 0.01)
+material_override = SubResource("StandardMaterial3D_igck6")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="Ore6" type="MeshInstance3D" parent="Loose" unique_id=864104701]
+transform = Transform3D(-0.7125849, -0.5034734, -0.4886075, -0.46321145, -0.18544036, 0.8666297, -0.52693254, 0.84387577, -0.10107264, -0.24, 0.015, -0.16)
+material_override = SubResource("StandardMaterial3D_au4r8")
+mesh = SubResource("PrismMesh_102md")
+
+[node name="PickupMark" type="MeshInstance3D" parent="Loose" unique_id=599512415]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.127, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_gnh6o")
+cast_shadow = 0
+mesh = SubResource("TorusMesh_t637e")
