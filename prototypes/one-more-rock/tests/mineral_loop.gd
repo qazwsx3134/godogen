@@ -56,11 +56,13 @@ func run() -> void:
 		quarry.player.eyes.look_at(mineral.global_position + mineral.global_basis.z * 0.11)
 		expect(quarry._pickaxe_aim().get("collider") == mineral, "從同一採掘位置可以瞄準已露出的礦片")
 		quarry.get_node("%MineSound").stop()
+		quarry.get_node("%RockBreakSound").stop()
 		quarry._swing()
 		await create_timer(0.30).timeout
 		expect(is_instance_valid(mineral) and mineral.hits_left == 1, "第一擊只敲鬆露出的礦片")
 		expect(quarry.get_node("%MineralImpactSound").playing and quarry.get_node("%CrystalOreSound").playing
-			and not quarry.get_node("%MineSound").playing, "直接命中礦片才播放 impactMining 和水晶聲")
+			and not quarry.get_node("%MineSound").playing and not quarry.get_node("%RockBreakSound").playing,
+			"直接命中礦片播放撞擊與水晶聲")
 		await quarry.player.swing.finished
 		quarry._swing()
 		await create_timer(0.29).timeout
@@ -69,12 +71,17 @@ func run() -> void:
 		expect(finds.size() == 1 and finds.front().rare, "只掉一顆可手動拾取的方解石原石")
 		if not finds.is_empty():
 			var piece: Debris = finds.front()
+			expect(piece.has_node("Crystals/Calcite") and not piece.get_node("ShapeMesh").visible,
+				"採下的剛體顯示實際方解石晶簇")
 			piece.grounded = true
 			piece.age = 0.25
 			piece.linear_velocity = Vector3.ZERO
+			# Move clear of ordinary drops so this unload exercises just the crystal.
+			quarry.player.global_position = Vector3(12.0, 0.0, 3.0)
+			await create_timer(quarry.pickup_flight_time + 0.1).timeout
 			quarry.inventory.pack.clear()
 			expect(quarry._collect_piece(piece, 0), "原石可以經一般拾取路徑收走")
-			await create_timer(0.62).timeout
+			await create_timer(quarry.pickup_flight_time + 0.1).timeout
 			expect(quarry.inventory.unload(false) == 1, "採出的原石經卸貨進料斗")
 			quarry.bench.hit_power = 1
 			expect(quarry._take_stored() == -1 and quarry.bench.waiting_hardness == 2, "方解石需要二階工坊槌")

@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="ArrayMesh" path="res://assets/minerals/raw_ore.res" id="ore_chip_mesh"]
 [ext_resource type="Script" path="res://quarry.gd" id="1_quarry"]
 [ext_resource type="PackedScene" path="res://scenes/workbench.tscn" id="2_yinqf"]
 [ext_resource type="Script" path="res://workbench.gd" id="3_1sjku"]
@@ -31,7 +32,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/kenney-adventure/panel_grey_bolts_green.png" id="22_ien8k"]
 [ext_resource type="Texture2D" path="res://assets/ui/kenney-adventure/panel_brown_arrows_detail.png" id="23_oxnvr"]
 [ext_resource type="AudioStream" path="res://assets/sfx/stone_crash.wav" id="23_urngg"]
-[ext_resource type="AudioStream" path="res://assets/sfx/stone_fracture_cue.wav" id="23_fracture"]
+[ext_resource type="AudioStream" path="res://assets/sfx/rock_collapse.wav" id="23_fracture"]
 [ext_resource type="Script" path="res://quarry_automation.gd" id="24_automation"]
 [ext_resource type="AudioStream" path="res://assets/sfx/ore_found.wav" id="26_ore_found"]
 [ext_resource type="Script" path="res://specimen_shelf.gd" id="26_vulhs"]
@@ -308,12 +309,17 @@ texture_margin_top = 15.0
 texture_margin_right = 15.0
 texture_margin_bottom = 15.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jik0c"]
-albedo_color = Color(0.72156864, 0.67058825, 0.627451, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mining_spark"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
 
-[sub_resource type="PrismMesh" id="PrismMesh_ja2k4"]
-material = SubResource("StandardMaterial3D_jik0c")
-size = Vector3(0.13, 0.1, 0.12)
+[sub_resource type="PrismMesh" id="PrismMesh_mining_spark"]
+material = SubResource("StandardMaterial3D_mining_spark")
+size = Vector3(0.035, 0.18, 0.036)
+
+[sub_resource type="Curve" id="Curve_spark_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.55, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_puff1"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -546,7 +552,8 @@ max_polyphony = 2
 [node name="RockBreakSound" type="AudioStreamPlayer" parent="." unique_id=1732463700]
 unique_name_in_owner = true
 stream = ExtResource("23_fracture")
-volume_db = -13.0
+volume_db = -7.5
+max_polyphony = 3
 
 [node name="OreFoundSound" type="AudioStreamPlayer" parent="." unique_id=717874270]
 unique_name_in_owner = true
@@ -836,23 +843,46 @@ card_selected = SubResource("StyleBoxTexture_pjt2x")
 [node name="BasinLandscape" type="Node3D" parent="." unique_id=1128735724 instance=ExtResource("9_yinqf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 0)
 
+[node name="MiningSparks" type="CPUParticles3D" parent="."]
+unique_name_in_owner = true
+cast_shadow = 0
+emitting = false
+amount = 9
+lifetime = 0.26
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.35
+mesh = SubResource("PrismMesh_mining_spark")
+particle_flag_align_y = true
+spread = 78.0
+gravity = Vector3(0, -3, 0)
+initial_velocity_min = 2.5
+initial_velocity_max = 5.5
+scale_amount_min = 0.48
+scale_amount_max = 1.0
+scale_amount_curve = SubResource("Curve_spark_scale")
+
 [node name="MiningChips" type="CPUParticles3D" parent="." unique_id=176513940]
 unique_name_in_owner = true
 emitting = false
-amount = 17
-lifetime = 0.39
+amount = 15
+lifetime = 0.58
 one_shot = true
-explosiveness = 1.0
-mesh = SubResource("PrismMesh_ja2k4")
+explosiveness = 0.92
+lifetime_randomness = 0.32
+mesh = ExtResource("ore_chip_mesh")
 direction = Vector3(0, 1, 0)
-spread = 58.0
-gravity = Vector3(0, -9, 0)
-initial_velocity_min = 1.85
+particle_flag_rotate_y = true
+spread = 75.0
+gravity = Vector3(0, -12, 0)
+initial_velocity_min = 1.5
 initial_velocity_max = 4.2
 angular_velocity_min = -270.0
 angular_velocity_max = 270.0
-scale_amount_min = 0.3
-scale_amount_max = 0.92
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.12
+scale_amount_max = 0.60
 
 [node name="MiningDust" type="CPUParticles3D" parent="." unique_id=730215948]
 unique_name_in_owner = true

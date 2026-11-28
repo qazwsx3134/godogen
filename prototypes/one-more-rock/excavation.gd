@@ -32,7 +32,7 @@ func _physics_process(delta: float) -> void:
 	_release_section(pending.preview, pending.cells, pending.normal)
 
 
-func spawn_ore(point: Vector3, normal: Vector3, amount: int, mineral := -1) -> void:
+func spawn_ore(point: Vector3, normal: Vector3, amount: int, mineral := -1, crystals: Node3D = null) -> void:
 	for index in amount:
 		var piece := OreBody.instantiate() as Debris
 		piece.position = to_local(point + normal * 0.18 + Vector3(rng.randf_range(-0.14, 0.14), index * 0.16, rng.randf_range(-0.18, 0.18)))
@@ -42,6 +42,12 @@ func spawn_ore(point: Vector3, normal: Vector3, amount: int, mineral := -1) -> v
 		piece.rare = mineral >= 2
 		if piece.rare:
 			piece.collision_layer |= 2
+		if crystals:
+			var cluster := crystals.duplicate(0) as Node3D
+			cluster.position = Vector3(0.0, 0.0, -0.08)
+			piece.get_node("ShapeMesh").hide()
+			piece.add_child(cluster)
+		elif piece.rare:
 			piece.get_node("ShapeMesh").material_overlay = preload("res://assets/mined_glint.tres")
 		add_child(piece)
 		loose.append(piece)

@@ -37,21 +37,6 @@ func _init(surface: MeshInstance3D) -> void:
 	skin = original.duplicate()
 
 
-## The visible entry spans the surface between sampled cell centers.
-func remove_entry(point: Vector3, normal: Vector3, cell_size: float) -> bool:
-	var tangent := normal.cross(Vector3.UP if absf(normal.y) < 0.9 else Vector3.RIGHT).normalized()
-	var bitangent := normal.cross(tangent)
-	var planes: Array[Plane] = [
-		Plane(normal, normal.dot(point) + cell_size * 0.34),
-		Plane(-normal, -normal.dot(point) + cell_size * 0.75),
-	]
-	for side in 8:
-		var angle := TAU * side / 8.0
-		var axis := tangent * cos(angle) + bitangent * sin(angle)
-		planes.append(Plane(axis, axis.dot(point) + cell_size * 0.67))
-	return remove(planes, AABB(point, Vector3.ZERO).grow(cell_size * 1.2))
-
-
 ## Cut the union of the removed cells, skipping disjoint polygons by their bounds.
 func remove(hole_planes: Array[Plane], bounds: AABB) -> bool:
 	var changed := false

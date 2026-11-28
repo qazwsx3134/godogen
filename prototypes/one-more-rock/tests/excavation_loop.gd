@@ -32,6 +32,37 @@ func hit_wall(offset := Vector3.ZERO) -> Dictionary:
 	return q.get_world_3d().direct_space_state.intersect_ray(ray)
 
 
+func check_single_strike_opening() -> void:
+	var from := Vector3(15.1, 1.35, 3.27)
+	var space := q.get_world_3d().direct_space_state
+	var ray := PhysicsRayQueryParameters3D.create(from, from + Vector3.RIGHT * 16.0, 4)
+	var hit := space.intersect_ray(ray)
+	var rock := hit.get("collider") as RockVolume
+	expect(rock != null, "高處落鎬測試能打到岩山")
+	if rock == null:
+		return
+	var original: Dictionary[Vector2i, Vector3] = {}
+	for y in range(-4, 5):
+		for z in range(-4, 5):
+			var offset := Vector2i(y, z)
+			if offset.length_squared() > 16:
+				continue
+			ray.from = from + Vector3(0.0, y * 0.09, z * 0.09)
+			ray.to = ray.from + Vector3.RIGHT * 16.0
+			var sample := space.intersect_ray(ray)
+			if sample.get("collider") == rock:
+				original[offset] = sample.position
+	expect(original.size() > 35, "取樣覆蓋鎬尖周圍的岩面")
+	expect(rock.chip(hit.position, hit.normal, 1), "以單次普通揮鎬打出凹口")
+	await wait_physics()
+	for offset in original:
+		ray.from = from + Vector3(0.0, offset.x * 0.09, offset.y * 0.09)
+		ray.to = ray.from + Vector3.RIGHT * 16.0
+		var sample := space.intersect_ray(ray)
+		expect(sample.get("collider") != rock or sample.position.x > original[offset].x + 0.015,
+			"單次揮鎬清除挖口中央的舊岩皮碰撞，取樣 %s" % offset)
+
+
 func check_skin_sliver() -> void:
 	var surface := MeshInstance3D.new()
 	var triangle := SurfaceTool.new()
@@ -169,5 +200,14 @@ func run() -> void:
 	await create_timer(2.2).timeout
 	expect(rubble_batches > 0, "落地碎裂後產生可拾取的碎岩")
 	expect(q.excavation.loose.any(func(piece: Debris): return piece.usable()), "碎岩接觸地面並進入可拾取狀態")
+	q.queue_free()
+	await wait_physics()
+	q = load("res://scenes/quarry.tscn").instantiate()
+	root.add_child(q)
+	await wait_physics()
+	await check_single_strike_opening()
+	await create_timer(0.70).timeout
+	q.queue_free()
+	await wait_physics()
 	print("excavation_loop ", "PASS" if failures == 0 else "FAIL")
 	quit(1 if failures else 0)

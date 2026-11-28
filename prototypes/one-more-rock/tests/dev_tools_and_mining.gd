@@ -92,6 +92,8 @@ func run() -> void:
 	expect(player.swing_side == -swing_side, "兩次揮鎬交替換邊")
 	var mine_sound: AudioStreamPlayer = quarry.get_node("%MineSound")
 	expect(mine_sound.playing and quarry.get_node("%RockBreakSound").playing, "實際挖岩播放命中與碎裂聲")
+	expect(quarry.get_node("%MiningSparks").emitting and quarry.get_node("%MiningChips").emitting,
+		"鎬頭火花與岩屑會在命中及崩裂時發射")
 	await create_timer(0.12).timeout
 	expect(quarry.get_node("%OreFoundSound").playing, "成功挖出原石後播放出礦聲")
 	expect(not quarry.get_node("%MineralImpactSound").playing and not quarry.get_node("%CrystalOreSound").playing,

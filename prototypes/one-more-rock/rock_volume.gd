@@ -112,14 +112,23 @@ func chip(world_point: Vector3, normal: Vector3, power: int) -> bool:
 	var center := point + inward * cell_size * 0.53
 	var key := Vector3i(((center - cell_origin) / cell_size).floor())
 	var reach := clampi(power, 1, 3)
-	var radius_squared := [1.48, 2.55, 5.2][reach - 1] as float
-	var bite_squared := cell_size * cell_size * radius_squared
+	var radius := [1.27, 1.63, 2.30][reach - 1] as float
 	prepare()
 	for x in range(-reach, reach + 1):
 		for y in range(-reach, reach + 1):
 			for z in range(-reach, reach + 1):
 				var cell := key + Vector3i(x, y, z)
-				if cut_cells.has(cell) or _center(cell).distance_squared_to(center) > bite_squared:
+				if cut_cells.has(cell):
+					continue
+				var offset := (_center(cell) - center) / cell_size
+				var depth := offset.dot(inward)
+				var radial := offset - inward * depth
+				# Round corners on a slightly squared footprint. Keep the interior cut
+				# shallower than the surface spread so successive strikes can leave ledges.
+				var edge := maxf(absf(radial.x), maxf(absf(radial.y), absf(radial.z)))
+				var distance := lerpf(radial.length(), edge, 0.28)
+				var rim := radius + float((hash(cell) & 15) - 7) * 0.008
+				if distance * distance + depth * depth * (1.55 if depth > 0.0 else 0.58) > rim * rim:
 					continue
 				if solid.has(cell):
 					removed.append(cell)
@@ -152,8 +161,13 @@ func chip(world_point: Vector3, normal: Vector3, power: int) -> bool:
 		_strip_unrooted(unsupported, removed + unsupported.keys())
 	for cell in unsupported:
 		cut_cells[cell] = true
-	var entry_trimmed := skin != null and skin.remove_entry(point, -inward, cell_size)
-	_refresh_surface(removed + unsupported.keys(), shell_only, entry_trimmed)
+	# A detached section can carry exterior polygons in its neighboring air cells.
+	for cell: Vector3i in unsupported:
+		for face: Array in _faces(cell):
+			var neighbor: Vector3i = cell + face[0]
+			if not solid.has(neighbor) and not cut_cells.has(neighbor):
+				shell_only[neighbor] = true
+	_refresh_surface(removed + unsupported.keys(), shell_only)
 	chipped.emit(world_point, normal, 2 if power >= 3 else 1)
 	if not unsupported.is_empty():
 		_release_sections(unsupported, normal)
@@ -269,7 +283,7 @@ func _center(cell: Vector3i) -> Vector3:
 
 
 ## Rebuilds only cut faces near removed cells, preserving the authored surface around each cut.
-func _refresh_surface(changed: Array = [], shell_only: Dictionary[Vector3i, bool] = {}, entry_trimmed := false) -> void:
+func _refresh_surface(changed: Array = [], shell_only: Dictionary[Vector3i, bool] = {}) -> void:
 	prepare()
 	var dirty: Dictionary[Vector3i, bool] = {}
 	if changed.is_empty():
@@ -280,7 +294,7 @@ func _refresh_surface(changed: Array = [], shell_only: Dictionary[Vector3i, bool
 			dirty[_chunk_of(cell)] = true
 	else:
 		if skin != null:
-			_trim_skin(changed, shell_only, entry_trimmed)
+			_trim_skin(changed, shell_only)
 		for cell: Vector3i in changed:
 			exposed_faces.erase(cell)
 			fracture_faces.erase(cell)
@@ -293,14 +307,10 @@ func _refresh_surface(changed: Array = [], shell_only: Dictionary[Vector3i, bool
 		_build_chunk(key)
 
 
-func _trim_skin(changed: Array, shell_only: Dictionary[Vector3i, bool], changed_skin: bool) -> void:
+func _trim_skin(changed: Array, shell_only: Dictionary[Vector3i, bool]) -> void:
+	var changed_skin := false
 	for cell: Vector3i in changed:
 		changed_skin = _trim_skin_cell(cell) or changed_skin
-		# A collapsed section can leave its old shell in adjacent cells with no bulk rock.
-		for face: Array in _faces(cell):
-			var neighbor: Vector3i = cell + face[0]
-			if not solid.has(neighbor) and not cut_cells.has(neighbor):
-				shell_only[neighbor] = true
 	for cell: Vector3i in shell_only:
 		if _trim_skin_cell(cell):
 			cut_cells[cell] = true

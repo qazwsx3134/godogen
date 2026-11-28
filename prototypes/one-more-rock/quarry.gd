@@ -401,11 +401,15 @@ func _mine_impact(hit: Dictionary, heavy := false) -> void:
 	var contact: Vector3 = hit.position
 	var normal: Vector3 = hit.normal
 	var power := 3 if heavy else player.mining_power
+	if mining_particles:
+		var sparks := %MiningSparks as CPUParticles3D
+		sparks.color = Color("dcb0ff") if target is EmbeddedMineral and target.mineral == 3 else Color("ffe1a1")
+		_mining_burst(sparks, contact, normal)
 	if target is EmbeddedMineral:
 		_strike_mineral(target, contact, power)
 	else:
 		if heavy or not player.using_drill:
-			%MineSound.pitch_scale = 0.67 if heavy else randf_range(0.86, 1.12)
+			%MineSound.pitch_scale = (0.72 if heavy else 1.0) * randf_range(0.93, 1.07)
 			%MineSound.play()
 		var rock := target as RockVolume
 		if rock.chip(contact, normal, power):
@@ -416,12 +420,6 @@ func _mine_impact(hit: Dictionary, heavy := false) -> void:
 				cuts_to_mineral = maxi(0, cuts_to_mineral - 1)
 				if cuts_to_mineral == 0:
 					_expose_mineral(rock, contact, player.eyes.global_position)
-	if mining_particles:
-		for burst: CPUParticles3D in [%MiningChips, %MiningDust]:
-			burst.scale = Vector3.ONE * (1.55 if heavy else 1.0)
-			burst.global_position = contact + normal * 0.04
-			burst.direction = (normal + Vector3.UP * 0.38).normalized()
-			burst.restart()
 	player.kick(2.4 if heavy else (0.36 if player.using_drill else float(player.mining_power)))
 	var pulse := crosshair.create_tween()
 	pulse.tween_property(crosshair, "scale", Vector2.ONE, 0.14).from(Vector2.ONE * 1.45)
@@ -429,13 +427,29 @@ func _mine_impact(hit: Dictionary, heavy := false) -> void:
 		Input.vibrate_handheld(45 if heavy else (10 if player.using_drill else 22))
 
 
+func _mining_burst(burst: CPUParticles3D, point: Vector3, normal: Vector3) -> void:
+	burst.global_position = point + normal * 0.10
+	burst.direction = (normal + Vector3.UP * 0.34).normalized()
+	burst.restart()
+
+
 func _rock_chipped(point: Vector3, normal: Vector3, amount: int) -> void:
 	excavation.spawn_ore(point, normal, amount + bonus_ore)
 	var cues := create_tween()
 	cues.tween_interval(0.045)
-	cues.tween_callback(%RockBreakSound.play)
+	cues.tween_callback(func():
+		%RockBreakSound.pitch_scale = (0.88 if amount > 1 else 1.0) * randf_range(0.94, 1.06)
+		%RockBreakSound.play()
+		if mining_particles:
+			%MiningChips.amount = 24 if amount > 1 else 15
+			_mining_burst(%MiningChips, point, normal)
+			_mining_burst(%MiningDust, point, normal)
+	)
 	cues.tween_interval(0.085)
-	cues.tween_callback(%OreFoundSound.play)
+	cues.tween_callback(func():
+		%OreFoundSound.pitch_scale = randf_range(0.95, 1.05)
+		%OreFoundSound.play()
+	)
 
 
 func _expose_mineral(rock: RockVolume, contact: Vector3, view_origin: Vector3) -> void:
@@ -447,7 +461,12 @@ func _expose_mineral(rock: RockVolume, contact: Vector3, view_origin: Vector3) -
 	var approach := view_origin.direction_to(contact)
 	var tangent := approach.cross(Vector3.UP if absf(approach.y) < 0.9 else Vector3.RIGHT).normalized()
 	var vertical := tangent.cross(approach)
-	for offset: Vector3 in [Vector3.ZERO, tangent * 0.25, -tangent * 0.25, vertical * 0.22, -vertical * 0.22]:
+	# A deep center can be out of reach while the sides of the same cut are mineable.
+	var offsets: Array[Vector3] = [Vector3.ZERO]
+	for distance in [0.23, 0.38, 0.52, 0.66]:
+		offsets.append_array([tangent * distance, -tangent * distance,
+			vertical * distance, -vertical * distance])
+	for offset in offsets:
 		var through := contact + offset
 		var end := through + view_origin.direction_to(through) * (2.3 * rock.cell_size)
 		var ray := PhysicsRayQueryParameters3D.create(view_origin, end, 4)
@@ -459,6 +478,12 @@ func _expose_mineral(rock: RockVolume, contact: Vector3, view_origin: Vector3) -
 		if (point - contact).dot(approach) < 0.12 or face_normal.dot(approach) > -0.25:
 			continue
 		if rock.shape_owner_get_owner(rock.shape_find_owner(hit.shape)) == rock.collider:
+			continue
+		var aim := point + face_normal * 0.11
+		if view_origin.distance_squared_to(aim) > player.mining_reach * player.mining_reach:
+			continue
+		var sight := PhysicsRayQueryParameters3D.create(view_origin, aim, 6)
+		if not get_world_3d().direct_space_state.intersect_ray(sight).is_empty():
 			continue
 		var anchor := rock._hit_cell(rock.to_local(point - face_normal * 0.045))
 		if not rock.solid.has(anchor):
@@ -478,7 +503,7 @@ func _expose_mineral(rock: RockVolume, contact: Vector3, view_origin: Vector3) -
 func _strike_mineral(mineral: EmbeddedMineral, contact: Vector3, power: int) -> void:
 	%MineralImpactSound.pitch_scale = randf_range(0.91, 1.08)
 	%MineralImpactSound.play()
-	%CrystalOreSound.pitch_scale = 0.88 if mineral.mineral == 2 else 1.08
+	%CrystalOreSound.pitch_scale = (0.92 if mineral.mineral == 2 else 1.08) * randf_range(0.95, 1.05)
 	%CrystalOreSound.play()
 	if mineral.strike(power):
 		_release_mineral(mineral, contact)
@@ -486,7 +511,7 @@ func _strike_mineral(mineral: EmbeddedMineral, contact: Vector3, power: int) -> 
 
 func _release_mineral(mineral: EmbeddedMineral, point: Vector3) -> void:
 	exposed_minerals.erase(mineral.get_parent())
-	excavation.spawn_ore(point, mineral.global_basis.z, 1, mineral.mineral)
+	excavation.spawn_ore(point, mineral.global_basis.z, 1, mineral.mineral, mineral.crystals)
 	mineral.retire()
 
 
@@ -506,6 +531,7 @@ func _landslide(point: Vector3, _amount: int) -> void:
 	var sound := %CollapseSound as AudioStreamPlayer3D
 	if not sound.playing:
 		sound.global_position = point
+		sound.pitch_scale = randf_range(0.93, 1.07)
 		sound.play()
 
 
@@ -516,15 +542,22 @@ func _collect_piece(piece: Debris, index: int) -> bool:
 	var pose := piece.global_transform
 	var rare := piece.rare
 	var mineral := piece.mineral
+	var crystals := piece.get_node_or_null("Crystals") as Node3D
+	if crystals:
+		piece.remove_child(crystals)
 	excavation.retire(piece)
-	_float_ore(pose, using_cart, rare, index, mineral)
+	_float_ore(pose, using_cart, rare, index, mineral, crystals)
 	return true
 
 
-func _float_ore(pose: Transform3D, using_cart: bool, rare: bool, index: int, mineral: int) -> void:
+func _float_ore(pose: Transform3D, using_cart: bool, rare: bool, index: int, mineral: int, crystals: Node3D) -> void:
 	var piece := PickupOre.instantiate() as Node3D
-	if rare:
-		(piece.get_node("Ore") as MeshInstance3D).material_overlay = MinedGlint
+	var mesh := piece.get_node("Ore") as MeshInstance3D
+	if crystals:
+		mesh.hide()
+		piece.add_child(crystals)
+	elif rare:
+		mesh.material_overlay = MinedGlint
 	add_child(piece)
 	piece.global_transform = pose
 	var origin := pose.origin
